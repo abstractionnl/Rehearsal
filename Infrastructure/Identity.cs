@@ -1,6 +1,6 @@
 using System;
 
-namespace Core
+namespace Infrastructure
 {
     public abstract class Identity<T>
     {

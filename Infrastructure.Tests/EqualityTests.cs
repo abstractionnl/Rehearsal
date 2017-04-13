@@ -2,7 +2,7 @@ using System;
 using NFluent;
 using Xunit;
 
-namespace Core.Tests
+namespace Infrastructure.Tests
 {
     public abstract class EqualityTests
     {

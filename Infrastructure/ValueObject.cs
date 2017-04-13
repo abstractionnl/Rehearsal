@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core
+namespace Infrastructure
 {
     public abstract class ValueObject<T>
         where T : ValueObject<T>
