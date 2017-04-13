@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal", "Rehearsal\Rehearsal.csproj", "{E27D47FA-4F3C-45D5-AC7C-5F7ED6DABE93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal", "src\Rehearsal\Rehearsal.csproj", "{E27D47FA-4F3C-45D5-AC7C-5F7ED6DABE93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Tests", "Rehearsal.Tests\Rehearsal.Tests.csproj", "{00BD527B-0E0F-4DC5-980D-194DC85E9468}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Tests", "test\Rehearsal.Tests\Rehearsal.Tests.csproj", "{00BD527B-0E0F-4DC5-980D-194DC85E9468}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{1CACD65C-562F-46E4-A540-DD4D4A646D55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{1CACD65C-562F-46E4-A540-DD4D4A646D55}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{799E757E-2B02-4558-B14F-1C77B6E32BFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Tests", "test\Infrastructure.Tests\Infrastructure.Tests.csproj", "{799E757E-2B02-4558-B14F-1C77B6E32BFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
