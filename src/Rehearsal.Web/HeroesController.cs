@@ -25,7 +25,10 @@ namespace Rehearsal.Web
         [HttpGet]
         public IEnumerable<Hero> Get([FromQuery] string term)
         {
-            return _heroes.Where(x => x.Name.Contains(term));
+            if (!string.IsNullOrWhiteSpace(term))
+              return _heroes.Where(x => x.Name.Contains(term));
+
+          return _heroes;
         }
 
         [HttpGet, Route("{id}")]
