@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NFluent;
+using Rehearsal.Infrastructure;
 using Xunit;
 
-namespace Infrastructure.Tests
+namespace Rehearsal.Tests.Infrastructure
 {
     public class ValueObjectTests
     {

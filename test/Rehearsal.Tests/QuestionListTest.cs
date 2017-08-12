@@ -25,6 +25,7 @@ namespace Rehearsal.Tests
             [Fact] public void ListIsEmpty()
             {
                 Check.That(QuestionList.Questions.Count).IsEqualTo(0);
+                
             }
         }
 

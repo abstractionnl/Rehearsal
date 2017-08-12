@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Infrastructure
+namespace Rehearsal.Infrastructure
 {
     public abstract class ValueObject<T>
         where T : ValueObject<T>
