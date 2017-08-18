@@ -4,34 +4,34 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AlertModule } from 'ngx-bootstrap';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-// Imports for loading & configuring the in-memory web api
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard.component';
-import { HeroesComponent } from './heroes.component';
-import { HeroDetailComponent } from './hero-detail.component';
-import { HeroSearchComponent } from './hero-search.component';
+import { QuestionlistOverviewComponent } from './questionlist-overview.component';
+import { QuestionlistDetailComponent } from './questionlist-detail.component';
 
-import { HeroService } from './hero.service';
+import { QuestionListService } from './questionlist.service';
+import { AlertService } from './error/alert.service';
 
 import { AppRoutingModule } from './app-routing.module';
+import { AlertComponent } from './error/alert.component';
 
 @NgModule({
   declarations: [
       AppComponent,
+      AlertComponent,
       DashboardComponent,
-      HeroesComponent,
-      HeroDetailComponent,
-      HeroSearchComponent
+      QuestionlistOverviewComponent,
+      QuestionlistDetailComponent
   ],
   imports: [
       BrowserModule, FormsModule, HttpModule,
-      AlertModule.forRoot(), NgbModule.forRoot(),
+      AlertModule.forRoot(),
       AppRoutingModule
   ],
   providers: [
-      HeroService
+    QuestionListService,
+    AlertService
   ],
   bootstrap: [
       AppComponent

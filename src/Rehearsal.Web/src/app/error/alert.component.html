@@ -1,0 +1,5 @@
+<div class="alert-list">
+  <div *ngFor="let alert of alerts">
+    <alert [type]="alert.type" dismissible="true" dismissOnTimeout="5000">{{ alert.message }}</alert>
+  </div>
+</div>

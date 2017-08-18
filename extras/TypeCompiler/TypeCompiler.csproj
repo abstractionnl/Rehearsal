@@ -52,8 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Scripts\Manager.ttinclude" />
-    <None Include="Scripts\TypeLite.Net4.tt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Rehearsal.Messages\Rehearsal.Messages.csproj">

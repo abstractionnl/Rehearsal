@@ -21,7 +21,8 @@ namespace TypeCompiler
             var ts = TypeScript.Definitions()
                 .AsConstEnums(false)
                 .WithIndentation("  ")
-                .WithMemberFormatter(id => Char.ToLower(id.Name[0]) + id.Name.Substring(1));
+                .WithMemberFormatter(id => Char.ToLower(id.Name[0]) + id.Name.Substring(1))
+                .WithModuleNameFormatter(mod => mod.Name.Replace(".Messages", ""));
             
             foreach (var type in typeof(QuestionList).Assembly
                 .GetTypes()

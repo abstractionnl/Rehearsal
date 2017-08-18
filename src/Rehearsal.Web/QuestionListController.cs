@@ -11,10 +11,34 @@ namespace Rehearsal.Web
     [Route("api/[controller]")]
     public class QuestionListController : Controller
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private static readonly List<QuestionList> Lists;
+
+        static QuestionListController()
         {
-            return new string[] { "Hello", "World", "from", "me" };
+            Lists = new List<QuestionList>()
+            {
+                new QuestionList("Hoofdstuk 1", "Nederlands", "Duits"),
+                new QuestionList("Hoofdstuk 2", "Nederlands", "Frans"),
+            };
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(Lists);
+        }
+
+        [HttpGet, Route("{id:guid}")]
+        public IActionResult GetById(Guid id)
+        {
+            var list = Lists.SingleOrDefault(x => x.Id == id);
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(list);
         }
     }
 }
