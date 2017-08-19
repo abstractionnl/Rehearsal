@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { QuestionlistOverviewComponent } from './questionlist-overview.component';
 import { QuestionlistDetailComponent } from './questionlist-detail.component';
+import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { QuestionListResolver } from './questionlist.resolver';
 //import { HeroDetailComponent } from './hero-detail.component';
 
@@ -21,6 +22,10 @@ const routes: Routes = [
                 resolve: {
                   questionList: QuestionListResolver
                 }
+            },
+            {
+                path: '',
+                component: NoQuestionlistSelectedComponent
             }
         ]
     }

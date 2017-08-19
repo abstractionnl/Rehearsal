@@ -12,16 +12,13 @@ import Guid = System.Guid;
 })
 export class QuestionlistOverviewComponent implements OnInit  {
     questionLists: Observable<Rehearsal.QuestionList[]>;
-    selectedQuestionList: Observable<Guid>;
 
-    constructor(private questionListService: QuestionListService, private route: ActivatedRoute) {
+    constructor(private questionListService: QuestionListService) {
 
     }
 
     ngOnInit(): void {
         this.questionLists = this.questionListService.getAll();
-        //this.route.firstChild.paramMap.subscribe(p => console.log(p.get('id')));
-        this.selectedQuestionList = this.route.firstChild.paramMap.map(x => x.get('id'));
     }
 
 }
