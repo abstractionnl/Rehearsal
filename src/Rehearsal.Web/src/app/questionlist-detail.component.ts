@@ -31,7 +31,7 @@ export class QuestionlistDetailComponent implements OnInit {
     save() {
         this.questionListService.update(this.questionList)
             .then(
-                x => this.questionList = x,
+                _ => this.alertService.success(`Woordenlijst ${this.questionList.title} opgeslagen`),
                 err => {
                     this.alertService.fail('Fout bij het opslaan van de woordenlijst', err);
                 }

@@ -16,8 +16,10 @@ namespace Rehearsal.WebApi
         {
             Lists = new List<QuestionList>()
             {
-                new QuestionList("Hoofdstuk 1", "Nederlands", "Duits", new[] { QuestionList.ListItem.Create("Huis", "Haus"), QuestionList.ListItem.Create("Kat", "Katze")  }),
-                new QuestionList("Hoofdstuk 2", "Nederlands", "Frans", new[] { QuestionList.ListItem.Create("Huis", "Maison"), QuestionList.ListItem.Create("Kat", "Chat") }),
+                new QuestionList("Hoofdstuk 1", "Nederlands", "Duits",
+                    new[] { QuestionList.ListItem.Create("het huis", "das Haus"), QuestionList.ListItem.Create("de kat", "die Katze")  }),
+                new QuestionList("Hoofdstuk 2", "Nederlands", "Frans",
+                    new[] { QuestionList.ListItem.Create("het huis", "le maison"), QuestionList.ListItem.Create("de kat", "le chat") }),
             };
         }
 

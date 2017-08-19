@@ -1,23 +1,41 @@
 ﻿/// <reference path="types.ts" />
 
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/switchMap';
 import "rxjs/add/operator/catch";
+import 'rxjs/add/observable/combinelatest';
+
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/publish";
 
 @Injectable()
 export class QuestionListService {
+
     private apiUrl = 'api/questionlist';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
-    constructor(private http: Http) { }
+    private fetchTrigger = new BehaviorSubject(null);
+    private all: Observable<Rehearsal.QuestionList[]>;
 
-    getAll(): Observable<Rehearsal.QuestionList[]> {
+    constructor(private http: Http) {
+        this.all = this.fetchTrigger
+            .switchMap(() => this.fetchAll())
+            .publish().refCount();
+    }
+
+    private fetchAll(): Observable<Rehearsal.QuestionList[]> {
         return this.http.get(this.apiUrl)
             .map(response => response.json() as Rehearsal.QuestionList[]);
+    }
+
+    getAll(): Observable<Rehearsal.QuestionList[]> {
+        this.fetchTrigger.next(null);
+        return this.all;
     }
 
     get(id: System.Guid): Observable<Rehearsal.QuestionList> {
@@ -34,12 +52,12 @@ export class QuestionListService {
             .catch(this.handleError);
     }
 
-    update(questionList: Rehearsal.QuestionList): Promise<Rehearsal.QuestionList> {
+    update(questionList: Rehearsal.QuestionList): Promise<void> {
         const url = `${this.apiUrl}/${questionList.id}`;
         return this.http
             .put(url, JSON.stringify(questionList), { headers: this.headers })
             .toPromise()
-            .then(_ => questionList);
+            .then(() => this.fetchTrigger.next(null));
     }
 
     delete(id: System.Guid): Promise<void> {
