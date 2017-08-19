@@ -23,8 +23,7 @@ export class QuestionListService {
     get(id: System.Guid): Observable<Rehearsal.QuestionList> {
         const url = `${this.apiUrl}/${id}`;
         return this.http.get(url)
-            .map(response => response.json() as Rehearsal.QuestionList)
-            .catch(this.handleError);
+            .map(response => response.json() as Rehearsal.QuestionList);
     }
 
     create(questionList: Rehearsal.QuestionList): Promise<Rehearsal.QuestionList> {
@@ -40,8 +39,7 @@ export class QuestionListService {
         return this.http
             .put(url, JSON.stringify(questionList), { headers: this.headers })
             .toPromise()
-            .then(() => questionList)
-            .catch(this.handleError);
+            .then(_ => questionList);
     }
 
     delete(id: System.Guid): Promise<void> {

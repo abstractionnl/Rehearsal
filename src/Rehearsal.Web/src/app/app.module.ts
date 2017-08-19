@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard.component';
 import { QuestionlistOverviewComponent } from './questionlist-overview.component';
 import { QuestionlistDetailComponent } from './questionlist-detail.component';
+import { QuestionlistFormComponent } from './questionlist-form.component';
 
 import { QuestionListService } from './questionlist.service';
 import { AlertService } from './error/alert.service';
@@ -22,7 +23,8 @@ import { AlertComponent } from './error/alert.component';
       AlertComponent,
       DashboardComponent,
       QuestionlistOverviewComponent,
-      QuestionlistDetailComponent
+      QuestionlistDetailComponent,
+      QuestionlistFormComponent,
   ],
   imports: [
       BrowserModule, FormsModule, HttpModule,

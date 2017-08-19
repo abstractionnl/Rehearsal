@@ -4,7 +4,7 @@
   <div class="col-md-4">
     <ul class="list-group">
       <ng-container *ngFor="let questionList of questionLists | async">
-        <a class="list-group-item" [routerLink]="[questionList.id]">
+        <a class="list-group-item" [routerLink]="[questionList.id]" [class.active]="(selectedQuestionList | async) === questionList.id">
           <h4>{{questionList.title}}</h4>
           <p class="list-group-item-heading">{{questionList.questionTitle}} - {{questionList.answerTitle}}</p>
         </a>

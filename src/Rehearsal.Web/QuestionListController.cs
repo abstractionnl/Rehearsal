@@ -20,6 +20,9 @@ namespace Rehearsal.Web
                 new QuestionList("Hoofdstuk 1", "Nederlands", "Duits"),
                 new QuestionList("Hoofdstuk 2", "Nederlands", "Frans"),
             };
+
+            Lists[0].Questions.Add(QuestionList.ListItem.Create("Huis", "Haus"));
+            Lists[0].Questions.Add(QuestionList.ListItem.Create("Kat", "Katze"));
         }
 
         [HttpGet]
