@@ -4,14 +4,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { QuestionListService } from './questionlist.service';
-import { ActivatedRoute } from "@angular/router";
 import Guid = System.Guid;
 
 @Component({
     templateUrl: './questionlist-overview.component.html'
 })
 export class QuestionlistOverviewComponent implements OnInit  {
-    questionLists: Observable<Rehearsal.QuestionList[]>;
+    questionLists: Observable<Rehearsal.QuestionListOverview[]>;
 
     constructor(private questionListService: QuestionListService) {
 

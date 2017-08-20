@@ -20,7 +20,7 @@ export class QuestionListService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     private fetchTrigger = new BehaviorSubject(null);
-    private all: Observable<Rehearsal.QuestionList[]>;
+    private all: Observable<Rehearsal.QuestionListOverview[]>;
 
     constructor(private http: Http) {
         this.all = this.fetchTrigger
@@ -28,12 +28,12 @@ export class QuestionListService {
             .publish().refCount();
     }
 
-    private fetchAll(): Observable<Rehearsal.QuestionList[]> {
+    private fetchAll(): Observable<Rehearsal.QuestionListOverview[]> {
         return this.http.get(this.apiUrl)
-            .map(response => response.json() as Rehearsal.QuestionList[]);
+            .map(response => response.json() as Rehearsal.QuestionListOverview[]);
     }
 
-    getAll(): Observable<Rehearsal.QuestionList[]> {
+    getAll(): Observable<Rehearsal.QuestionListOverview[]> {
         this.fetchTrigger.next(null);
         return this.all;
     }

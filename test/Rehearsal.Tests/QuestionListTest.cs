@@ -63,7 +63,7 @@ namespace Rehearsal.Tests
         private const string StubQuestion = "kat";
         private const string StubAnswer = "cat";
 
-        private static QuestionList CreateQuestionList() => new QuestionList(StubTitle, StubQuestionTitle, StubAnswerTitle);
+        private static QuestionList CreateQuestionList() => new QuestionList(StubTitle, StubQuestionTitle, StubAnswerTitle, new QuestionList.ListItem[0]);
         private static QuestionList CreateQuestionListWithOneQuestion()
         {
             var questionList = CreateQuestionList();

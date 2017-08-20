@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Rehearsal.Messages;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,6 +12,8 @@ namespace Rehearsal.WebApi
     [Route("api/[controller]")]
     public class QuestionListController : Controller
     {
+        private IMapper Mapper { get; }
+
         private static readonly List<QuestionList> Lists;
 
         static QuestionListController()
@@ -23,10 +27,15 @@ namespace Rehearsal.WebApi
             };
         }
 
+        public QuestionListController(IMapper mapper)
+        {
+            Mapper = mapper;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Lists);
+            return Ok(Lists.Select(Mapper.Map<QuestionListOverviewModel>));
         }
 
         [HttpGet, Route("{id:guid}")]
@@ -39,11 +48,12 @@ namespace Rehearsal.WebApi
                 return NotFound();
             }
 
-            return Ok(list);
+            var model = Mapper.Map<QuestionListModel>(list);
+            return Ok(model);
         }
 
         [HttpPut, Route("{id:guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] Messages.QuestionList model)
+        public IActionResult Update([FromRoute] Guid id, [FromBody] Messages.QuestionListModel model)
         {
             var list = Lists.SingleOrDefault(x => x.Id == id);
 
@@ -57,13 +67,13 @@ namespace Rehearsal.WebApi
             return Ok();
         }
 
-        private void UpdateFromModel(QuestionList questionList, Messages.QuestionList model)
+        private void UpdateFromModel(QuestionList questionList, Messages.QuestionListModel model)
         {
             questionList.Update(model.Title, model.AnswerTitle, model.QuestionTitle,
                 model.Questions.Select(questionModel => QuestionList.ListItem.Create(questionModel.Question, questionModel.Answer)));
         }
 
-        private QuestionList CreateFromModel(Messages.QuestionList model)
+        private QuestionList CreateFromModel(Messages.QuestionListModel model)
         {
             var questionList = new QuestionList(model.Title, model.AnswerTitle, model.QuestionTitle,
                 model.Questions.Select(questionModel => QuestionList.ListItem.Create(questionModel.Question, questionModel.Answer)));
