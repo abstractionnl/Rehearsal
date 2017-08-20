@@ -6,15 +6,17 @@ import { QuestionlistOverviewComponent } from './questionlist-overview.component
 import { QuestionlistDetailComponent } from './questionlist-detail.component';
 import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { QuestionListResolver } from './questionlist.resolver';
-//import { HeroDetailComponent } from './hero-detail.component';
+import { QuestionListsResolver } from './questionlists.resolver';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
-    //{ path: 'detail/:id', component: HeroDetailComponent },
     {
         path: 'questionlists',
         component: QuestionlistOverviewComponent,
+        resolve: {
+            questionLists: QuestionListsResolver
+        },
         children: [
             {
                 path: ':id',
@@ -34,6 +36,6 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
-    providers: [QuestionListResolver]
+    providers: [QuestionListResolver, QuestionListsResolver]
 })
 export class AppRoutingModule { }

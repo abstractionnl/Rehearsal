@@ -12,6 +12,7 @@ import 'rxjs/add/observable/combinelatest';
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import "rxjs/add/operator/publish";
+import "rxjs/add/operator/throttleTime";
 
 @Injectable()
 export class QuestionListService {
@@ -24,6 +25,7 @@ export class QuestionListService {
 
     constructor(private http: Http) {
         this.all = this.fetchTrigger
+            .throttleTime(500)
             .switchMap(() => this.fetchAll())
             .publish().refCount();
     }
