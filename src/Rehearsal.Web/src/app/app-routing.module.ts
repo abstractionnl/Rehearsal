@@ -7,6 +7,7 @@ import { QuestionlistDetailComponent } from './questionlist-detail.component';
 import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { QuestionListResolver } from './questionlist.resolver';
 import { QuestionListsResolver } from './questionlists.resolver';
+import { CanDeactivateGuard } from './can-deactivate-guard.service';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
                 component: QuestionlistDetailComponent,
                 resolve: {
                   questionList: QuestionListResolver
-                }
+                },
+                canDeactivate: [ CanDeactivateGuard ]
             },
             {
                 path: '',
@@ -36,6 +38,6 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
-    providers: [QuestionListResolver, QuestionListsResolver]
+    providers: [QuestionListResolver, QuestionListsResolver, CanDeactivateGuard]
 })
 export class AppRoutingModule { }

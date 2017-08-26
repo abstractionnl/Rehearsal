@@ -24,7 +24,7 @@ namespace TypeCompiler
                 .WithMemberFormatter(id => Char.ToLower(id.Name[0]) + id.Name.Substring(1))
                 .WithModuleNameFormatter(mod => mod.Name.Replace(".Messages", ""));
             
-            foreach (var type in typeof(QuestionList).Assembly
+            foreach (var type in typeof(QuestionListModel).Assembly
                 .GetTypes()
                 .SelectMany(x => new[] {x}.Union(x.GetNestedTypes()))
                 .Where(t => t.IsClass || t.IsEnum)

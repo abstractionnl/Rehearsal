@@ -1,5 +1,38 @@
-<div class="btn-group pull-right">
-    <button type="button" class="btn btn-success" (click)="save()"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
-</div>
-<div class="clearfix"></div>
-<questionlist-form [questionList]="questionList"></questionlist-form>
+<form #form="ngForm" (submit)="save(form)">
+    <div class="btn-group pull-right">
+        <button type="submit" class="btn btn-success" [disabled]="!form.form.valid || form.form.pristine"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="form-group col-sm-10">
+            <label for="title">Titel</label>
+            <input type="text" class="form-control" id="title" name="title" [(ngModel)]="questionList.title" required />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-5">
+            <label for="questionTitle">Vraagtaal</label>
+            <input type="text" class="form-control" id="questionTitle" name="questionTitle" [(ngModel)]="questionList.questionTitle" required />
+        </div>
+        <div class="form-group col-sm-5">
+            <label for="answerTitle">Antwoordtaal</label>
+            <input type="text" class="form-control" id="answerTitle" name="answerTitle" [(ngModel)]="questionList.answerTitle" required />
+        </div>
+    </div>
+    <hr />
+    <div class="row" *ngFor="let question of questionList.questions;let index = index; let last = last">
+        <div class="form-group col-sm-5">
+            <input type="text" class="form-control" id="question" name="question{{index}}" [(ngModel)]="question.question" />
+        </div>
+        <div class="form-group col-sm-5">
+            <input type="text" class="form-control" id="answer" name="answer{{index}}" (keydown.tab)="!last || addQuestion();" [(ngModel)]="question.answer" />
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-default" (click)="removeQuestion(question)"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-default" (click)="addQuestion()"><span class="glyphicon glyphicon-plus"></span> regel toevoegen</button>
+    </div>
+</form>

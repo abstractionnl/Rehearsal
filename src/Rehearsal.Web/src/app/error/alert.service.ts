@@ -31,13 +31,13 @@ export class AlertService {
 
   info(message: string) {
     this.alerts$.next({
-      type: 'success',
+      type: 'info',
       message: message,
       err: null
     });
   }
 
-  warn(message: string, err: any) {
+  warning(message: string, err?: any) {
     this.alerts$.next({
       type: 'warning',
       message: message,
@@ -45,7 +45,7 @@ export class AlertService {
     });
   }
 
-  fail(message: string, err: any) {
+  fail(message: string, err?: any) {
     this.alerts$.next({
       type: 'danger',
       message: message,
