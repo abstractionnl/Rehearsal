@@ -1,6 +1,6 @@
 ﻿/// <reference path="types.ts" />
 
-import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { Observable } from 'rxjs/Observable';
 

@@ -11,6 +11,7 @@ import { QuestionlistOverviewComponent } from './questionlist-overview.component
 import { QuestionlistDetailComponent } from './questionlist-detail.component';
 import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { ConfirmSaveQuestionComponent } from "./confirm-save-question.component";
+import { FormValidationStyleDirective } from "./form-validation-style.directive";
 
 import { QuestionListService } from './questionlist.service';
 import { AlertService } from './error/alert.service';
@@ -26,7 +27,8 @@ import { AlertComponent } from './error/alert.component';
         QuestionlistOverviewComponent,
         QuestionlistDetailComponent,
         NoQuestionlistSelectedComponent,
-        ConfirmSaveQuestionComponent
+        ConfirmSaveQuestionComponent,
+        FormValidationStyleDirective
     ],
     imports: [
         BrowserModule, FormsModule, HttpModule,

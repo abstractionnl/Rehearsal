@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    template: 'Selecteer links een vragenlijst'
+    template: '<div class="hidden-xs">Selecteer links een vragenlijst</div>'
 })
 export class NoQuestionlistSelectedComponent {
 }
