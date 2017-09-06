@@ -1,6 +1,7 @@
 ﻿<form #form="ngForm" (submit)="save()">
     <div class="btn-group pull-right">
         <button type="submit" class="btn btn-success" [disabled]="!form.form.valid || form.form.pristine"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
+        <button type="button" class="btn btn-danger" [disabled]="!questionList.id" (click)="delete()"><span class="glyphicon glyphicon-remove"></span> Verwijderen</button>
     </div>
     <div class="clearfix"></div>
 

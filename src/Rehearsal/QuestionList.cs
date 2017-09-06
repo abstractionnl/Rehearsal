@@ -14,6 +14,8 @@ namespace Rehearsal
         public string AnswerTitle { get; private set; }
 
         public IList<ListItem> Questions { get; private set; }
+        
+        public bool IsDeleted { get; set; }
 
         [Obsolete("For CQRS")]
         private QuestionList() {}
@@ -22,35 +24,27 @@ namespace Rehearsal
         {
             Id = id;
             
-            FromProperties(properties);
-            
             ApplyChange(new QuestionListCreatedEvent()
             {
                 Id = Id,
-                QuestionList = ToProperties()
+                QuestionList = properties
             });
-        }
-
-        public class ListItem : Record<ListItem>
-        {
-            public string Question { get; internal set; }
-            public string Answer { get; internal set; }
-
-            public static ListItem Create(string question, string answer) => new ListItem
-            {
-                Question = question,
-                Answer = answer
-            };
         }
 
         public void Update(QuestionListProperties properties)
         {
-            FromProperties(properties);
-            
             ApplyChange(new QuestionListUpdatedEvent()
             {
                 Id = Id,
-                QuestionList = ToProperties()
+                QuestionList = properties
+            });
+        }
+
+        public void Delete()
+        {
+            ApplyChange(new QuestionListDeletedEvent()
+            {
+                Id = Id
             });
         }
 
@@ -75,6 +69,18 @@ namespace Rehearsal
             }).ToList()
         };
         
+        public class ListItem : Record<ListItem>
+        {
+            public string Question { get; internal set; }
+            public string Answer { get; internal set; }
+
+            public static ListItem Create(string question, string answer) => new ListItem
+            {
+                Question = question,
+                Answer = answer
+            };
+        }
+        
         protected void Apply(QuestionListCreatedEvent @event)
         {
             FromProperties(@event.QuestionList);
@@ -83,6 +89,11 @@ namespace Rehearsal
         protected void Apply(QuestionListUpdatedEvent @event)
         {
             FromProperties(@event.QuestionList);
+        }
+        
+        protected void Apply(QuestionListDeletedEvent @event)
+        {
+            IsDeleted = true;
         }
     }
 }

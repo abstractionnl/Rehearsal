@@ -9,7 +9,7 @@ import { ActivatedRoute, Router} from "@angular/router";
 import { AlertService } from "./error/alert.service";
 import { ICanComponentDeactivate } from "./can-deactivate-guard.service";
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { ConfirmSaveQuestionComponent, ResultAction } from "./confirm-save-question.component";
+import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent, ResultAction } from "./confirm-save-question.component";
 
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/delay";
@@ -52,6 +52,21 @@ export class QuestionlistDetailComponent implements OnInit, ICanComponentDeactiv
 
     save() {
         this.saveInternal(true);
+    }
+
+    delete() {
+        this.questionListService.delete(this.questionList.id)
+            .then(
+                _ => {
+                    this.alertService.success(`Woordenlijst ${this.questionList.title} verwijderd`);
+                    this.form.form.markAsPristine();
+                    this.router.navigate(['/questionlists']);
+                },
+                err => {
+                    this.alertService.fail('Fout bij het verwijderen van de woordenlijst', err);
+                    return false;
+                }
+            );
     }
 
     private saveInternal(navigateToNewList: boolean): Promise<boolean> {

@@ -54,8 +54,7 @@ export class QuestionListService {
             .then(response => {
                 this.fetchTrigger.next(null);
                 return response.json() as Guid;
-            })
-            .catch(this.handleError);
+            });
     }
 
     update(questionList: Rehearsal.QuestionList): Promise<void> {
@@ -70,8 +69,7 @@ export class QuestionListService {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
-            .then(() => null)
-            .catch(this.handleError);
+            .then(() => this.fetchTrigger.next(null));
     }
 
     new(): Rehearsal.QuestionList {
@@ -85,10 +83,5 @@ export class QuestionListService {
                 answer: ''
             }]
         }
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
     }
 }

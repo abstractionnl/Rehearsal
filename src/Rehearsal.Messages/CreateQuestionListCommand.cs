@@ -1,4 +1,5 @@
-﻿using Rehearsal.Messages.Infrastructure;
+﻿using System;
+using Rehearsal.Messages.Infrastructure;
 
 namespace Rehearsal.Messages
 {

@@ -26,7 +26,7 @@ export interface ResultAction {
         </div>
     `
 })
-export class ConfirmSaveQuestionComponent {
+export class ConfirmSaveQuestionListComponent {
     title: string = "Wil je de wijzigingen opslaan?";
     body: string = "Je hebt nog onopgeslagen wijzigingen, wil je deze nog opslaan?";
     actions: ResultAction[];

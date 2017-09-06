@@ -8,7 +8,8 @@ namespace Rehearsal.Data
 {
     public class QuestionListEventHandler : 
         IEventHandler<QuestionListCreatedEvent>,
-        IEventHandler<QuestionListUpdatedEvent>
+        IEventHandler<QuestionListUpdatedEvent>,
+        IEventHandler<QuestionListDeletedEvent>
     {
         public QuestionListEventHandler(InMemoryStore<QuestionListModel> questionListStore, InMemoryStore<QuestionListOverviewModel> questionListOverviewStore, IMapper mapper)
         {
@@ -32,6 +33,16 @@ namespace Rehearsal.Data
         {
             QuestionListStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListModel(message.Id)));
             QuestionListOverviewStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListOverviewModel(message.Id)));
+            return Task.CompletedTask;
+        }
+        
+        public Task Handle(QuestionListDeletedEvent message)
+        {
+            QuestionListOverviewStore.GetById(message.Id).IfSome(list =>
+            {
+                list.IsDeleted = true;
+                QuestionListOverviewStore.Save(message.Id, list);
+            });
             return Task.CompletedTask;
         }
     }

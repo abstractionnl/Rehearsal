@@ -70,5 +70,18 @@ namespace Rehearsal.WebApi
 
             return Ok();
         }
+
+        [HttpDelete, Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id)
+        {
+            var command = new DeleteQuestionListCommand()
+            {
+                Id = id
+            };
+
+            await CommandSender.Send(command);
+
+            return Ok();
+        }
     }
 }

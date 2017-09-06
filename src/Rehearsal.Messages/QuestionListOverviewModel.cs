@@ -15,5 +15,6 @@ namespace Rehearsal.Messages
         public string QuestionTitle { get; set; }
         public string AnswerTitle { get; set; }
         public int QuestionsCount { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
