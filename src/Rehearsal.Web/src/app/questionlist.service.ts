@@ -51,7 +51,10 @@ export class QuestionListService {
         return this.http
             .post(this.apiUrl, JSON.stringify(questionList), { headers: this.headers })
             .toPromise()
-            .then(response => response.json() as Guid)
+            .then(response => {
+                this.fetchTrigger.next(null);
+                return response.json() as Guid;
+            })
             .catch(this.handleError);
     }
 
@@ -69,6 +72,19 @@ export class QuestionListService {
             .toPromise()
             .then(() => null)
             .catch(this.handleError);
+    }
+
+    new(): Rehearsal.QuestionList {
+        return {
+            id: null,
+            title: 'Nieuwe lijst',
+            questionTitle: '',
+            answerTitle: '',
+            questions: [ {
+                question: '',
+                answer: ''
+            }]
+        }
     }
 
     private handleError(error: any): Promise<any> {

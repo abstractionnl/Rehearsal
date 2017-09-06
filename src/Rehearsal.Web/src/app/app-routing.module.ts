@@ -38,6 +38,6 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
-    providers: [QuestionListResolver, QuestionListsResolver, CanDeactivateGuard]
+    providers: [QuestionListResolver, QuestionListsResolver, CanDeactivateGuard ]
 })
 export class AppRoutingModule { }
