@@ -13,6 +13,7 @@ import 'rxjs/add/observable/combinelatest';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import "rxjs/add/operator/publish";
 import "rxjs/add/operator/throttleTime";
+import Guid = System.Guid;
 
 @Injectable()
 export class QuestionListService {
@@ -46,11 +47,11 @@ export class QuestionListService {
             .map(response => response.json() as Rehearsal.QuestionList);
     }
 
-    create(questionList: Rehearsal.QuestionList): Promise<Rehearsal.QuestionList> {
+    create(questionList: Rehearsal.QuestionList): Promise<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(questionList), { headers: this.headers })
             .toPromise()
-            .then(response => response.json() as Rehearsal.QuestionList)
+            .then(response => response.json() as Guid)
             .catch(this.handleError);
     }
 
@@ -71,7 +72,7 @@ export class QuestionListService {
     }
 
     private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
+        console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
 }

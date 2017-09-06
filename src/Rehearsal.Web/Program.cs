@@ -17,6 +17,7 @@ namespace Rehearsal.Web
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseEnvironment("Development")
                 .Build();
 
             host.Run();

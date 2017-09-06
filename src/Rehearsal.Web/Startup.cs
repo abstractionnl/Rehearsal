@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,33 +22,44 @@ namespace Rehearsal.Web
             {
                 config.Scan(_ =>
                 {
-                    _.Assembly("Rehearsal.WebApi");
-                    _.AddAllTypesOf<Profile>();
+                    _.AssembliesFromApplicationBaseDirectory();
+                    _.LookForRegistries();
                 });
 
                 config.Populate(services);
-
-                config.For<IMapper>().Use("Build automapper using config", CreateAutomapper);
+                config.For<InjectTestData>();
             });
 
             return container.GetInstance<IServiceProvider>();
         }
 
-        private IMapper CreateAutomapper(IContext context)
-        {
-            var profiles = context.GetAllInstances<Profile>();
-            var config = new MapperConfiguration(x =>
-            {
-                foreach (var profile in profiles)
-                    x.AddProfile(profile);
-            });
-
-            return config.CreateMapper();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory
+                .AddConsole(LogLevel.Debug, includeScopes: true);
+
+            /*app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = 500; // or another Status accordingly to Exception Type
+                    context.Response.ContentType = "application/json";
+
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+                    if (error != null)
+                    {
+                        var ex = error.Error;
+
+                        await context.Response.WriteAsync(ex.Message, Encoding.UTF8);
+                    }
+                });
+            });*/
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.ApplicationServices.GetService<InjectTestData>().Run();
+            }
             app.Use(async (context, next) => {
                 await next();
                 if (context.Response.StatusCode == 404 &&

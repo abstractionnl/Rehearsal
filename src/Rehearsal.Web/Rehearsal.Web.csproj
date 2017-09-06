@@ -21,6 +21,7 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rehearsal.Data\Rehearsal.Data.csproj" />
     <ProjectReference Include="..\Rehearsal.WebApi\Rehearsal.WebApi.csproj" />
     <ProjectReference Include="..\Rehearsal\Rehearsal.csproj">
       <Project>{E27D47FA-4F3C-45D5-AC7C-5F7ED6DABE93}</Project>

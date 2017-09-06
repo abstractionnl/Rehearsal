@@ -60,7 +60,10 @@ export class QuestionlistDetailComponent implements OnInit, ICanComponentDeactiv
 
         return this.questionListService.update(this.questionList)
             .then(
-                _ => { this.alertService.success(`Woordenlijst ${this.questionList.title} opgeslagen`); return true; },
+                _ => {
+                    this.alertService.success(`Woordenlijst ${this.questionList.title} opgeslagen`);
+                    this.form.form.markAsPristine();
+                    return true; },
                 err => {
                     this.alertService.fail('Fout bij het opslaan van de woordenlijst', err);
                     return false;

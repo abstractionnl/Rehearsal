@@ -1,84 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using CQRSlite.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Rehearsal.Messages;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Rehearsal.WebApi
 {
     [Route("api/[controller]")]
     public class QuestionListController : Controller
     {
+        public IQuestionListRepository QuestionListRepository { get; }
         private IMapper Mapper { get; }
+        private ICommandSender CommandSender { get; }
 
-        private static readonly List<QuestionList> Lists;
-
-        static QuestionListController()
+        public QuestionListController(IQuestionListRepository questionListRepository, IMapper mapper, ICommandSender commandSender)
         {
-            Lists = new List<QuestionList>()
-            {
-                new QuestionList("Hoofdstuk 1", "Nederlands", "Duits",
-                    new[] { QuestionList.ListItem.Create("het huis", "das Haus"), QuestionList.ListItem.Create("de kat", "die Katze")  }),
-                new QuestionList("Hoofdstuk 2", "Nederlands", "Frans",
-                    new[] { QuestionList.ListItem.Create("het huis", "le maison"), QuestionList.ListItem.Create("de kat", "le chat") }),
-            };
-        }
-
-        public QuestionListController(IMapper mapper)
-        {
+            if (questionListRepository == null) throw new ArgumentNullException(nameof(questionListRepository));
+            if (mapper == null) throw new ArgumentNullException(nameof(mapper));
+            if (commandSender == null) throw new ArgumentNullException(nameof(commandSender));
+            
+            QuestionListRepository = questionListRepository;
             Mapper = mapper;
+            CommandSender = commandSender;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Lists.Select(Mapper.Map<QuestionListOverviewModel>));
+            return Ok(QuestionListRepository.GetAll());
         }
 
         [HttpGet, Route("{id:guid}")]
         public IActionResult GetById(Guid id)
         {
-            var list = Lists.SingleOrDefault(x => x.Id == id);
+            var list = QuestionListRepository.GetById(id);
 
-            if (list == null)
-            {
-                return NotFound();
-            }
-
-            var model = Mapper.Map<QuestionListModel>(list);
-            return Ok(model);
+            return list
+                .Map<IActionResult>(Ok)
+                .IfNone(NotFound);
         }
 
-        [HttpPut, Route("{id:guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] Messages.QuestionListModel model)
+        [HttpPost, Route("")]
+        public async Task<IActionResult> Create([FromBody] QuestionListProperties questionList)
         {
-            var list = Lists.SingleOrDefault(x => x.Id == id);
-
-            if (list == null)
+            var command = new CreateQuestionListCommand()
             {
-                return NotFound();
-            }
+                Id = Guid.NewGuid(),
+                QuestionList = questionList
+            };
 
-            UpdateFromModel(list, model);
+            await CommandSender.Send(command);
+
+            return Ok(command.Id);
+        }
+        
+        [HttpPut, Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] QuestionListProperties questionList)
+        {
+            var command = new UpdateQuestionListCommand()
+            {
+                Id = id,
+                QuestionList = questionList
+            };
+
+            await CommandSender.Send(command);
 
             return Ok();
-        }
-
-        private void UpdateFromModel(QuestionList questionList, Messages.QuestionListModel model)
-        {
-            questionList.Update(model.Title, model.AnswerTitle, model.QuestionTitle,
-                model.Questions.Select(questionModel => QuestionList.ListItem.Create(questionModel.Question, questionModel.Answer)));
-        }
-
-        private QuestionList CreateFromModel(Messages.QuestionListModel model)
-        {
-            var questionList = new QuestionList(model.Title, model.AnswerTitle, model.QuestionTitle,
-                model.Questions.Select(questionModel => QuestionList.ListItem.Create(questionModel.Question, questionModel.Answer)));
-
-            return questionList;
         }
     }
 }

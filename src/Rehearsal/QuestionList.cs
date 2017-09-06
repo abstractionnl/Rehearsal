@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rehearsal.Infrastructure;
+using System.Linq;
+using CQRSlite.Domain;
+using LanguageExt;
+using Rehearsal.Messages;
 
 namespace Rehearsal
 {
-    public class QuestionList
+    public class QuestionList : AggregateRoot
     {
-        public Guid Id { get; }
         public string Title { get; private set; }
         public string QuestionTitle { get; private set; }
         public string AnswerTitle { get; private set; }
 
-        public IList<ListItem> Questions { get; }
+        public IList<ListItem> Questions { get; private set; }
 
-        public QuestionList(string title, string questionTitle, string answerTitle, IEnumerable<ListItem> questions)
+        [Obsolete("For CQRS")]
+        private QuestionList() {}
+        
+        public QuestionList(Guid id, QuestionListProperties properties)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             
-            Title = title;
-            QuestionTitle = questionTitle;
-            AnswerTitle = answerTitle;
+            FromProperties(properties);
             
-            Questions = new List<ListItem>(questions);
+            ApplyChange(new QuestionListCreatedEvent()
+            {
+                Id = Id,
+                QuestionList = ToProperties()
+            });
         }
 
-        public class ListItem : ValueObject<ListItem>
+        public class ListItem : Record<ListItem>
         {
             public string Question { get; internal set; }
             public string Answer { get; internal set; }
@@ -34,23 +41,48 @@ namespace Rehearsal
                 Question = question,
                 Answer = answer
             };
-
-            protected override IEnumerable<Func<ListItem, object>> GetCompareProperties()
-            {
-                yield return x => x.Question;
-                yield return x => x.Answer;
-            }
         }
 
-        public void Update(string modelTitle, string modelAnswerTitle, string modelQuestionTitle, IEnumerable<ListItem> questions)
+        public void Update(QuestionListProperties properties)
         {
-            Title = modelTitle;
-            AnswerTitle = modelAnswerTitle;
-            QuestionTitle = modelQuestionTitle;
+            FromProperties(properties);
             
-            Questions.Clear();
-            foreach (var question in questions)
-                Questions.Add(question);
+            ApplyChange(new QuestionListUpdatedEvent()
+            {
+                Id = Id,
+                QuestionList = ToProperties()
+            });
+        }
+
+        private void FromProperties(QuestionListProperties properties)
+        {
+            Title = properties.Title;
+            QuestionTitle = properties.QuestionTitle;
+            AnswerTitle = properties.AnswerTitle;
+            
+            Questions = new List<ListItem>(properties.Questions.Select(x => ListItem.Create(x.Question, x.Answer)));
+        }
+
+        private QuestionListProperties ToProperties() => new QuestionListProperties
+        {
+            Title = Title,
+            QuestionTitle = QuestionTitle,
+            AnswerTitle = AnswerTitle,
+            Questions = Questions.Select(q => new QuestionListProperties.Item
+            {
+                Question = q.Question,
+                Answer = q.Answer
+            }).ToList()
+        };
+        
+        protected void Apply(QuestionListCreatedEvent @event)
+        {
+            FromProperties(@event.QuestionList);
+        }
+        
+        protected void Apply(QuestionListUpdatedEvent @event)
+        {
+            FromProperties(@event.QuestionList);
         }
     }
 }

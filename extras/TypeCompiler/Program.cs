@@ -22,14 +22,17 @@ namespace TypeCompiler
                 .AsConstEnums(false)
                 .WithIndentation("  ")
                 .WithMemberFormatter(id => Char.ToLower(id.Name[0]) + id.Name.Substring(1))
-                .WithModuleNameFormatter(mod => mod.Name.Replace(".Messages", ""));
+                .WithModuleNameFormatter(mod => mod.Name.Replace(".Messages", "").TrimEnd("Model"))
+                .WithTypeFormatter((type, formatter) => type.Type.Name.TrimEnd("Model"));
             
             foreach (var type in typeof(QuestionListModel).Assembly
                 .GetTypes()
                 .SelectMany(x => new[] {x}.Union(x.GetNestedTypes()))
                 .Where(t => t.IsClass || t.IsEnum)
-                .Where(t => !t.IsNestedPrivate))
+                .Where(t => !t.IsNestedPrivate)
+                .Where(IsModel))
             {
+                Console.WriteLine($"Adding {type.FullName}");
                 ts.For(type);
             }
             
@@ -38,5 +41,11 @@ namespace TypeCompiler
                 writer.Write(ts.Generate());
             }
         }
+
+        private static bool IsModel(Type type) => type.IsNested 
+            ? IsModel(type.DeclaringType) 
+            : type.Name.EndsWith("Model") || type.Name.EndsWith("Request");
+
+        
     }
 }

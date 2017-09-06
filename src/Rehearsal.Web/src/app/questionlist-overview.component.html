@@ -5,7 +5,7 @@
         <ul class="list-group">
             <ng-container *ngFor="let questionList of questionLists | async">
                 <a class="list-group-item" [routerLink]="[questionList.id]" routerLinkActive="active">
-                    <h4>{{questionList.title}} <span class="badge pull-right">{{questionList.questionCount}}</span></h4>
+                    <h4>{{questionList.title}} <span class="badge pull-right">{{questionList.questionsCount}}</span></h4>
                     <p class="list-group-item-heading">{{questionList.questionTitle}} - {{questionList.answerTitle}}</p>
                 </a>
             </ng-container>

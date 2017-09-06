@@ -4,11 +4,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
+    <PackageReference Include="csharp-monad" Version="1.0.1" />
     <PackageReference Include="StructureMap" Version="4.5.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rehearsal.Messages\Rehearsal.Messages.csproj" />
+    <ProjectReference Include="..\Rehearsal.Messages\Rehearsal.Messages.csproj">
+      <Project>{9E234866-9209-419F-9A7C-FB05BC51D24C}</Project>
+      <Name>Rehearsal.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rehearsal.WebApi\Rehearsal.WebApi.csproj" />
     <ProjectReference Include="..\Rehearsal\Rehearsal.csproj" />
   </ItemGroup>
 </Project>

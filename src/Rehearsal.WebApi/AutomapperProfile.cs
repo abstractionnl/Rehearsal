@@ -8,7 +8,7 @@ namespace Rehearsal.WebApi
         public AutomapperProfile()
         {
             CreateMap<QuestionList, QuestionListOverviewModel>()
-                .ForMember(x => x.QuestionCount, x => x.MapFrom(l => l.Questions.Count));
+                .ForMember(x => x.QuestionsCount, x => x.MapFrom(l => l.Questions.Count));
             CreateMap<QuestionList, QuestionListModel>();
             CreateMap<QuestionList.ListItem, QuestionListModel.Item>();
         }
