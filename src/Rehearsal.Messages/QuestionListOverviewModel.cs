@@ -4,6 +4,10 @@ namespace Rehearsal.Messages
 {
     public class QuestionListOverviewModel
     {
+        public QuestionListOverviewModel()
+        {
+        }
+        
         public QuestionListOverviewModel(Guid id)
         {
             Id = id;

@@ -1,5 +1,4 @@
-﻿using CQRSlite.Bus;
-using CQRSlite.Commands;
+﻿using CQRSlite.Commands;
 using CQRSlite.Domain;
 using CQRSlite.Events;
 using StructureMap;
@@ -10,12 +9,13 @@ namespace Rehearsal.Data.StructureMap
     {
         public CqrsRegistry()
         {
-            For<InProcessBus>().Singleton().Use<InProcessBus>();
+            ForSingletonOf<InProcessBus>().Use<InProcessBus>();
             For<ICommandSender>().Use(y => y.GetInstance<InProcessBus>());
             For<IEventPublisher>().Use(y => y.GetInstance<InProcessBus>());
             For<ISession>().Use<Session>();
-            For<IEventStore>().Singleton().Use<InMemoryEventStore>();
-            For<IRepository>().Use(y => new Repository(y.GetInstance<IEventStore>()));
+            ForConcreteType<EventStoreFactory>();
+            ForSingletonOf<IEventStore>().Use(y => y.GetInstance<EventStoreFactory>().Create());
+            For<IRepository>().Use<Repository>();
             
             Scan(_ =>
             {

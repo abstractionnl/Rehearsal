@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Rehearsal.Data;
 
 namespace Rehearsal.Web
 {
@@ -19,6 +20,9 @@ namespace Rehearsal.Web
                 .UseApplicationInsights()
                 .UseEnvironment("Development")
                 .Build();
+
+            //host.Services.GetService<SqliteEventStore>().ProvisionTable().Wait();
+            host.Services.GetService<InjectTestData>().Run().Wait();
 
             host.Run();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CQRSlite.Commands;
 using LanguageExt;
 using Rehearsal.Messages;
@@ -14,9 +15,9 @@ namespace Rehearsal.Web
 
         private ICommandSender CommandSender { get; }
 
-        public void Run()
+        public async Task Run()
         {
-            CommandSender.Send(new CreateQuestionListCommand()
+            await CommandSender.Send(new CreateQuestionListCommand()
             {
                 Id = Guid.NewGuid(),
                 QuestionList = new QuestionListProperties
@@ -37,9 +38,9 @@ namespace Rehearsal.Web
                         },
                     }
                 }
-            }).Wait();
-            
-            CommandSender.Send(new CreateQuestionListCommand()
+            });
+
+            await CommandSender.Send(new CreateQuestionListCommand()
             {
                 Id = Guid.NewGuid(),
                 QuestionList = new QuestionListProperties
@@ -60,7 +61,7 @@ namespace Rehearsal.Web
                         },
                     }
                 }
-            }).Wait();
+            });
         }
     }
 }

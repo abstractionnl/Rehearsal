@@ -13,7 +13,8 @@ namespace Rehearsal.Data
             CreateMap<QuestionListProperties.Item, QuestionListModel.Item>();
             
             CreateMap<QuestionListProperties, QuestionListOverviewModel>()
-                .ForMember(x => x.Id, c => c.Ignore());
+                .ForMember(x => x.Id, c => c.Ignore())
+                .ForMember(x => x.IsDeleted, c => c.UseValue(false));
         }
     }
 }
