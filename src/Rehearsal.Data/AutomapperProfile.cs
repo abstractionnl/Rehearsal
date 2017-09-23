@@ -8,7 +8,8 @@ namespace Rehearsal.Data
         public AutomapperProfile()
         {
             CreateMap<QuestionListProperties, QuestionListModel>()
-                .ForMember(x => x.Id, c => c.Ignore());
+                .ForMember(x => x.Id, c => c.Ignore())
+                .ForMember(x => x.Version, c => c.Ignore());
 
             CreateMap<QuestionListProperties.Item, QuestionListModel.Item>();
             

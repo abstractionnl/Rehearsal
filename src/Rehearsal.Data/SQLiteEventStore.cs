@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace Rehearsal.Data
 {
-    public class SqliteEventStore : IEventStore
+    public class SqliteEventStore : IEventRepository
     {
         private IEventPublisher EventPublisher { get; }
         private SqliteConnection Connection { get; }
@@ -27,6 +28,7 @@ namespace Rehearsal.Data
 
         private const string InsertSyntax = @"INSERT INTO events (Id, Version, TimeStamp, Type, Data) VALUES (@id, @version, @timestamp, @type, @data)";
         private const string SelectSyntax = @"SELECT Type, Data FROM events WHERE Id = @id AND Version > @fromVersion";
+        private const string GetAllEventsSyntax = @"SELECT Type, Data FROM events ORDER BY TimeStamp";
         
         public SqliteEventStore(SqliteConnection connection, JsonSerializer serializer, IEventPublisher eventPublisher)
         {
@@ -62,12 +64,12 @@ namespace Rehearsal.Data
 
                 foreach (var @event in events)
                 {
-                    await PublishEvent(@event, cancellationToken);
+                    await EventPublisher.PublishEvent(@event, cancellationToken);
                 }
             }
         }
 
-        public async Task<IEnumerable<IEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken())
+        public Task<IEnumerable<IEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken())
         {
             var command = Connection.CreateCommand();
             command.CommandText = SelectSyntax;
@@ -78,6 +80,39 @@ namespace Rehearsal.Data
             idParam.Value = aggregateId;
             fromVersionParam.Value = fromVersion;
 
+            return ReadFromCommand(command, cancellationToken);
+        }
+
+        public IObservable<IEvent> GetEventStream()
+        {
+            return Observable.Create<IEvent>(async (observer, cancelationToken) =>
+            {
+                var command = Connection.CreateCommand();
+                command.CommandText = GetAllEventsSyntax;
+                
+                await StreamCommandResult(command, observer, cancelationToken);
+            });
+        }
+
+        private async Task StreamCommandResult(SqliteCommand command, IObserver<IEvent> observer, CancellationToken cancel)
+        {
+            using (var reader = await command.ExecuteReaderAsync(CancellationToken.None))
+            {
+                while (!cancel.IsCancellationRequested && await reader.ReadAsync(CancellationToken.None))
+                {
+                    var typeAsString = reader.GetString(0);
+                    var data = reader.GetString(1);
+
+                    var type = Type.GetType(typeAsString, true);
+                    observer.OnNext(Deserialize(data, type));
+                }
+
+                observer.OnCompleted();
+            }
+        }
+
+        private async Task<IEnumerable<IEvent>> ReadFromCommand(SqliteCommand command, CancellationToken cancellationToken)
+        {
             using (var reader = await command.ExecuteReaderAsync(cancellationToken))
             {
                 var result = new List<IEvent>();
@@ -100,13 +135,6 @@ namespace Rehearsal.Data
             var command = Connection.CreateCommand();
             command.CommandText = CreateSyntax;
             await command.ExecuteNonQueryAsync();
-        }
-        
-        private Task PublishEvent(IEvent @event, CancellationToken cancellationToken)
-        {
-            return (Task)typeof(IEventPublisher).GetMethod(nameof(IEventPublisher.Publish))
-                .MakeGenericMethod(@event.GetType())
-                .Invoke(EventPublisher, new object[] { @event, cancellationToken });
         }
 
         private string Serialize(IEvent @event)

@@ -9,9 +9,10 @@ namespace Rehearsal.Messages
         {
         }
 
-        public QuestionListModel(Guid id)
+        public QuestionListModel(Guid id, int version)
         {
             Id = id;
+            Version = version;
         }
         
         public Guid Id { get; set; }
@@ -19,6 +20,7 @@ namespace Rehearsal.Messages
         public string QuestionTitle { get; set; }
         public string AnswerTitle { get; set; }
         public ICollection<Item> Questions { get; set; }
+        public int Version { get; set; }
 
         public class Item
         {

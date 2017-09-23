@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 
 namespace Rehearsal.Data.StructureMap
 {
-    public class EventStoreFactory
+    public class EventRepositoryFactory
     {
-        public EventStoreFactory(IOptions<DatabaseOptions> options, IEventPublisher eventPublisher, JsonSerializer jsonSerializer)
+        public EventRepositoryFactory(IOptions<DatabaseOptions> options, IEventPublisher eventPublisher, JsonSerializer jsonSerializer)
         {
             Options = options.Value;
             EventPublisher = eventPublisher;
@@ -19,7 +19,7 @@ namespace Rehearsal.Data.StructureMap
         public IEventPublisher EventPublisher { get; }
         public JsonSerializer JsonSerializer { get; }
 
-        public IEventStore Create()
+        public IEventRepository Create()
         {
             switch (Options.EventStoreType)
             {

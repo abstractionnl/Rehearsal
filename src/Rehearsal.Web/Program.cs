@@ -23,6 +23,9 @@ namespace Rehearsal.Web
 
             //host.Services.GetService<SqliteEventStore>().ProvisionTable().Wait();
             host.Services.GetService<InjectTestData>().Run().Wait();
+            host.Services.GetService<EventReplayer>().ReplayEvents(
+                host.Services.GetService<IEventRepository>().GetEventStream()
+             );
 
             host.Run();
         }

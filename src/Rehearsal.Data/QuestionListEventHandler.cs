@@ -24,15 +24,21 @@ namespace Rehearsal.Data
         
         public Task Handle(QuestionListCreatedEvent message)
         {
-            QuestionListStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListModel(message.Id)));
+            QuestionListStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListModel(message.Id, message.Version)));
             QuestionListOverviewStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListOverviewModel(message.Id)));
             return Task.CompletedTask;
         }
 
         public Task Handle(QuestionListUpdatedEvent message)
         {
-            QuestionListStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListModel(message.Id)));
-            QuestionListOverviewStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListOverviewModel(message.Id)));
+            var currentVersion = QuestionListStore.GetById(message.Id).Map(x => x.Version).IfNone(0);
+
+            if (currentVersion < message.Version)
+            {
+                QuestionListStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListModel(message.Id, message.Version)));
+                QuestionListOverviewStore.Save(message.Id, Mapper.Map(message.QuestionList, new QuestionListOverviewModel(message.Id)));
+            }
+            
             return Task.CompletedTask;
         }
         

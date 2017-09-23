@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ using CQRSlite.Events;
 
 namespace Rehearsal.Data
 {
-    public class InMemoryEventStore : IEventStore
+    public class InMemoryEventStore : IEventRepository
     {
         private readonly IEventPublisher _publisher;
         private readonly IDictionary<Guid, List<IEvent>> _inMemoryDb = new Dictionary<Guid, List<IEvent>>();
@@ -29,15 +31,8 @@ namespace Rehearsal.Data
                     _inMemoryDb.Add(@event.Id, list);
                 }
                 list.Add(@event);
-                await PublishEvent(@event, cancellationToken);
+                await _publisher.PublishEvent(@event, cancellationToken);
             }
-        }
-
-        private Task PublishEvent(IEvent @event, CancellationToken cancellationToken)
-        {
-            return (Task)typeof(IEventPublisher).GetMethod(nameof(IEventPublisher.Publish))
-                .MakeGenericMethod(@event.GetType())
-                .Invoke(_publisher, new object[] { @event, cancellationToken });
         }
 
         public Task<IEnumerable<IEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = default(CancellationToken))
@@ -45,5 +40,7 @@ namespace Rehearsal.Data
             _inMemoryDb.TryGetValue(aggregateId, out var events);
             return Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>());
         }
+
+        public IObservable<IEvent> GetEventStream() => _inMemoryDb.Values.SelectMany(x => x).OrderBy(x => x.TimeStamp).ToObservable();
     }
 }

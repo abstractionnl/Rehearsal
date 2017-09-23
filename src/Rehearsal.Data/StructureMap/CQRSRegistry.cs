@@ -13,8 +13,11 @@ namespace Rehearsal.Data.StructureMap
             For<ICommandSender>().Use(y => y.GetInstance<InProcessBus>());
             For<IEventPublisher>().Use(y => y.GetInstance<InProcessBus>());
             For<ISession>().Use<Session>();
-            ForConcreteType<EventStoreFactory>();
-            ForSingletonOf<IEventStore>().Use(y => y.GetInstance<EventStoreFactory>().Create());
+            ForConcreteType<EventRepositoryFactory>();
+            For<IEventStore>().Use(y => y.GetInstance<IEventRepository>());
+            ForSingletonOf<IEventRepository>().Use(y => y.GetInstance<EventRepositoryFactory>().Create());
+            ForConcreteType<EventReplayer>();
+            
             For<IRepository>().Use<Repository>();
             
             Scan(_ =>

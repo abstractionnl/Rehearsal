@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Bogus;
+using Bogus.DataSets;
 using Rehearsal.Data.Test.Mocks;
 
 namespace Rehearsal.Data.Test
@@ -17,7 +18,9 @@ namespace Rehearsal.Data.Test
             };
 
         public static SomeEvent[] SomeEventsFor(this Faker faker, Guid entityId, int count) =>
-            Enumerable.Range(1, count).Select(i => faker.SomeEvent(entityId, i)).ToArray();
+            Enumerable.Range(1, count)
+                .Select(i => faker.SomeEvent(entityId, i, faker.Date.BetweenDaysAgo(i, i+1)))
+                .ToArray();
         
         public static AnotherEvent AnotherEvent(this Faker faker, Guid? entityId = null, int? version = null, DateTime? timeStamp = null) =>
             new AnotherEvent()
@@ -27,5 +30,8 @@ namespace Rehearsal.Data.Test
                 TimeStamp = timeStamp ?? faker.Date.Recent(),
                 AnotherValue = faker.Random.Number()
             };
+
+        public static DateTime BetweenDaysAgo(this Date faker, int minimumDaysAgo, int maximumDaysAgo) => 
+            faker.Between(DateTime.UtcNow.AddDays(maximumDaysAgo), DateTime.UtcNow.AddDays(minimumDaysAgo));
     }
 }

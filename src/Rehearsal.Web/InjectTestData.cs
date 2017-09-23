@@ -1,22 +1,29 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
 using LanguageExt;
 using Rehearsal.Messages;
+using Rehearsal.WebApi;
 
 namespace Rehearsal.Web
 {
     public class InjectTestData
     {
-        public InjectTestData(ICommandSender commandSender)
+        public InjectTestData(ICommandSender commandSender, IQuestionListRepository repository)
         {
             CommandSender = commandSender;
+            Repository = repository;
         }
 
         private ICommandSender CommandSender { get; }
+        public IQuestionListRepository Repository { get; }
 
         public async Task Run()
         {
+            if (Repository.GetAll().Any())
+                return;
+
             await CommandSender.Send(new CreateQuestionListCommand()
             {
                 Id = Guid.NewGuid(),

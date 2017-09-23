@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace Rehearsal.Data.Test
 {
-    public class SqliteEventStoreTest : BaseEventStoreTest<SqliteEventStore>, IDisposable
+    public class SqliteEventRepositoryTest : BaseEventRepositoryTest<SqliteEventStore>, IDisposable
     {
         private SqliteConnection Connection { get; }
         
-        public SqliteEventStoreTest()
+        public SqliteEventRepositoryTest()
         {
             Connection = new SqliteConnection("Datasource=:memory:;");
             Connection.Open();

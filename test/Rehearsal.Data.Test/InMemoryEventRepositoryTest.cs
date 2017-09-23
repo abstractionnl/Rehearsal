@@ -3,9 +3,9 @@ using Rehearsal.Data.Test.Mocks;
 
 namespace Rehearsal.Data.Test
 {
-    public class InMemoryEventStoreTest : BaseEventStoreTest<InMemoryEventStore>
+    public class InMemoryEventRepositoryTest : BaseEventRepositoryTest<InMemoryEventStore>
     {
-        public InMemoryEventStoreTest()
+        public InMemoryEventRepositoryTest()
         {
             EventStore = new InMemoryEventStore(EventPublisher);
         }
