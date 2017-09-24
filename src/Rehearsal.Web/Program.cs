@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using CQRSlite.Events;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Rehearsal.Data;
@@ -22,10 +23,8 @@ namespace Rehearsal.Web
                 .Build();
 
             //host.Services.GetService<SqliteEventStore>().ProvisionTable().Wait();
-            host.Services.GetService<InjectTestData>().Run().Wait();
-            host.Services.GetService<EventReplayer>().ReplayEvents(
-                host.Services.GetService<IEventRepository>().GetEventStream()
-             );
+
+            host.Services.GetService<StartupService>().Run().Wait();
 
             host.Run();
         }

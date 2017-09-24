@@ -16,7 +16,6 @@ namespace Rehearsal.Data.StructureMap
             ForConcreteType<EventRepositoryFactory>();
             For<IEventStore>().Use(y => y.GetInstance<IEventRepository>());
             ForSingletonOf<IEventRepository>().Use(y => y.GetInstance<EventRepositoryFactory>().Create());
-            ForConcreteType<EventReplayer>();
             
             For<IRepository>().Use<Repository>();
             

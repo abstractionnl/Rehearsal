@@ -44,7 +44,7 @@ namespace Rehearsal.Web
                 });
 
                 config.Populate(services);
-                config.For<InjectTestData>();
+                config.For<StartupService>();
             });
 
             return container.GetInstance<IServiceProvider>();

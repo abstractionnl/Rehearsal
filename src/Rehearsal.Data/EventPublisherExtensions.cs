@@ -1,3 +1,6 @@
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,5 +16,11 @@ namespace Rehearsal.Data
                 .MakeGenericMethod(@event.GetType())
                 .Invoke(eventPublisher, new object[] { @event, cancellationToken });
         }
+        
+        public static Task ReplayEvents(this IEventPublisher eventPublisher, IObservable<IEvent> events) => 
+            events
+                .Select(e => Observable.FromAsync(cancellationToken => eventPublisher.PublishEvent(e, cancellationToken)))
+                .Concat()
+                .ToTask();
     }
 }
