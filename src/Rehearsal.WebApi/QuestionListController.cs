@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CQRSlite.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rehearsal.Messages;
 
 namespace Rehearsal.WebApi
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class QuestionListController : Controller
     {
         public IQuestionListRepository QuestionListRepository { get; }

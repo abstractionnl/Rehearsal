@@ -8,13 +8,22 @@ import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.comp
 import { QuestionListResolver } from './questionlist.resolver';
 import { QuestionListsResolver } from './questionlists.resolver';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { AuthModule } from "./auth/auth.module";
+import { AuthGuard } from "./auth/auth-guard.service";
+import { LoginComponent } from "./login.component";
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent },
+    { path: 'login', component: LoginComponent },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [ AuthGuard ]
+    },
     {
         path: 'questionlists',
         component: QuestionlistOverviewComponent,
+        canActivate: [ AuthGuard ],
         resolve: {
             questionLists: QuestionListsResolver
         },
@@ -36,8 +45,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule],
-    providers: [QuestionListResolver, QuestionListsResolver, CanDeactivateGuard ]
+    imports: [ RouterModule.forRoot(routes), AuthModule ],
+    exports: [ RouterModule ],
+    providers: [ QuestionListResolver, QuestionListsResolver, CanDeactivateGuard ]
 })
 export class AppRoutingModule { }

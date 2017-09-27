@@ -18,6 +18,7 @@ import { AlertService } from './error/alert.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AlertComponent } from './error/alert.component';
+import { LoginComponent } from "./login.component";
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { AlertComponent } from './error/alert.component';
         QuestionlistDetailComponent,
         NoQuestionlistSelectedComponent,
         ConfirmSaveQuestionComponent,
-        FormValidationStyleDirective
+        FormValidationStyleDirective,
+        LoginComponent
     ],
     imports: [
         BrowserModule, FormsModule, HttpModule,

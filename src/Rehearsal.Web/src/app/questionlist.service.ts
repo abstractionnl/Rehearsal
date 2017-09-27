@@ -1,7 +1,8 @@
 ﻿/// <reference path="types.ts" />
 
-import {Injectable, OnInit} from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Injectable, OnInit } from '@angular/core';
+import { Headers } from '@angular/http';
+import { AuthHttp } from "angular2-jwt";
 
 import { Observable } from 'rxjs/Observable';
 
@@ -24,7 +25,7 @@ export class QuestionListService {
     private fetchTrigger = new BehaviorSubject(null);
     private all: Observable<Rehearsal.QuestionListOverview[]>;
 
-    constructor(private http: Http) {
+    constructor(private http: AuthHttp) {
         this.all = this.fetchTrigger
             .throttleTime(500)
             .switchMap(() => this.fetchAll())

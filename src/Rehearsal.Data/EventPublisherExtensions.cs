@@ -21,6 +21,7 @@ namespace Rehearsal.Data
             events
                 .Select(e => Observable.FromAsync(cancellationToken => eventPublisher.PublishEvent(e, cancellationToken)))
                 .Concat()
+                .LastOrDefaultAsync()
                 .ToTask();
     }
 }
