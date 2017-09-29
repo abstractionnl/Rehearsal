@@ -12,18 +12,20 @@ namespace Rehearsal.Web
 {
     public class StartupService
     {
-        public StartupService(ICommandSender commandSender, IQuestionListRepository questionListRepository, IEventPublisher eventPublisher, IEventRepository eventRepository, ILogger<StartupService> logger)
+        public StartupService(ICommandSender commandSender, IEventPublisher eventPublisher, IEventRepository eventRepository, IQuestionListRepository questionListRepository, IUserRepository userRepository, ILogger<StartupService> logger)
         {
             CommandSender = commandSender;
             QuestionListRepository = questionListRepository;
             EventPublisher = eventPublisher;
             EventRepository = eventRepository;
             Logger = logger;
+            UserRepository = userRepository;
         }
 
         private IEventPublisher EventPublisher { get; }
         private ICommandSender CommandSender { get; }
         private IQuestionListRepository QuestionListRepository { get; }
+        private IUserRepository UserRepository { get; }
         private IEventRepository EventRepository { get; }
         private ILogger<StartupService> Logger { get; }
 
@@ -39,58 +41,69 @@ namespace Rehearsal.Web
 
                 Logger.LogDebug("Finished replaying previous events to fill in memory repositories");
 
-                if (QuestionListRepository.GetAll().Any())
-                    return;
-
-                Logger.LogDebug("Injecting test data into application for development");
-
-                await CommandSender.Send(new CreateQuestionListCommand()
+                if (!UserRepository.GetAll().Any())
                 {
-                    Id = Guid.NewGuid(),
-                    QuestionList = new QuestionListProperties
-                    {
-                        Title = "Hoodstuk 1",
-                        QuestionTitle = "Nederlands",
-                        AnswerTitle = "Duits",
-                        Questions = new[] {
-                            new QuestionListProperties.Item
-                            {
-                                Question = "het huis",
-                                Answer = "das Haus"
-                            },
-                            new QuestionListProperties.Item
-                            {
-                                Question = "de kat",
-                                Answer = "die Katze"
-                            },
-                        }
-                    }
-                });
+                    Logger.LogDebug("Adding default user");
 
-                await CommandSender.Send(new CreateQuestionListCommand()
-                {
-                    Id = Guid.NewGuid(),
-                    QuestionList = new QuestionListProperties
+                    await CommandSender.Send(new CreateUserCommand()
                     {
-                        Title = "Hoodstuk 2",
-                        QuestionTitle = "Nederlands",
-                        AnswerTitle = "Frans",
-                        Questions = new[] {
-                            new QuestionListProperties.Item
-                            {
-                                Question = "het huis",
-                                Answer = "le maison"
-                            },
-                            new QuestionListProperties.Item
-                            {
-                                Question = "de kat",
-                                Answer = "le chat"
-                            },
-                        }
-                    }
-                });
+                        Id = Guid.NewGuid(),
+                        Username = "default"
+                    });
+                }
 
-                Logger.LogDebug("Finished injecting test data into application for development");
+                if (!QuestionListRepository.GetAll().Any()) {
+
+                    Logger.LogDebug("Injecting test data into application for development");
+
+                    await CommandSender.Send(new CreateQuestionListCommand()
+                    {
+                        Id = Guid.NewGuid(),
+                        QuestionList = new QuestionListProperties
+                        {
+                            Title = "Hoodstuk 1",
+                            QuestionTitle = "Nederlands",
+                            AnswerTitle = "Duits",
+                            Questions = new[] {
+                                new QuestionListProperties.Item
+                                {
+                                    Question = "het huis",
+                                    Answer = "das Haus"
+                                },
+                                new QuestionListProperties.Item
+                                {
+                                    Question = "de kat",
+                                    Answer = "die Katze"
+                                },
+                            }
+                        }
+                    });
+
+                    await CommandSender.Send(new CreateQuestionListCommand()
+                    {
+                        Id = Guid.NewGuid(),
+                        QuestionList = new QuestionListProperties
+                        {
+                            Title = "Hoodstuk 2",
+                            QuestionTitle = "Nederlands",
+                            AnswerTitle = "Frans",
+                            Questions = new[] {
+                                new QuestionListProperties.Item
+                                {
+                                    Question = "het huis",
+                                    Answer = "la maison"
+                                },
+                                new QuestionListProperties.Item
+                                {
+                                    Question = "de kat",
+                                    Answer = "le chat"
+                                },
+                            }
+                        }
+                    });
+
+                    Logger.LogDebug("Finished injecting test data into application for development");
+                }
             }
         }
     }

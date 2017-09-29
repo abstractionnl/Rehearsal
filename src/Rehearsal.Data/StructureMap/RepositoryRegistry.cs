@@ -10,6 +10,7 @@ namespace Rehearsal.Data.StructureMap
             For(typeof(InMemoryStore<>)).Singleton().Use(typeof(InMemoryStore<>));
 
             For<IQuestionListRepository>().Use<QuestionListRepository>();
+            For<IUserRepository>().Use<UserRepository>();
         }
     }
 }

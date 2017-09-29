@@ -21,7 +21,7 @@ export class Auth  {
     }
 
     login(): Promise<void> {
-        return this.http.post(this.tokenUrl, {})
+        return this.http.post(this.tokenUrl, { userName: 'default' })
             .toPromise()
             .then(response => localStorage.setItem('token', response.json().access_token));
     }

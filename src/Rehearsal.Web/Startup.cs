@@ -46,6 +46,9 @@ namespace Rehearsal.Web
                 options.Issuer = jwtConfigurationSection[nameof(JwtOptions.Issuer)];
                 options.Audience = jwtConfigurationSection[nameof(JwtOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+
+                if (!string.IsNullOrEmpty(jwtConfigurationSection[nameof(JwtOptions.ValidFor)]))
+                    options.ValidFor = TimeSpan.Parse(jwtConfigurationSection[nameof(JwtOptions.ValidFor)]);
             });
 
             services.AddMvc();
