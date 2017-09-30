@@ -1,7 +1,7 @@
 ﻿using Rehearsal.WebApi;
 using StructureMap;
 
-namespace Rehearsal.Data.StructureMap
+namespace Rehearsal.Data.Infrastructure.StructureMap
 {
     public class RepositoryRegistry : Registry
     {

@@ -1,4 +1,4 @@
-﻿namespace Rehearsal.Data
+﻿namespace Rehearsal.Data.Infrastructure
 {
     public class DatabaseOptions
     {

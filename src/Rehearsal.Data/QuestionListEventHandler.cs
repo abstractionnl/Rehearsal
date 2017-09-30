@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using CQRSlite.Events;
+using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages;
 using Rehearsal.WebApi;
 

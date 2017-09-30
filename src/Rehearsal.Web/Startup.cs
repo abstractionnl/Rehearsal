@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Rehearsal.Data;
-using Rehearsal.WebApi;
+using Rehearsal.Data.Infrastructure;
+using Rehearsal.WebApi.Infrastructure;
 using StructureMap;
 
 namespace Rehearsal.Web
@@ -51,7 +50,7 @@ namespace Rehearsal.Web
                     options.ValidFor = TimeSpan.Parse(jwtConfigurationSection[nameof(JwtOptions.ValidFor)]);
             });
 
-            services.AddMvc();
+            services.SetupWebApi();
 
             var container = new Container();
 
@@ -73,15 +72,12 @@ namespace Rehearsal.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory
-                .AddConsole(LogLevel.Debug, includeScopes: true);
-
-            var jwtOptions = app.ApplicationServices.GetService<IOptions<JwtOptions>>().Value;
-
             if (env.IsDevelopment())
             {
+                loggerFactory.AddConsole(LogLevel.Debug, includeScopes: true);
                 app.UseDeveloperExceptionPage();
             }
+
             app.Use(async (context, next) => {
                 await next();
                 if (context.Response.StatusCode == 404 &&
@@ -92,27 +88,7 @@ namespace Rehearsal.Web
                     await next();
                 }
             });
-            app.UseJwtBearerAuthentication(new JwtBearerOptions()
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtOptions.Issuer,
-
-                    ValidateAudience = true,
-                    ValidAudience = jwtOptions.Audience,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = jwtOptions.SigningCredentials.Key,
-
-                    RequireExpirationTime = true,
-                    ValidateLifetime = true,
-
-                    ClockSkew = TimeSpan.Zero
-                }
-            });
-            app.UseMvcWithDefaultRoute();
+            app.UseWebApi();
             app.UseDefaultFiles();
             app.UseStaticFiles();
         }

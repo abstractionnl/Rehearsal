@@ -10,11 +10,4 @@ namespace Rehearsal.WebApi
         IEnumerable<QuestionListOverviewModel> GetAll();
         Option<QuestionListModel> GetById(Guid id);
     }
-
-    public interface IUserRepository
-    {
-        Option<UserModel> GetById(Guid id);
-        IEnumerable<UserModel> GetAll();
-        Option<UserModel> GetByUsername(string userName);
-    }
 }

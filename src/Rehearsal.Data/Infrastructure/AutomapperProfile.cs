@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Rehearsal.Messages;
 
-namespace Rehearsal.Data
+namespace Rehearsal.Data.Infrastructure
 {
     public class AutomapperProfile : Profile
     {

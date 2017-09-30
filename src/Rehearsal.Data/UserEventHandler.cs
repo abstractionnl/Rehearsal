@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using CQRSlite.Events;
+using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages;
 
 namespace Rehearsal.Data
@@ -11,7 +12,7 @@ namespace Rehearsal.Data
             UserStore = userStore;
         }
 
-        public InMemoryStore<UserModel> UserStore { get; }
+        private InMemoryStore<UserModel> UserStore { get; }
         
         public Task Handle(UserCreatedEvent message)
         {

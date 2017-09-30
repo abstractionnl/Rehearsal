@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace Rehearsal.Data.StructureMap
+namespace Rehearsal.Data.Infrastructure.StructureMap
 {
     public class EventRepositoryFactory
     {

@@ -5,6 +5,7 @@ using CQRSlite.Commands;
 using CQRSlite.Events;
 using Microsoft.Extensions.Logging;
 using Rehearsal.Data;
+using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages;
 using Rehearsal.WebApi;
 

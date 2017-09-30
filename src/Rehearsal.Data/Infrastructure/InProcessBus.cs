@@ -6,7 +6,7 @@ using CQRSlite.Events;
 using Microsoft.Extensions.Logging;
 using StructureMap;
 
-namespace Rehearsal.Data
+namespace Rehearsal.Data.Infrastructure
 {
     public class InProcessBus : ICommandSender, IEventPublisher
     {
@@ -41,7 +41,6 @@ namespace Rehearsal.Data
                     throw;
                 }
             }
-            
         }
 
         public async Task Publish<T>(T @event, CancellationToken cancellationToken = default(CancellationToken)) where T : class, IEvent
@@ -62,13 +61,13 @@ namespace Rehearsal.Data
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError(LoggingEvents.SendError, "Failed executing handler {handlertype}", e, handler.GetType().FullName);
+                        Logger.LogError(LoggingEvents.PublishError, "Failed executing handler {handlertype}", e, handler.GetType().FullName);
                     }
                 }
             }
         }
         
-        public class LoggingEvents
+        public static class LoggingEvents
         {
             public const int Send = 1000;
             public const int Publish = 1001;

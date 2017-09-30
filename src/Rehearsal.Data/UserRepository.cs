@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LanguageExt;
+using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages;
 using Rehearsal.WebApi;
 

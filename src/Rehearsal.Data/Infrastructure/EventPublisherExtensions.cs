@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
 
-namespace Rehearsal.Data
+namespace Rehearsal.Data.Infrastructure
 {
     public static class EventPublisherExtensions
     {
-        public static Task PublishEvent(this IEventPublisher eventPublisher, IEvent @event, CancellationToken cancellationToken)
+        internal static Task PublishEvent(this IEventPublisher eventPublisher, IEvent @event, CancellationToken cancellationToken)
         {
             return (Task)typeof(IEventPublisher).GetMethod(nameof(IEventPublisher.Publish))
                 .MakeGenericMethod(@event.GetType())

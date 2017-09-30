@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
@@ -11,7 +10,7 @@ using CQRSlite.Events;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 
-namespace Rehearsal.Data
+namespace Rehearsal.Data.Infrastructure
 {
     public class SqliteEventStore : IEventRepository
     {

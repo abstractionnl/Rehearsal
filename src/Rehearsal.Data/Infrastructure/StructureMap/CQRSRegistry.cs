@@ -3,7 +3,7 @@ using CQRSlite.Domain;
 using CQRSlite.Events;
 using StructureMap;
 
-namespace Rehearsal.Data.StructureMap
+namespace Rehearsal.Data.Infrastructure.StructureMap
 {
     public class CqrsRegistry : Registry
     {

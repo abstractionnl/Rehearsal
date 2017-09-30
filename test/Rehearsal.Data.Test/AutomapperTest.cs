@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Rehearsal.Data.Infrastructure;
 using Xunit;
 
 namespace Rehearsal.Data.Test

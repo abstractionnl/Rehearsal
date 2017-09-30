@@ -1,4 +1,5 @@
 using AutoMapper;
+using Rehearsal.WebApi.Infrastructure;
 using Xunit;
 
 namespace Rehearsal.WebApi.Test

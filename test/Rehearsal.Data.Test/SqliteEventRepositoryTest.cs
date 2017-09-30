@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
+using Rehearsal.Data.Infrastructure;
 
 namespace Rehearsal.Data.Test
 {

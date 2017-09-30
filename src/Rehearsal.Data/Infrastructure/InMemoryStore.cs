@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using LanguageExt;
-using Rehearsal.Data.StructureMap;
-using Rehearsal.Messages;
 
-namespace Rehearsal.Data
+namespace Rehearsal.Data.Infrastructure
 {
     public class InMemoryStore<TEntity>
         where TEntity: class
@@ -14,7 +12,7 @@ namespace Rehearsal.Data
             Entities = new Dictionary<Guid, TEntity>();
         }
 
-        protected IDictionary<Guid, TEntity> Entities { get; }
+        private IDictionary<Guid, TEntity> Entities { get; }
 
         public IEnumerable<TEntity> All => Entities.Values;
 

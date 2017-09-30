@@ -7,8 +7,8 @@ using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Rehearsal.Messages;
+using Rehearsal.WebApi.Infrastructure;
 
 namespace Rehearsal.WebApi
 {
@@ -24,6 +24,21 @@ namespace Rehearsal.WebApi
 
         private JwtOptions JwtOptions { get; }
         private IUserRepository UserRepository { get; }
+
+        [HttpGet, Route("token")]
+        public IActionResult ShowClaims()
+        {
+            return Ok(
+                new
+                {
+                    Identity = new
+                    {
+                        User.Identity.Name
+                    },
+                    Claims = User.Claims.Select(claim => new { claim.Type, claim.Value })
+                }
+            );
+        }
         
         [HttpPost, Route("token")]
         public IActionResult GenerateJwtToken([FromBody] TokenRequestModel request) => 
@@ -32,7 +47,6 @@ namespace Rehearsal.WebApi
                 {
                     var claims = new[]
                     {
-                        new Claim(JwtRegisteredClaimNames.Sub, claimsIdentity.Name),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(),
                             ClaimValueTypes.Integer64)
@@ -58,20 +72,17 @@ namespace Rehearsal.WebApi
         private Option<ClaimsIdentity> GetClaim(string userName)
         {
             return UserRepository.GetByUsername(userName).HeadOrNone()
-                .Map(user => new ClaimsIdentity(new GenericIdentity(user.UserName)));
+                .Map(user => new ClaimsIdentity(
+                    new GenericIdentity(user.UserName), 
+                    new []
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), 
+                    }));
         }
 
         private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - 
                                  new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .TotalSeconds);
-    }
-
-    public class JwtOptions
-    {
-        public string Issuer { get; set; }
-        public string Audience { get; set; }
-        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(5);
-        public SigningCredentials SigningCredentials { get; set; }
     }
 }
