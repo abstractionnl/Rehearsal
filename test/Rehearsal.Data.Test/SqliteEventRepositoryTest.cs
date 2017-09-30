@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Rehearsal.Data.Infrastructure;
+using Rehearsal.Data.Test.Mocks;
 
 namespace Rehearsal.Data.Test
 {
@@ -13,7 +14,9 @@ namespace Rehearsal.Data.Test
         {
             Connection = new SqliteConnection("Datasource=:memory:;");
             Connection.Open();
-            EventStore = new SqliteEventStore(Connection, JsonSerializer.CreateDefault(), EventPublisher);
+            var eventSerializer = new EventSerializer(JsonSerializer.CreateDefault(), typeof(SomeEvent), typeof(AnotherEvent));
+            
+            EventStore = new SqliteEventStore(Connection, eventSerializer, EventPublisher);
             EventStore.ProvisionTable().Wait();
         }
 

@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
 using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
 
 namespace Rehearsal.Data.Infrastructure
 {
@@ -16,7 +12,7 @@ namespace Rehearsal.Data.Infrastructure
     {
         private IEventPublisher EventPublisher { get; }
         private SqliteConnection Connection { get; }
-        private JsonSerializer Serializer { get; }
+        private EventSerializer Serializer { get; }
 
         const string CreateSyntax = @"CREATE TABLE IF NOT EXISTS events (
 	        Id VARCHAR(36),
@@ -29,7 +25,7 @@ namespace Rehearsal.Data.Infrastructure
         private const string SelectSyntax = @"SELECT Type, Data FROM events WHERE Id = @id AND Version > @fromVersion";
         private const string GetAllEventsSyntax = @"SELECT Type, Data FROM events ORDER BY TimeStamp";
         
-        public SqliteEventStore(SqliteConnection connection, JsonSerializer serializer, IEventPublisher eventPublisher)
+        public SqliteEventStore(SqliteConnection connection, EventSerializer serializer, IEventPublisher eventPublisher)
         {
             Connection = connection;
             Serializer = serializer;
@@ -53,8 +49,7 @@ namespace Rehearsal.Data.Infrastructure
                     idParam.Value = @event.Id;
                     verionParam.Value = @event.Version;
                     timestampParam.Value = @event.TimeStamp;
-                    typeParam.Value = @event.GetType().AssemblyQualifiedName;
-                    dataParam.Value = Serialize(@event);
+                    (typeParam.Value, dataParam.Value) = Serializer.Serialize(@event);
                         
                     await command.ExecuteNonQueryAsync(cancellationToken);
                 }
@@ -101,9 +96,8 @@ namespace Rehearsal.Data.Infrastructure
                 {
                     var typeAsString = reader.GetString(0);
                     var data = reader.GetString(1);
-
-                    var type = Type.GetType(typeAsString, true);
-                    observer.OnNext(Deserialize(data, type));
+                    
+                    observer.OnNext(Serializer.Deserialize(typeAsString, data));
                 }
 
                 observer.OnCompleted();
@@ -121,8 +115,7 @@ namespace Rehearsal.Data.Infrastructure
                     var typeAsString = reader.GetString(0);
                     var data = reader.GetString(1);
 
-                    var type = Type.GetType(typeAsString, true);
-                    result.Add(Deserialize(data, type));
+                    result.Add(Serializer.Deserialize(typeAsString, data));
                 }
 
                 return result;
@@ -134,26 +127,6 @@ namespace Rehearsal.Data.Infrastructure
             var command = Connection.CreateCommand();
             command.CommandText = CreateSyntax;
             await command.ExecuteNonQueryAsync();
-        }
-
-        private string Serialize(IEvent @event)
-        {
-            var sb = new StringBuilder(256);
-            var sw = new StringWriter(sb, CultureInfo.InvariantCulture);
-            using (var jsonWriter = new JsonTextWriter(sw))
-            {
-                Serializer.Serialize(jsonWriter, @event);
-            }
-
-            return sw.ToString();
-        }
-
-        private IEvent Deserialize(string json, Type type)
-        {
-            using (var reader = new JsonTextReader(new StringReader(json)))
-            {
-                return (IEvent)Serializer.Deserialize(reader, type);
-            }
         }
     }
 }

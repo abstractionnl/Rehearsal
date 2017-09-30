@@ -8,16 +8,16 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
 {
     public class EventRepositoryFactory
     {
-        public EventRepositoryFactory(IOptions<DatabaseOptions> options, IEventPublisher eventPublisher, JsonSerializer jsonSerializer)
+        public EventRepositoryFactory(IOptions<DatabaseOptions> options, IEventPublisher eventPublisher, EventSerializer eventSerializer)
         {
             Options = options.Value;
             EventPublisher = eventPublisher;
-            JsonSerializer = jsonSerializer;
+            EventSerializer = eventSerializer;
         }
 
-        public DatabaseOptions Options { get; }
-        public IEventPublisher EventPublisher { get; }
-        public JsonSerializer JsonSerializer { get; }
+        private DatabaseOptions Options { get; }
+        private IEventPublisher EventPublisher { get; }
+        private EventSerializer EventSerializer { get; }
 
         public IEventRepository Create()
         {
@@ -30,7 +30,7 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
                 case EventStoreType.Sqlite:
                     var store = new SqliteEventStore(
                         CreateSqlConnection(Options.ConnectionString), 
-                        JsonSerializer, 
+                        EventSerializer, 
                         EventPublisher
                     );
 

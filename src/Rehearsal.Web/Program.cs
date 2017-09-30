@@ -19,10 +19,10 @@ namespace Rehearsal.Web
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+            #if DEBUG
                 .UseEnvironment("Development")
+            #endif
                 .Build();
-
-            //host.Services.GetService<SqliteEventStore>().ProvisionTable().Wait();
 
             host.Services.GetService<StartupService>().Run().Wait();
 
