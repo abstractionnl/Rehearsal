@@ -1,4 +1,4 @@
-﻿/// <reference path="types.ts" />
+﻿/// <reference path="../types.ts" />
 
 import { Injectable, OnInit } from '@angular/core';
 import { Headers } from '@angular/http';

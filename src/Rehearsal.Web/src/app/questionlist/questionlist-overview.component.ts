@@ -1,4 +1,4 @@
-﻿/// <reference path="types.ts" />
+﻿/// <reference path="../types.ts" />
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Observable } from 'rxjs/Observable';

@@ -1,13 +1,12 @@
-﻿/// <reference path="types.ts" />
+﻿/// <reference path="../types.ts" />
 
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { Observable } from 'rxjs/Observable';
 
 import { QuestionListService } from './questionlist.service';
 import { ActivatedRoute, Router} from "@angular/router";
-import { AlertService } from "./error/alert.service";
-import { ICanComponentDeactivate } from "./can-deactivate-guard.service";
+import { AlertService } from "../alert/alert.service";
+import { ICanComponentDeactivate } from "../can-deactivate-guard.service";
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent, ResultAction } from "./confirm-save-question.component";
 

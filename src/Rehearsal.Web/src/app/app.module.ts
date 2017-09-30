@@ -7,39 +7,29 @@ import { AlertModule, ModalModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard.component';
-import { QuestionlistOverviewComponent } from './questionlist-overview.component';
-import { QuestionlistDetailComponent } from './questionlist-detail.component';
-import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
-import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent } from "./confirm-save-question.component";
 import { FormValidationStyleDirective } from "./form-validation-style.directive";
 
-import { QuestionListService } from './questionlist.service';
-import { AlertService } from './error/alert.service';
+import { AlertService } from './alert/alert.service';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AlertComponent } from './error/alert.component';
-import { LoginComponent } from "./login.component";
+import { AlertComponent } from './alert/alert.component';
+import { QuestionlistModule } from "./questionlist/questionlist.module";
+import { AuthModule } from "./auth/auth.module";
 
 @NgModule({
     declarations: [
         AppComponent,
         AlertComponent,
         DashboardComponent,
-        QuestionlistOverviewComponent,
-        QuestionlistDetailComponent,
-        NoQuestionlistSelectedComponent,
-        ConfirmSaveQuestionComponent,
-        FormValidationStyleDirective,
-        LoginComponent
+        FormValidationStyleDirective
     ],
     imports: [
         BrowserModule, FormsModule, HttpModule,
         AlertModule.forRoot(), ModalModule.forRoot(),
-        AppRoutingModule
+        QuestionlistModule,
+        AuthModule, AppRoutingModule
     ],
-    entryComponents: [ ConfirmSaveQuestionComponent ],
     providers: [
-        QuestionListService,
         AlertService
     ],
     bootstrap: [

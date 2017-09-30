@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 import {QuestionListService} from "./questionlist.service";
 import QuestionList = Rehearsal.QuestionList;
 
-import { AlertService } from "./error/alert.service";
+import { AlertService } from "../alert/alert.service";
 import QuestionListOverview = Rehearsal.QuestionListOverview;
 import "rxjs/add/operator/take";
 

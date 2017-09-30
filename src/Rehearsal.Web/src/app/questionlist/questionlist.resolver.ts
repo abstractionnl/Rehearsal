@@ -7,7 +7,7 @@ import {QuestionListService} from "./questionlist.service";
 import QuestionList = Rehearsal.QuestionList;
 
 import "rxjs/add/operator/do";
-import { AlertService } from "./error/alert.service";
+import { AlertService } from "../alert/alert.service";
 
 @Injectable()
 export class QuestionListResolver implements Resolve<QuestionList> {
