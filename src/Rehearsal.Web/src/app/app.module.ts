@@ -15,13 +15,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AlertComponent } from './alert/alert.component';
 import { QuestionlistModule } from "./questionlist/questionlist.module";
 import { AuthModule } from "./auth/auth.module";
+import { StartRehearsalComponent } from "./start-rehearsal.component";
+import { RehearsalService } from "./rehearsal.service";
 
 @NgModule({
     declarations: [
         AppComponent,
         AlertComponent,
         DashboardComponent,
-        FormValidationStyleDirective
+        FormValidationStyleDirective,
+        StartRehearsalComponent
     ],
     imports: [
         BrowserModule, FormsModule, HttpModule,
@@ -30,7 +33,7 @@ import { AuthModule } from "./auth/auth.module";
         AuthModule, AppRoutingModule
     ],
     providers: [
-        AlertService
+        AlertService, RehearsalService
     ],
     bootstrap: [
         AppComponent

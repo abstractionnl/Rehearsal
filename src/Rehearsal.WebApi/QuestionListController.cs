@@ -14,18 +14,15 @@ namespace Rehearsal.WebApi
     [Authorize]
     public class QuestionListController : Controller
     {
-        public IQuestionListRepository QuestionListRepository { get; }
-        private IMapper Mapper { get; }
+        private IQuestionListRepository QuestionListRepository { get; }
         private ICommandSender CommandSender { get; }
 
-        public QuestionListController(IQuestionListRepository questionListRepository, IMapper mapper, ICommandSender commandSender)
+        public QuestionListController(IQuestionListRepository questionListRepository, ICommandSender commandSender)
         {
             if (questionListRepository == null) throw new ArgumentNullException(nameof(questionListRepository));
-            if (mapper == null) throw new ArgumentNullException(nameof(mapper));
             if (commandSender == null) throw new ArgumentNullException(nameof(commandSender));
             
             QuestionListRepository = questionListRepository;
-            Mapper = mapper;
             CommandSender = commandSender;
         }
 

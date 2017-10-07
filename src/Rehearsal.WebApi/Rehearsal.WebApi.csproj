@@ -10,9 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.3" />
     <PackageReference Include="StructureMap" Version="4.5.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
+    <PackageReference Include="LanguageExt.Core" Version="2.1.18" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rehearsal.Messages\Rehearsal.Messages.csproj" />
-    <ProjectReference Include="..\Rehearsal\Rehearsal.csproj" />
   </ItemGroup>
 </Project>

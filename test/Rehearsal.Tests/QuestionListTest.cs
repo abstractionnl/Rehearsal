@@ -1,76 +1,66 @@
 using NFluent;
 using System;
+using Rehearsal.Messages;
 using Xunit;
 
 namespace Rehearsal.Tests
 {
-    /* TODO: Refactor tests to test CQRS events
-    public class QuestionListTest
+    public class QuestionListTest : BaseAggregateTest<QuestionList>
     {
-        protected QuestionList QuestionList;
-
-        public class GivenNewQuestionList : QuestionListTest
+        [Fact]
+        public void CanCreate()
         {
-            public GivenNewQuestionList()
-            {
-                QuestionList = CreateQuestionList();
-            }
-
-            [Fact] public void TitlesAreSet()
-            {
-                Check.That(QuestionList.Title).IsEqualTo(StubTitle);
-                Check.That(QuestionList.QuestionTitle).IsEqualTo(StubQuestionTitle);
-                Check.That(QuestionList.AnswerTitle).IsEqualTo(StubAnswerTitle);
-            }
-
-            [Fact] public void ListIsEmpty()
-            {
-                Check.That(QuestionList.Questions.Count).IsEqualTo(0);
-                
-            }
+            var properties = Faker.QuestionListProperties();
+            
+            Given(
+                () => new QuestionList(Guid.NewGuid(), properties)
+            ).ThenEvent<QuestionListCreatedEvent>(
+                @event => Check.That(@event.QuestionList).IsEqualTo(properties)
+            );
         }
 
-        public class GivenOneQuestionIsAdded : QuestionListTest
+        [Fact]
+        public void CanUpdate()
         {
-            public GivenOneQuestionIsAdded()
-            {
-                QuestionList = CreateQuestionListWithOneQuestion();
-            }
+            var properties = Faker.QuestionListProperties();
 
-            [Fact] public void ListContainsOneQuestion()
-            {
-                Check.That(QuestionList.Questions.Count).IsEqualTo(1);
-            }
-
-            [Fact] public void FirstQuestionIsAvailable()
-            {
-                Check.That(QuestionList.Questions[0]).IsNotNull();
-                Check.That(QuestionList.Questions[0].Question).IsEqualTo(StubQuestion);
-                Check.That(QuestionList.Questions[0].Answer).IsEqualTo(StubAnswer);
-            }
+            Given(new QuestionListCreatedEvent { QuestionList = Faker.QuestionListProperties() })
+                .When(q => q.Update(properties))
+                .ThenEvent<QuestionListUpdatedEvent>(
+                    @event => Check.That(@event.QuestionList).IsEqualTo(properties)
+                );
         }
 
-        public class GivenListWithTenQuestions : QuestionListTest
+        [Fact]
+        public void CanUpdateTwice()
         {
-            public GivenListWithTenQuestions()
-            {
-                QuestionList = CreateQuestionList();
-            }
+            var properties = Faker.QuestionListProperties();
+            
+            Given(
+                new QuestionListCreatedEvent { QuestionList = Faker.QuestionListProperties() },
+                new QuestionListUpdatedEvent { QuestionList = Faker.QuestionListProperties() }
+            )
+                .When(q => q.Update(properties))
+                .ThenEvent<QuestionListUpdatedEvent>(
+                    @event => Check.That(@event.QuestionList).IsEqualTo(properties)
+                );
         }
 
-        private const string StubTitle = "Sample List";
-        private const string StubQuestionTitle = "Dutch";
-        private const string StubAnswerTitle = "English";
-        private const string StubQuestion = "kat";
-        private const string StubAnswer = "cat";
-
-        private static QuestionList CreateQuestionList() => new QuestionList(StubTitle, StubQuestionTitle, StubAnswerTitle, new QuestionList.ListItem[0]);
-        private static QuestionList CreateQuestionListWithOneQuestion()
+        [Fact]
+        public void CanDelete()
         {
-            var questionList = CreateQuestionList();
-            questionList.Questions.Add(QuestionList.ListItem.Create(StubQuestion, StubAnswer));
-            return questionList;
+            Given(new QuestionListCreatedEvent { QuestionList = Faker.QuestionListProperties() })
+                .When(q => q.Delete())
+                .ThenEvent<QuestionListDeletedEvent>();
+        }
+
+        [Fact]
+        public void CannotDeleteTwice()
+        {
+            Given(
+                new QuestionListCreatedEvent { QuestionList = Faker.QuestionListProperties() },
+                new QuestionListDeletedEvent()
+            ).ThrowsWhen<InvalidOperationException>(q => q.Delete());
         }
     }
-    */
 }

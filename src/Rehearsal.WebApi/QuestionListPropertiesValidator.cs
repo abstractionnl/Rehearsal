@@ -10,12 +10,12 @@ namespace Rehearsal.WebApi
             RuleFor(x => x.Title).NotEmpty();
             RuleFor(x => x.QuestionTitle).NotEmpty();
             RuleFor(x => x.AnswerTitle).NotEmpty();
-            RuleFor(x => x.Questions).NotNull().SetCollectionValidator(new ItemValidator());
+            RuleFor(x => x.Questions).NotNull().SetCollectionValidator(new QuestionModelValidator());
         }
 
-        private class ItemValidator : AbstractValidator<QuestionListProperties.Item>
+        private class QuestionModelValidator : AbstractValidator<QuestionModel>
         {
-            public ItemValidator()
+            public QuestionModelValidator()
             {
                 RuleFor(x => x.Question).NotEmpty();
                 RuleFor(x => x.Answer).NotEmpty();

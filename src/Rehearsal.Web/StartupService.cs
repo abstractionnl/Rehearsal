@@ -66,12 +66,12 @@ namespace Rehearsal.Web
                             QuestionTitle = "Nederlands",
                             AnswerTitle = "Duits",
                             Questions = new[] {
-                                new QuestionListProperties.Item
+                                new QuestionModel
                                 {
                                     Question = "het huis",
                                     Answer = "das Haus"
                                 },
-                                new QuestionListProperties.Item
+                                new QuestionModel
                                 {
                                     Question = "de kat",
                                     Answer = "die Katze"
@@ -89,12 +89,12 @@ namespace Rehearsal.Web
                             QuestionTitle = "Nederlands",
                             AnswerTitle = "Frans",
                             Questions = new[] {
-                                new QuestionListProperties.Item
+                                new QuestionModel
                                 {
                                     Question = "het huis",
                                     Answer = "la maison"
                                 },
-                                new QuestionListProperties.Item
+                                new QuestionModel
                                 {
                                     Question = "de kat",
                                     Answer = "le chat"

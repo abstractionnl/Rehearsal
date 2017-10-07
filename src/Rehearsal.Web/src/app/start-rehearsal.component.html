@@ -1,0 +1,15 @@
+<h3>Overhoring starten</h3>
+<div class="col-lg-6">
+    <form #form="ngForm" (submit)="start()" class="form-horizontal">
+        <div class="form-group">
+            <label for="questionList">
+                Woordenlijst
+            </label>
+            <select class="form-control" id="questionList" name="questionList" [(ngModel)]="questionList">
+                <option hidden>Selecteer een woordenlijst</option>
+                <option *ngFor="let questionList of questionLists | async" [ngValue]="questionList">{{questionList.title}} ({{questionList.questionTitle}} - {{questionList.answerTitle}})</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!canStart()">Starten</button>
+    </form>
+</div>

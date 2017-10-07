@@ -1,4 +1,5 @@
-﻿using Rehearsal.WebApi;
+﻿using Rehearsal.Messages;
+using Rehearsal.WebApi;
 using StructureMap;
 
 namespace Rehearsal.Data.Infrastructure.StructureMap
@@ -11,6 +12,7 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
 
             For<IQuestionListRepository>().Use<QuestionListRepository>();
             For<IUserRepository>().Use<UserRepository>();
+            For<IRehearsalSessionRepository>().Use<RehearsalSessionRepository>();
         }
     }
 }

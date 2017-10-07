@@ -6,6 +6,7 @@ import { CanDeactivateGuard } from './can-deactivate-guard.service';
 import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth-guard.service";
 import { LoginComponent } from "./auth/login.component";
+import { StartRehearsalComponent } from "./start-rehearsal.component";
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -13,6 +14,11 @@ const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [ AuthGuard ]
+    },
+    {
+        path: 'rehearsal',
+        component: StartRehearsalComponent,
         canActivate: [ AuthGuard ]
     }
 ];

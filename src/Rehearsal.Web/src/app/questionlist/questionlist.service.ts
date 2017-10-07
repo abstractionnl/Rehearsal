@@ -82,7 +82,8 @@ export class QuestionListService {
             questions: [ {
                 question: '',
                 answer: ''
-            }]
+            }],
+            version: 0
         }
     }
 }

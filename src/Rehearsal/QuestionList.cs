@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using CQRSlite.Domain;
-using LanguageExt;
 using Rehearsal.Messages;
 
 namespace Rehearsal
@@ -13,7 +12,7 @@ namespace Rehearsal
         public string QuestionTitle { get; private set; }
         public string AnswerTitle { get; private set; }
 
-        public IList<ListItem> Questions { get; private set; }
+        public IList<QuestionRecord> Questions { get; private set; }
         
         public bool IsDeleted { get; set; }
 
@@ -22,6 +21,8 @@ namespace Rehearsal
         
         public QuestionList(Guid id, QuestionListProperties properties)
         {
+            if (properties == null) throw new ArgumentNullException(nameof(properties));
+            
             Id = id;
             
             ApplyChange(new QuestionListCreatedEvent()
@@ -33,6 +34,8 @@ namespace Rehearsal
 
         public void Update(QuestionListProperties properties)
         {
+            if (properties == null) throw new ArgumentNullException(nameof(properties));
+            
             ApplyChange(new QuestionListUpdatedEvent()
             {
                 Id = Id,
@@ -42,6 +45,9 @@ namespace Rehearsal
 
         public void Delete()
         {
+            if (IsDeleted)
+                throw new InvalidOperationException("Cannot delete questionlist twice");
+            
             ApplyChange(new QuestionListDeletedEvent()
             {
                 Id = Id
@@ -54,31 +60,7 @@ namespace Rehearsal
             QuestionTitle = properties.QuestionTitle;
             AnswerTitle = properties.AnswerTitle;
             
-            Questions = new List<ListItem>(properties.Questions.Select(x => ListItem.Create(x.Question, x.Answer)));
-        }
-
-        private QuestionListProperties ToProperties() => new QuestionListProperties
-        {
-            Title = Title,
-            QuestionTitle = QuestionTitle,
-            AnswerTitle = AnswerTitle,
-            Questions = Questions.Select(q => new QuestionListProperties.Item
-            {
-                Question = q.Question,
-                Answer = q.Answer
-            }).ToList()
-        };
-        
-        public class ListItem : Record<ListItem>
-        {
-            public string Question { get; internal set; }
-            public string Answer { get; internal set; }
-
-            public static ListItem Create(string question, string answer) => new ListItem
-            {
-                Question = question,
-                Answer = answer
-            };
+            Questions = new List<QuestionRecord>(properties.Questions.Select(x => QuestionRecord.Create(x.Question, x.Answer)));
         }
         
         protected void Apply(QuestionListCreatedEvent @event)

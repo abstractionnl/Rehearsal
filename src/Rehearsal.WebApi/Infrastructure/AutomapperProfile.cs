@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Rehearsal.Messages;
 
 namespace Rehearsal.WebApi.Infrastructure
@@ -7,10 +8,7 @@ namespace Rehearsal.WebApi.Infrastructure
     {
         public AutomapperProfile()
         {
-            CreateMap<QuestionList, QuestionListOverviewModel>()
-                .ForMember(x => x.QuestionsCount, x => x.MapFrom(l => l.Questions.Count));
-            CreateMap<QuestionList, QuestionListModel>();
-            CreateMap<QuestionList.ListItem, QuestionListModel.Item>();
+
         }
     }
 }

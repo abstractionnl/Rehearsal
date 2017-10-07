@@ -1,45 +1,33 @@
 
 declare namespace Rehearsal {
-  interface CreateQuestionListRequest {
-    answerTitle: string;
-    questions: Rehearsal.CreateQuestionListRequest.Item[];
-    questionTitle: string;
-    title: string;
-  }
   interface QuestionList {
     answerTitle: string;
     id: System.Guid;
     questions: Rehearsal.QuestionList.Item[];
     questionTitle: string;
     title: string;
+    version: number;
   }
   interface QuestionListOverview {
     answerTitle: string;
     id: System.Guid;
+    isDeleted: boolean;
     questionsCount: number;
     questionTitle: string;
     title: string;
   }
-  interface UpdateQuestionListRequest {
-    answerTitle: string;
-    questions: Rehearsal.UpdateQuestionListRequest.Item[];
-    questionTitle: string;
-    title: string;
+  interface StartRehearsalRequest {
+    questionListId: System.Guid;
   }
-}
-declare namespace Rehearsal.CreateQuestionListRequest {
-  interface Item {
-    answer: string;
-    question: string;
+  interface TokenRequest {
+    userName: string;
+  }
+  interface User {
+    id: System.Guid;
+    userName: string;
   }
 }
 declare namespace Rehearsal.QuestionList {
-  interface Item {
-    answer: string;
-    question: string;
-  }
-}
-declare namespace Rehearsal.UpdateQuestionListRequest {
   interface Item {
     answer: string;
     question: string;
