@@ -1,16 +1,16 @@
 ﻿/// <reference path="../types.ts" />
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { QuestionListService } from './questionlist.service';
-import Guid = System.Guid;
+import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
 @Component({
     templateUrl: './questionlist-overview.component.html'
 })
 export class QuestionlistOverviewComponent implements OnInit  {
-    questionLists: Observable<Rehearsal.QuestionListOverview[]>;
+    questionLists: Observable<QuestionListOverviewModel[]>;
 
     constructor(private questionListService: QuestionListService) {
 
@@ -19,5 +19,4 @@ export class QuestionlistOverviewComponent implements OnInit  {
     ngOnInit(): void {
         this.questionLists = this.questionListService.getAll();
     }
-
 }

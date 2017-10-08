@@ -7,7 +7,11 @@ using Microsoft.Extensions.Logging;
 using Rehearsal.Data;
 using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages;
+using Rehearsal.Messages.Authorization;
+using Rehearsal.Messages.QuestionList;
 using Rehearsal.WebApi;
+using Rehearsal.WebApi.Authorization;
+using Rehearsal.WebApi.QuestionList;
 
 namespace Rehearsal.Web
 {

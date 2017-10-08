@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Rehearsal.Messages;
+using Rehearsal.Messages.QuestionList;
 
 namespace Rehearsal.Tests
 {

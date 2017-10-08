@@ -4,9 +4,19 @@ namespace TypeCompiler
     {
         public static string TrimEnd(this string s, string end)
         {
-            if (s.EndsWith(end))
+            while (s.EndsWith(end))
             {
-                return s.Substring(0, s.Length - end.Length);
+                s = s.Substring(0, s.Length - end.Length);
+            }
+
+            return s;
+        }
+        
+        public static string TrimStart(this string s, string start)
+        {
+            while (s.StartsWith(start))
+            {
+                s = s.Substring(start.Length, s.Length - start.Length);
             }
 
             return s;

@@ -1,14 +1,23 @@
 
-declare namespace Rehearsal {
-  interface QuestionList {
+declare namespace Authorization {
+  interface TokenRequestModel {
+    userName: string;
+  }
+  interface UserModel {
+    id: System.Guid;
+    userName: string;
+  }
+}
+declare namespace QuestionList {
+  interface QuestionListModel {
     answerTitle: string;
     id: System.Guid;
-    questions: Rehearsal.QuestionList.Item[];
+    questions: QuestionList.QuestionModel[];
     questionTitle: string;
     title: string;
     version: number;
   }
-  interface QuestionListOverview {
+  interface QuestionListOverviewModel {
     answerTitle: string;
     id: System.Guid;
     isDeleted: boolean;
@@ -16,21 +25,14 @@ declare namespace Rehearsal {
     questionTitle: string;
     title: string;
   }
-  interface StartRehearsalRequest {
-    questionListId: System.Guid;
-  }
-  interface TokenRequest {
-    userName: string;
-  }
-  interface User {
-    id: System.Guid;
-    userName: string;
-  }
-}
-declare namespace Rehearsal.QuestionList {
-  interface Item {
+  interface QuestionModel {
     answer: string;
     question: string;
+  }
+}
+declare namespace Rehearsal {
+  interface StartRehearsalRequest {
+    questionListId: System.Guid;
   }
 }
 declare namespace System {

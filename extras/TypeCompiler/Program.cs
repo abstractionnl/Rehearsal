@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Rehearsal.Messages;
+using Rehearsal.Messages.QuestionList;
 using TypeLite;
 using TypeLite.Net4;
 
@@ -22,8 +23,8 @@ namespace TypeCompiler
                 .AsConstEnums(false)
                 .WithIndentation("  ")
                 .WithMemberFormatter(id => Char.ToLower(id.Name[0]) + id.Name.Substring(1))
-                .WithModuleNameFormatter(mod => mod.Name.Replace(".Messages", "").TrimEnd("Model"))
-                .WithTypeFormatter((type, formatter) => type.Type.Name.TrimEnd("Model"));
+                .WithModuleNameFormatter(mod => mod.Name.TrimStart("Rehearsal.Messages."))
+                .WithTypeFormatter((type, formatter) => type.Type.Name);
             
             foreach (var type in typeof(QuestionListModel).Assembly
                 .GetTypes()

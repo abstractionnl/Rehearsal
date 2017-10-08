@@ -13,12 +13,15 @@ import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent, Resul
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/delay";
 
+import QuestionListModel = QuestionList.QuestionListModel;
+import QuestionModel = QuestionList.QuestionModel;
+
 @Component({
     templateUrl: './questionlist-detail.component.html',
     styleUrls: [ './questionlist-detail.component.css' ],
 })
 export class QuestionlistDetailComponent implements OnInit, ICanComponentDeactivate {
-    questionList: Rehearsal.QuestionList;
+    questionList: QuestionListModel;
 
     @ViewChild('form') public form: NgForm;
 
@@ -34,7 +37,7 @@ export class QuestionlistDetailComponent implements OnInit, ICanComponentDeactiv
 
     ngOnInit() {
         this.route.data
-            .subscribe((data: { questionList: Rehearsal.QuestionList }) => {
+            .subscribe((data: { questionList: QuestionListModel }) => {
                 this.questionList = data.questionList;
                 this.form.form.markAsPristine();
                 this.form.form.markAsUntouched();
@@ -45,7 +48,7 @@ export class QuestionlistDetailComponent implements OnInit, ICanComponentDeactiv
         this.questionList.questions.push({ question: '', answer: '' });
     }
 
-    removeQuestion(item: Rehearsal.QuestionList.Item) {
+    removeQuestion(item: QuestionModel) {
         this.questionList.questions = this.questionList.questions.filter(x => x != item);
     }
 

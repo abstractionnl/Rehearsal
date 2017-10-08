@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Rehearsal.Messages;
+using Rehearsal.Messages.QuestionList;
 
 namespace Rehearsal.Data.Infrastructure
 {
