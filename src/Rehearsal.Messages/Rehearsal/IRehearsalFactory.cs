@@ -6,7 +6,7 @@ namespace Rehearsal.Messages.Rehearsal
 {
     public interface IRehearsalFactory
     {
-        Task<Guid> Create();
+        Task<StartRehearsalCommand> Create();
         IRehearsalFactory AddQuestionList(QuestionListModel questionList);
     }
 }

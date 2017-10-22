@@ -1,25 +1,32 @@
 ﻿using System;
 using CQRSlite.Commands;
-using Rehearsal.Messages;
+using LanguageExt;
+using Rehearsal.Data.Infrastructure;
 using Rehearsal.Messages.Rehearsal;
 using Rehearsal.Rehearsal;
-using Rehearsal.WebApi;
 using Rehearsal.WebApi.Rehearsal;
 
 namespace Rehearsal.Data.Rehearsal
 {
     public class RehearsalSessionRepository : IRehearsalSessionRepository
     {
-        public RehearsalSessionRepository(ICommandSender commandSender)
+        private InMemoryStore<RehearsalSessionModel> SessionStore { get; }
+        
+        public RehearsalSessionRepository(InMemoryStore<RehearsalSessionModel> sessionStore)
         {
-            CommandSender = commandSender ?? throw new ArgumentNullException(nameof(commandSender));
+            SessionStore = sessionStore;
         }
-
-        private ICommandSender CommandSender { get; }
         
         public IRehearsalFactory New()
         {
-            return new RehearsalFactory(CommandSender);
+            return new RehearsalFactory();
         }
+
+        public Option<RehearsalSessionModel> GetById(Guid rehearsalId) => 
+            SessionStore.GetById(rehearsalId);
+
+        public Option<IRehearsalSession> GetSession(Guid rehearsalId) => 
+            SessionStore.GetById(rehearsalId)
+                .Map<IRehearsalSession>(session => new RehearsalSession(session.Questions, new AnswerValidatorFactory()));
     }
 }

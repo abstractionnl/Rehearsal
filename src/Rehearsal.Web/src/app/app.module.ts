@@ -17,6 +17,9 @@ import { QuestionlistModule } from "./questionlist/questionlist.module";
 import { AuthModule } from "./auth/auth.module";
 import { StartRehearsalComponent } from "./start-rehearsal.component";
 import { RehearsalService } from "./rehearsal.service";
+import { RehearsalComponent } from "./rehearsal.component";
+import { RehearsalQuestionComponent } from "./rehearsal-question.component";
+import {FocusDirective} from "./focus.directive";
 
 @NgModule({
     declarations: [
@@ -24,7 +27,10 @@ import { RehearsalService } from "./rehearsal.service";
         AlertComponent,
         DashboardComponent,
         FormValidationStyleDirective,
-        StartRehearsalComponent
+        StartRehearsalComponent,
+        RehearsalComponent,
+        RehearsalQuestionComponent,
+        FocusDirective
     ],
     imports: [
         BrowserModule, FormsModule, HttpModule,

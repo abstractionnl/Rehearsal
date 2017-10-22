@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 
 import { QuestionListService } from "./questionlist/questionlist.service";
@@ -14,7 +15,10 @@ export class StartRehearsalComponent implements OnInit {
     questionLists: Observable<QuestionListOverviewModel[]>;
     questionList: QuestionListModel;
 
-    constructor(private questionListService: QuestionListService, private rehearsalService : RehearsalService) {
+    constructor(
+        private questionListService: QuestionListService,
+        private rehearsalService : RehearsalService,
+        private router: Router) {
 
     }
 
@@ -25,6 +29,8 @@ export class StartRehearsalComponent implements OnInit {
     start(): void {
         this.rehearsalService.start({
             questionListId: this.questionList.id
+        }).then(id => {
+            this.router.navigate(['/rehearsal', id]);
         });
     }
 

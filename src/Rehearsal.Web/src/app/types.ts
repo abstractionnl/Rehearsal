@@ -31,6 +31,29 @@ declare namespace QuestionList {
   }
 }
 declare namespace Rehearsal {
+  interface AnswerResultModel {
+    correctAnswer: string;
+    givenAnswer: string;
+    isCorrect: boolean;
+  }
+  interface GiveAnswerRequest {
+    answer: string;
+    questionId: System.Guid;
+  }
+  interface OpenRehearsalQuestionModel extends Rehearsal.RehearsalQuestionModel {
+    correctAnswer: string;
+  }
+  interface RehearsalQuestionModel {
+    answerTitle: string;
+    id: System.Guid;
+    question: string;
+    questionTitle: string;
+    type: string;
+  }
+  interface RehearsalSessionModel {
+    id: System.Guid;
+    questions: Rehearsal.RehearsalQuestionModel[];
+  }
   interface StartRehearsalRequest {
     questionListId: System.Guid;
   }

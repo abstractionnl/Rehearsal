@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Rehearsal.Messages;
+using Rehearsal.Messages.Rehearsal;
 
 namespace Rehearsal.WebApi.Infrastructure
 {
@@ -8,7 +9,7 @@ namespace Rehearsal.WebApi.Infrastructure
     {
         public AutomapperProfile()
         {
-
+            
         }
     }
 }

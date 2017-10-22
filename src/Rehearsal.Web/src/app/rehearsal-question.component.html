@@ -1,0 +1,29 @@
+<form class="form-horizontal" (ngSubmit)="submit()">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{question.questionTitle}}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{question.question}}</p>
+        </div>
+    </div>
+    <div class="form-group has-feedback" [class.has-error]="isInCorrect()" [class.has-success]="isCorrect()">
+        <label for="answer" class="col-sm-3 control-label">{{question.answerTitle}}</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" name="answer" id="answer" placeholder="Antwoord" [(ngModel)]="answer"
+                   autocapitalize="none" autocomplete="off" [disabled]="answerGiven" [focus]="focusAnswerField" />
+            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" *ngIf="isCorrect()"></span>
+            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" *ngIf="isInCorrect()"></span>
+        </div>
+    </div>
+    <div class="form-group" *ngIf="isInCorrect()">
+        <label class="col-sm-3 control-label">Juiste antwoord</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{answerResult.correctAnswer}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-success" [disabled]="!canSubmit()" *ngIf="!answerGiven">Controleer</button>
+            <button type="submit" class="btn btn-success" [disabled]="!canGotoNext()" *ngIf="answerGiven" [focus]="focusNextButton">Volgende</button>
+        </div>
+    </div>
+</form>

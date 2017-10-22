@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
+using Rehearsal.Messages.Rehearsal;
 
 namespace Rehearsal.Data.Infrastructure
 {
@@ -15,6 +16,8 @@ namespace Rehearsal.Data.Infrastructure
             CreateMap<QuestionListProperties, QuestionListOverviewModel>()
                 .ForMember(x => x.Id, c => c.Ignore())
                 .ForMember(x => x.IsDeleted, c => c.UseValue(false));
+
+            CreateMap<RehearsalStartedEvent, RehearsalSessionModel>();
         }
     }
 }

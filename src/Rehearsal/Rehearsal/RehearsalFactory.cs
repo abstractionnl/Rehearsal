@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
 using Rehearsal.Messages;
@@ -10,39 +11,67 @@ namespace Rehearsal.Rehearsal
 {
     public class RehearsalFactory : IRehearsalFactory
     {
-        public RehearsalFactory(ICommandSender commandSender)
+        public RehearsalFactory()
         {
-            CommandSender = commandSender ?? throw new ArgumentNullException(nameof(commandSender));
-            Questions = new List<QuestionModel>();
+            Questions = new List<QuestionDefinition>();
         }
 
-        private ICommandSender CommandSender { get; }
+        private IList<QuestionDefinition> Questions { get; }
         
-        private IList<QuestionModel> Questions { get; }
-        
-        public async Task<Guid> Create()
+        public Task<StartRehearsalCommand> Create()
         {
             var id = Guid.NewGuid();
 
             var cmd = new StartRehearsalCommand()
             {
                 Id = id,
-                Questions = Questions
+                Questions = Questions.Select(PrepareQuestion).ToList()
             };
-
-            await CommandSender.Send(cmd);
             
-            return id;
+            return Task.FromResult(cmd);
+        }
+
+        private RehearsalQuestionModel PrepareQuestion(QuestionDefinition question)
+        {
+            return new OpenRehearsalQuestionModel()
+            {
+                Id = Guid.NewGuid(),
+                QuestionTitle = question.QuestionTitle,
+                Question = question.Question,
+                AnswerTitle = question.AnswerTitle,
+                CorrectAnswer = question.Answer
+            };
         }
 
         public IRehearsalFactory AddQuestionList(QuestionListModel questionList)
         {
             foreach (var question in questionList.Questions)
             {
-                Questions.Add(question);
+                Questions.Add(new QuestionDefinition(
+                    questionList.QuestionTitle,
+                    question.Question,
+                    questionList.AnswerTitle,
+                    question.Answer
+                ));
             }
 
             return this;
+        }
+
+        public class QuestionDefinition
+        {
+            public QuestionDefinition(string questionTitle, string question, string answerTitle, string answer)
+            {
+                QuestionTitle = questionTitle;
+                Question = question;
+                AnswerTitle = answerTitle;
+                Answer = answer;
+            }
+
+            public string QuestionTitle { get; }
+            public string Question { get; }
+            public string AnswerTitle { get; }
+            public string Answer { get; }
         }
     }
 }

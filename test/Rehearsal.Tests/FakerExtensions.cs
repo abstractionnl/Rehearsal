@@ -4,6 +4,7 @@ using System.Linq;
 using Bogus;
 using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
+using Rehearsal.Messages.Rehearsal;
 
 namespace Rehearsal.Tests
 {
@@ -31,5 +32,15 @@ namespace Rehearsal.Tests
             Questions = Enumerable.Range(0, questionCount).Select(_ => faker.Question()).ToList(),
             Version = 1
         };
+
+        public static OpenRehearsalQuestionModel OpenRehearsalQuestion(this Faker faker) =>
+            new OpenRehearsalQuestionModel()
+            {
+                Id = Guid.NewGuid(),
+                QuestionTitle = faker.Lorem.Word(),
+                Question = faker.Lorem.Sentence(),
+                AnswerTitle = faker.Lorem.Word(),
+                CorrectAnswer = faker.Lorem.Sentence()
+            };
     }
 }
