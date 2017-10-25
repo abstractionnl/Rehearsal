@@ -1,0 +1,25 @@
+<h3>Woordenlijsten</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <ul class="list-group">
+            <questionlist-overview
+                [questionLists]="questionLists$ | async"
+                [selectedList]="selectedList?.id"
+                (onSelect)="selectList($event)"></questionlist-overview>
+        </ul>
+
+        <a class="btn btn-default" (click)="new()">Nieuwe woordenlijst</a>
+    </div>
+    <div class="col-md-8">
+        <questionlist-form
+            [questionList]="selectedList"
+            (onSave)="save($event, false)"
+            (onDelete)="delete($event)"
+            (validChange)="listIsValid = $event"
+            (pristineChange)="listIsPristine = $event"
+            *ngIf="!!selectedList"></questionlist-form>
+        <no-questionlist-selected *ngIf="!selectedList"></no-questionlist-selected>
+    </div>
+</div>
+

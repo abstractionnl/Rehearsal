@@ -19,7 +19,10 @@ export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDe
     private errorSubject: Subject<boolean> = new Subject<boolean>();
     private errorSubjectSubscription: Subscription;
 
-    constructor(private element: ElementRef, private renderer: Renderer2) { }
+    constructor(private element: ElementRef, private renderer: Renderer2)
+    {
+        console.log('FormValidationStyleDirective');
+    }
 
     ngOnInit(): void {
         this.errorSubjectSubscription = this.errorSubject
@@ -45,7 +48,8 @@ export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDe
     }
 
     private update() {
-        if (!this.modelComponents) return;
+        if (!this.modelComponents)
+            return;
 
         let hasError = this.modelComponents.some(x => !x.valid && (x.touched || x.dirty));
         let isValid = !this.modelComponents.some(x => !x.valid);

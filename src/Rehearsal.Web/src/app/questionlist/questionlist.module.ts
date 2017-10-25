@@ -7,18 +7,19 @@ import { RouterModule } from "@angular/router";
 import { ModalModule } from 'ngx-bootstrap';
 
 import { QuestionlistOverviewComponent } from './questionlist-overview.component';
-import { QuestionlistDetailComponent } from './questionlist-detail.component';
+import {QuestionlistFormComponent} from './questionlist-form.component';
 import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent } from "./confirm-save-question.component";
 
-import { QuestionListService } from './questionlist.service';
-import { QuestionlistRoutingModule } from "./questionlist-routing.module";
-
+import {QuestionlistEditorComponent} from "./questionlist-editor.component";
+import {QuestionListService} from './questionlist.service';
+import {QuestionlistRoutingModule} from "./questionlist-routing.module";
 
 @NgModule({
     declarations: [
+        QuestionlistEditorComponent,
         QuestionlistOverviewComponent,
-        QuestionlistDetailComponent,
+        QuestionlistFormComponent,
         NoQuestionlistSelectedComponent,
         ConfirmSaveQuestionComponent
     ],

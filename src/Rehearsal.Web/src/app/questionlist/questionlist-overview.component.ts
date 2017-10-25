@@ -1,22 +1,22 @@
 ﻿/// <reference path="../types.ts" />
 
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { QuestionListService } from './questionlist.service';
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
+import Guid = System.Guid;
 
 @Component({
-    templateUrl: './questionlist-overview.component.html'
+    templateUrl: './questionlist-overview.component.html',
+    selector: 'questionlist-overview'
 })
-export class QuestionlistOverviewComponent implements OnInit  {
-    questionLists: Observable<QuestionListOverviewModel[]>;
+export class QuestionlistOverviewComponent  {
+    @Input() questionLists: QuestionListOverviewModel[];
+    @Input() selectedList: Guid;
+    @Output() onSelect: EventEmitter<Guid> = new EventEmitter<Guid>();
 
-    constructor(private questionListService: QuestionListService) {
-
-    }
-
-    ngOnInit(): void {
-        this.questionLists = this.questionListService.getAll();
+    select(id: Guid) {
+        this.onSelect.emit(id);
     }
 }

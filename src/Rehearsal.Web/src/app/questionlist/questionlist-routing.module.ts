@@ -1,24 +1,33 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { QuestionlistOverviewComponent } from './questionlist-overview.component';
-import { QuestionlistDetailComponent } from './questionlist-detail.component';
-import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
 import { QuestionListResolver } from './questionlist.resolver';
 import { QuestionListsResolver } from './questionlists.resolver';
 import { CanDeactivateGuard } from '../can-deactivate-guard.service';
 import { AuthGuard } from "../auth/auth-guard.service";
 import { AuthModule } from "../auth/auth.module";
+import {QuestionlistEditorComponent} from "./questionlist-editor.component";
 
 const routes: Routes = [
     {
         path: 'questionlists',
-        component: QuestionlistOverviewComponent,
+        component: QuestionlistEditorComponent,
         canActivate: [ AuthGuard ],
         resolve: {
-            questionLists: QuestionListsResolver
+            questionLists: QuestionListsResolver,
+            questionList: QuestionListResolver
         },
-        children: [
+    },
+    {
+        path: 'questionlists/:id',
+        component: QuestionlistEditorComponent,
+        canActivate: [ AuthGuard ],
+        resolve: {
+            questionLists: QuestionListsResolver,
+            questionList: QuestionListResolver
+        },
+        canDeactivate: [ CanDeactivateGuard ]
+        /*children: [
             {
                 path: ':id',
                 component: QuestionlistDetailComponent,
@@ -31,7 +40,7 @@ const routes: Routes = [
                 path: '',
                 component: NoQuestionlistSelectedComponent
             }
-        ]
+        ]*/
     }
 ];
 

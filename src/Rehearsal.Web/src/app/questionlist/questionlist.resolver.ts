@@ -6,7 +6,7 @@ import "rxjs/add/operator/do";
 
 import {QuestionListService} from "./questionlist.service";
 
-import { AlertService } from "../alert/alert.service";
+import {AlertService} from "../alert/alert.service";
 
 import QuestionListModel = QuestionList.QuestionListModel;
 
@@ -15,6 +15,9 @@ export class QuestionListResolver implements Resolve<QuestionListModel> {
     constructor(private questionListService: QuestionListService, private alertService: AlertService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<QuestionListModel> | QuestionListModel {
+        if (!route.params.id)
+            return null;
+
         if (route.params.id == 'new') {
             return this.questionListService.new();
         }

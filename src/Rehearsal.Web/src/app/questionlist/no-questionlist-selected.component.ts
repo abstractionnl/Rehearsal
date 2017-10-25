@@ -3,7 +3,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-    template: '<div class="hidden-xs">Selecteer links een vragenlijst</div>'
+    selector: 'no-questionlist-selected',
+    template: '<div class="hidden-xs">Selecteer links een woordenlijst</div>'
 })
 export class NoQuestionlistSelectedComponent {
 }

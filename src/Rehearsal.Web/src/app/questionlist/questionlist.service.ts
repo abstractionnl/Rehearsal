@@ -12,7 +12,7 @@ import "rxjs/add/operator/catch";
 import 'rxjs/add/observable/combinelatest';
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import "rxjs/add/operator/publish";
+import "rxjs/add/operator/publishReplay";
 import "rxjs/add/operator/throttleTime";
 import Guid = System.Guid;
 
@@ -27,12 +27,14 @@ export class QuestionListService {
 
     private fetchTrigger = new BehaviorSubject(null);
     private all: Observable<QuestionListOverviewModel[]>;
+    private hasLoaded: boolean;
 
     constructor(private http: AuthHttp) {
         this.all = this.fetchTrigger
             .throttleTime(500)
+            .do(() => this.hasLoaded = true)
             .switchMap(() => this.fetchAll())
-            .publish().refCount();
+            .publishReplay(1).refCount();
     }
 
     private fetchAll(): Observable<QuestionListOverviewModel[]> {
@@ -41,7 +43,9 @@ export class QuestionListService {
     }
 
     getAll(): Observable<QuestionListOverviewModel[]> {
-        this.fetchTrigger.next(null);
+        if (!this.hasLoaded)
+            this.fetchTrigger.next(null);
+
         return this.all;
     }
 
