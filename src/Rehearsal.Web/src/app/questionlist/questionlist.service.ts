@@ -43,10 +43,7 @@ export class QuestionListService {
     }
 
     getAll(): Observable<QuestionListOverviewModel[]> {
-        if (!this.hasLoaded)
-            this.fetchTrigger.next(null);
-
-        return this.all;
+        return this.fetchAll();
     }
 
     get(id: System.Guid): Observable<QuestionListModel> {
@@ -55,42 +52,22 @@ export class QuestionListService {
             .map(response => response.json() as QuestionListModel);
     }
 
-    create(questionList: QuestionListModel): Promise<Guid> {
+    create(questionList: QuestionListModel): Observable<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(questionList), { headers: this.headers })
-            .toPromise()
-            .then(response => {
-                this.fetchTrigger.next(null);
-                return response.json() as Guid;
-            });
+            .map(response => response.json() as Guid);
     }
 
-    update(questionList: QuestionListModel): Promise<void> {
+    update(questionList: QuestionListModel): Observable<void> {
         const url = `${this.apiUrl}/${questionList.id}`;
         return this.http
             .put(url, JSON.stringify(questionList), { headers: this.headers })
-            .toPromise()
-            .then(() => this.fetchTrigger.next(null));
+            .map(_ => null);
     }
 
-    delete(id: System.Guid): Promise<void> {
+    remove(id: System.Guid): Observable<void> {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(() => this.fetchTrigger.next(null));
-    }
-
-    new(): QuestionListModel {
-        return {
-            id: null,
-            title: 'Nieuwe lijst',
-            questionTitle: '',
-            answerTitle: '',
-            questions: [ {
-                question: '',
-                answer: ''
-            }],
-            version: 0
-        }
+            .map(_ => null);
     }
 }

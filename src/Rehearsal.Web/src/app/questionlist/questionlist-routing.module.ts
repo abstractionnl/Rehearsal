@@ -1,31 +1,30 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { QuestionListResolver } from './questionlist.resolver';
-import { QuestionListsResolver } from './questionlists.resolver';
 import { CanDeactivateGuard } from '../can-deactivate-guard.service';
 import { AuthGuard } from "../auth/auth-guard.service";
 import { AuthModule } from "../auth/auth.module";
 import {QuestionlistEditorComponent} from "./questionlist-editor.component";
+import {QuestionListGuard} from "./questionlist.guard";
+import {QuestionlistOverviewGuard} from "./questionlist-overview.guard";
 
 const routes: Routes = [
     {
         path: 'questionlists',
         component: QuestionlistEditorComponent,
-        canActivate: [ AuthGuard ],
-        resolve: {
-            questionLists: QuestionListsResolver,
-            questionList: QuestionListResolver
-        },
+        canActivate: [
+            AuthGuard,
+            QuestionlistOverviewGuard
+        ],
     },
     {
         path: 'questionlists/:id',
         component: QuestionlistEditorComponent,
-        canActivate: [ AuthGuard ],
-        resolve: {
-            questionLists: QuestionListsResolver,
-            questionList: QuestionListResolver
-        },
+        canActivate: [
+            AuthGuard,
+            QuestionlistOverviewGuard,
+            QuestionListGuard
+        ],
         canDeactivate: [ CanDeactivateGuard ]
         /*children: [
             {
@@ -47,6 +46,6 @@ const routes: Routes = [
 @NgModule({
     imports: [ RouterModule.forChild(routes), AuthModule ],
     exports: [ RouterModule ],
-    providers: [ QuestionListResolver, QuestionListsResolver ]
+    providers: [ QuestionlistOverviewGuard, QuestionListGuard ]
 })
 export class QuestionlistRoutingModule { }

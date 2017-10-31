@@ -16,6 +16,15 @@ import {ConfirmSaveQuestionListComponent, ResultAction} from "./confirm-save-que
 import {BsModalService} from "ngx-bootstrap";
 
 import _ from "lodash";
+import {Store} from "@ngrx/store";
+import {
+    QuestionlistEditorState, selectQuestionListOverview,
+    selectSelectedQuestionList
+} from "./store/questionlist.state";
+import {
+    LoadQuestionListOverview, LoadQuestionListOverviewFailed,
+    LoadQuestionListOverviewSuccess, RemoveQuestionList, SaveQuestionList
+} from "./store/questionlist.actions";
 
 @Component({
     templateUrl: 'questionlist-editor.component.html'
@@ -23,27 +32,21 @@ import _ from "lodash";
 export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactivate {
 
     questionLists$: Observable<QuestionListOverviewModel[]>;
-    selectedList: QuestionListModel;
+    selectedList$: Observable<QuestionListModel>;
 
     listIsValid: boolean;
     listIsPristine: boolean;
 
     constructor(
-        private questionListService: QuestionListService,
-        private alertService: AlertService,
+        private store: Store<QuestionlistEditorState>,
         private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private modalService: BsModalService) {
-        this.questionLists$ = this.questionListService.getAll();
-
-        this.activatedRoute.data
-            .map((data: { questionList: QuestionListModel }) => data.questionList)
-            .subscribe(list => this.selectedList = _.cloneDeep(list));
-            //.publishReplay(1).refCount();
+        private modalService: BsModalService)
+    {
+        this.questionLists$ = this.store.select(selectQuestionListOverview);
+        this.selectedList$ = this.store.select(selectSelectedQuestionList);
     }
 
     ngOnInit(): void {
-
     }
 
     selectList(id: Guid) {
@@ -54,77 +57,45 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
         this.router.navigate(['/questionlists', 'new']);
     }
 
-    save(questionList: QuestionListModel, navigateToNewList: boolean): Promise<boolean> {
+    save(questionList: QuestionListModel) {
         /*if (!this.form.valid) {
             this.alertService.warning('Er zitten nog fouten in de woordenlijst', null);
             return Promise.resolve(false);
         }*/
 
-        if (questionList.id) {
-            // update
-            return this.questionListService.update(questionList)
-                .then(
-                    __ => {
-                        this.alertService.success(`Woordenlijst ${questionList.title} opgeslagen`);
-                        this.selectedList = _.cloneDeep(questionList);
-                        return true; },
-                    err => {
-                        this.alertService.fail('Fout bij het opslaan van de woordenlijst', err);
-                        return false;
-                    }
-                );
-        } else {
-            return this.questionListService.create(questionList)
-                .then(
-                    id => {
-                        this.alertService.success(`Woordenlijst ${questionList.title} opgeslagen`);
-                        if (navigateToNewList) this.router.navigate(['/questionlists', id]);
-                        return true;
-                    },
-                    err => {
-                        this.alertService.fail('Fout bij het opslaan van de woordenlijst', err);
-                        return false;
-                    }
-                );
-        }
+        this.store.dispatch(new SaveQuestionList(questionList));
     }
 
     delete(questionList: QuestionListModel) {
-        this.questionListService.delete(questionList.id)
-            .then(
-                _ => {
-                    this.alertService.success(`Woordenlijst ${questionList.title} verwijderd`);
-                    this.router.navigate(['/questionlists']);
-                },
-                err => {
-                    this.alertService.fail('Fout bij het verwijderen van de woordenlijst', err);
-                    return false;
-                }
-            );
+        this.store.dispatch(new RemoveQuestionList(questionList));
     }
 
-    canDeactivate() {
-        if (!this.selectedList || this.listIsPristine) {
-            return true;
-        }
-
-        let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
-        let event = (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
-            switch (x.action) {
-                case 'continue':
+    canDeactivate(): Observable<boolean> {
+        return this.selectedList$
+            .switchMap(list => {
+                if (!list || this.listIsPristine) {
                     return Promise.resolve(true);
-                case 'save':
-                    if (!this.listIsValid) {
-                        this.alertService.warning('Er zitten nog fouten in de woordenlijst', null);
-                        return Promise.resolve(false);
+                }
+
+                let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
+                let event = (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
+                    switch (x.action) {
+                        case 'continue':
+                            return Promise.resolve(true);
+                        case 'save':
+                            if (!this.listIsValid) {
+                                //this.alertService.warning('Er zitten nog fouten in de woordenlijst', null);
+                                return Promise.resolve(false);
+                            }
+
+                            //TODO: We must block until saved, but this is done async so we must wait until success
+                            //return this.save(list);
+                        default:
+                            return Promise.resolve(false);
                     }
+                });
 
-                    return this.save(this.selectedList, false);
-                default:
-                    return Promise.resolve(false);
-            }
-        });
-
-        return event;
+                return event;
+            });
     }
 }

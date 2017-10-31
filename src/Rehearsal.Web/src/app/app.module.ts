@@ -20,6 +20,9 @@ import { RehearsalService } from "./rehearsal.service";
 import { RehearsalComponent } from "./rehearsal.component";
 import { RehearsalQuestionComponent } from "./rehearsal-question.component";
 import {FocusDirective} from "./focus.directive";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {EffectsModule} from "@ngrx/effects";
+import {AlertEffects} from "./alert/store/alert.effects";
 
 @NgModule({
     declarations: [
@@ -36,7 +39,11 @@ import {FocusDirective} from "./focus.directive";
         BrowserModule, FormsModule, HttpModule,
         AlertModule.forRoot(), ModalModule.forRoot(),
         QuestionlistModule,
-        AuthModule, AppRoutingModule
+        AuthModule, AppRoutingModule,
+        EffectsModule.forFeature([AlertEffects]),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25 //  Retains last 25 states
+        })
     ],
     providers: [
         AlertService, RehearsalService

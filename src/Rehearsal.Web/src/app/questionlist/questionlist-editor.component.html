@@ -5,7 +5,7 @@
         <ul class="list-group">
             <questionlist-overview
                 [questionLists]="questionLists$ | async"
-                [selectedList]="selectedList?.id"
+                [selectedList]="(selectedList$ | async)?.id"
                 (onSelect)="selectList($event)"></questionlist-overview>
         </ul>
 
@@ -13,13 +13,13 @@
     </div>
     <div class="col-md-8">
         <questionlist-form
-            [questionList]="selectedList"
+            [questionList]="selectedList$ | async"
             (onSave)="save($event, false)"
             (onDelete)="delete($event)"
             (validChange)="listIsValid = $event"
             (pristineChange)="listIsPristine = $event"
-            *ngIf="!!selectedList"></questionlist-form>
-        <no-questionlist-selected *ngIf="!selectedList"></no-questionlist-selected>
+            *ngIf="!!(selectedList$ | async)"></questionlist-form>
+        <no-questionlist-selected *ngIf="!(selectedList$ | async)"></no-questionlist-selected>
     </div>
 </div>
 
