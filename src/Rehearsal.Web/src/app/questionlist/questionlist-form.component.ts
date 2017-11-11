@@ -1,11 +1,13 @@
 ﻿/// <reference path="../types.ts" />
 
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import { NgForm } from "@angular/forms";
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, NgForm} from "@angular/forms";
 
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/delay";
 import {Subscription} from "rxjs/Subscription";
+
+import _ from "lodash";
 
 @Component({
     selector: 'questionlist-form',
@@ -14,70 +16,87 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
 
-    private validChangeSubscription: Subscription;
-    private pristineChangeSubscription: Subscription;
+    constructor(private fb: FormBuilder) {
+        this.form = this.fb.group({
+            'title': '',
+            'questionTitle': '',
+            'answerTitle': '',
+            'questions': this.fb.array([])
+        });
+    }
 
-    @ViewChild('form') public form: NgForm;
+    private valueChangeSubscription: Subscription;
+
+    public form: FormGroup;
     private _questionList: QuestionList.QuestionListModel;
     @Output() public onSave: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
     @Output() public onDelete: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
-    @Output() public validChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @Output() public pristineChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() public onChange: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
+
+    @Input() public isValid;
+    @Input() public isPristine;
+
+    private isReloading: boolean = false;
 
     @Input()
     set questionList(value: QuestionList.QuestionListModel) {
+        this.isReloading = true;
         this._questionList = value;
 
-        if (this.form)
-            this.form.form.markAsPristine();
+        while (this.questions.length < value.questions.length) {
+            this.questions.push(this.fb.group({
+                'question': '',
+                'answer': ''
+            }));
+        }
+
+        while (this.questions.length > value.questions.length) {
+            this.questions.removeAt(this.questions.controls.length-1);
+        }
+
+        /*this.form.setControl('questions', this.fb.array(value.questions.map(_ => ))));*/
+        this.form.patchValue(value, { emitEvent: false });
+        this.isReloading = false;
     }
 
     get questionList(): QuestionList.QuestionListModel {
         return this._questionList;
     }
 
-    ngAfterViewInit() {
-        this.validChangeSubscription = this.form.form.valueChanges
-            .map(_ => this.form.form.valid)
-            .distinctUntilChanged()
-            .subscribe(valid => {
-                console.log('valid', valid);
-                this.validChange.emit(valid);
-            });
+    get questions(): FormArray {
+        return this.form.get('questions') as FormArray;
+    };
 
-        this.pristineChangeSubscription = this.form.form.valueChanges
-            .map(_ => this.form.form.pristine)
-            .distinctUntilChanged()
-            .subscribe(valid => {
-                console.log('pristine', valid);
-                this.pristineChange.emit(valid);
-            });
+    ngAfterViewInit() {
+        this.valueChangeSubscription = this.form.valueChanges
+            .filter(_ => !this.isReloading)
+            .debounceTime(250)
+            .map(_ => this.form.value)
+            .subscribe(x => this.onChange.emit(x));
     }
 
     ngOnDestroy() {
-        this.validChangeSubscription
-            .unsubscribe();
-        this.pristineChangeSubscription
+        this.valueChangeSubscription
             .unsubscribe();
     }
 
     addQuestion(): void {
-        this.questionList.questions.push({ question: '', answer: '' });
+        this.questions.push(this.fb.group({ question: '', answer: '' }));
     }
 
-    removeQuestion(item: QuestionList.QuestionModel) {
-        this.questionList.questions = this.questionList.questions.filter(x => x != item);
+    removeQuestion(index: number) {
+        this.questions.removeAt(index);
     }
 
     save() {
         if (this.canSave()) {
             this.onSave.emit(this.questionList);
-            this.form.form.markAsPristine();
+            this.form.markAsPristine();
         }
     }
 
     canSave(): boolean {
-        return this.form && this.form.valid && !this.form.pristine;
+        return !this.isPristine && this.isValid;
     }
 
     delete() {

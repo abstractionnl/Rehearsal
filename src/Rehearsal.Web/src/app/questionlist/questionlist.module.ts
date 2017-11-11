@@ -1,6 +1,6 @@
 ﻿import { NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from "@angular/router";
 
@@ -16,7 +16,7 @@ import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent } from
 import {QuestionlistEditorComponent} from "./questionlist-editor.component";
 import {QuestionListService} from './questionlist.service';
 import {QuestionlistRoutingModule} from "./questionlist-routing.module";
-import {questionListOverviewReducer, questionListReducer} from "./store/questionlist.reducer";
+import {questionListReducer} from "./store/questionlist.reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {QuestionlistEffects} from "./store/questionlist.effects";
 
@@ -29,11 +29,10 @@ import {QuestionlistEffects} from "./store/questionlist.effects";
         ConfirmSaveQuestionComponent
     ],
     imports: [
-        CommonModule, FormsModule, HttpModule, RouterModule,
+        CommonModule, ReactiveFormsModule, HttpModule, RouterModule,
         ModalModule.forRoot(), QuestionlistRoutingModule,
         StoreModule.forRoot({
-            questionListOverview: questionListOverviewReducer,
-            selectedQuestionList: questionListReducer
+            questionListEditor: questionListReducer
         }),
         EffectsModule.forRoot([QuestionlistEffects])
     ],

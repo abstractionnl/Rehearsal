@@ -7,10 +7,11 @@ import QuestionListModel = QuestionList.QuestionListModel;
 export const LOAD_OVERVIEW = '[QuestionList] Load overview';
 export const LOAD_OVERVIEW_SUCCESS = '[QuestionList] Load overview success';
 export const LOAD_OVERVIEW_FAILED = '[QuestionList] Load overview failed';
-export const NEW_LIST = '[QuestionList] New list'
+export const NEW_LIST = '[QuestionList] New list';
 export const LOAD_LIST = '[QuestionList] Load List';
 export const LOAD_LIST_SUCCESS = '[QuestionList] Load list success';
 export const LOAD_LIST_FAILED = '[QuestionList] Load list failed';
+export const LIST_EDITED = '[QuestionList] List Edited';
 export const SAVE_LIST = '[QuestionList] Save list';
 export const SAVE_LIST_SUCCESS = '[QuestionList] Save list success';
 export const SAVE_LIST_FAILED = '[QuestionList] Save list failed';
@@ -53,6 +54,11 @@ export class LoadQuestionListFailed implements Action {
     constructor(public payload: any) { }
 }
 
+export class QuestionListEdited implements Action {
+    readonly type = LIST_EDITED;
+    constructor(public payload: QuestionListModel) { }
+}
+
 export class SaveQuestionList implements Action {
     readonly type = SAVE_LIST;
     constructor(public payload: QuestionListModel) { }
@@ -85,7 +91,7 @@ export class RemoveQuestionListFailed implements Action {
 
 export type All =
     LoadQuestionListOverview | LoadQuestionListOverviewSuccess | LoadQuestionListOverviewFailed |
-    NewQuestionList |
+    NewQuestionList | QuestionListEdited |
     LoadQuestionList | LoadQuestionListSuccess | LoadQuestionListFailed |
     SaveQuestionList | SaveQuestionListSuccess | SaveQuestionListFailed |
     RemoveQuestionList | RemoveQuestionListSuccess | RemoveQuestionListFailed;

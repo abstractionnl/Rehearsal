@@ -5,19 +5,14 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/timeoutWith";
 
-import {QuestionListService} from "./questionlist.service";
-
 import QuestionListModel = QuestionList.QuestionListModel;
 import {Store} from "@ngrx/store";
-import {QuestionlistEditorState, selectSelectedQuestionList} from "./store/questionlist.state";
-import {
-    LoadQuestionList, LoadQuestionListFailed, LoadQuestionListSuccess,
-    NewQuestionList
-} from "./store/questionlist.actions";
+import {AppState, selectSelectedQuestionList} from "./store/questionlist.state";
+import {LoadQuestionList, NewQuestionList} from "./store/questionlist.actions";
 
 @Injectable()
 export class QuestionListGuard implements CanActivate {
-    constructor(private store: Store<QuestionlistEditorState>) {}
+    constructor(private store: Store<AppState>) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         let id = route.params['id'];

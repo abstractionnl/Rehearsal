@@ -1,4 +1,4 @@
-﻿<form #form="ngForm" (submit)="save()" *ngIf="questionList">
+﻿<form [formGroup]="form" (submit)="save()" *ngIf="questionList">
     <div class="btn-group pull-right">
         <button type="submit" class="btn btn-success" [disabled]="!canSave()"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
         <button type="button" class="btn btn-danger" *ngIf="canDelete()" (click)="delete()"><span class="glyphicon glyphicon-remove"></span> Verwijderen</button>
@@ -8,29 +8,31 @@
     <div class="row">
         <div class="form-group col-sm-10" formValidationStyle>
             <label for="title" class="control-label">Titel</label>
-            <input type="text" class="form-control" id="title" name="title" [(ngModel)]="questionList.title" required  />
+            <input type="text" class="form-control" id="title" name="title" formControlName="title" />
         </div>
     </div>
     <div class="row">
         <div class="form-group col-sm-5" formValidationStyle>
             <label for="questionTitle" class="control-label">Vraagtaal</label>
-            <input type="text" class="form-control" id="questionTitle" name="questionTitle" [(ngModel)]="questionList.questionTitle" required />
+            <input type="text" class="form-control" formControlName="questionTitle" />
         </div>
         <div class="form-group col-sm-5" formValidationStyle>
             <label for="answerTitle" class="control-label">Antwoordtaal</label>
-            <input type="text" class="form-control" id="answerTitle" name="answerTitle" [(ngModel)]="questionList.answerTitle" required />
+            <input type="text" class="form-control" formControlName="answerTitle" />
         </div>
     </div>
     <hr />
-    <div class="row" *ngFor="let question of questionList.questions;let index = index; let last = last">
-        <div class="form-group col-sm-5" formValidationStyle>
-            <input type="text" class="form-control" id="question" name="question{{index}}" [(ngModel)]="question.question" required />
-        </div>
-        <div class="form-group col-sm-5" formValidationStyle>
-            <input type="text" class="form-control" id="answer" name="answer{{index}}" (keydown.tab)="!last || addQuestion();" [(ngModel)]="question.answer" required />
-        </div>
-        <div class="col-sm-1">
-            <button class="btn btn-default" type="button" (click)="removeQuestion(question)"><span class="glyphicon glyphicon-remove"></span></button>
+    <div formArrayName="questions">
+        <div class="row" *ngFor="let question of questions.controls;let index = index; let last = last" [formGroupName]="index">
+            <div class="form-group col-sm-5" formValidationStyle>
+                <input type="text" class="form-control" id="question" formControlName="question" autocapitalize="none" autocomplete="off" />
+            </div>
+            <div class="form-group col-sm-5" formValidationStyle>
+                <input type="text" class="form-control" id="answer" formControlName="answer" autocapitalize="none" autocomplete="off" (keydown.tab)="!last || addQuestion();" required />
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-default" type="button" (click)="removeQuestion(index)"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
         </div>
     </div>
     <div class="btn-group pull-left">

@@ -5,13 +5,13 @@ import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/take";
 
-import {QuestionlistEditorState, selectQuestionListOverview} from "./store/questionlist.state";
+import {AppState, selectQuestionListOverview} from "./store/questionlist.state";
 import {LoadQuestionListOverview} from "./store/questionlist.actions";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
 @Injectable()
 export class QuestionlistOverviewGuard implements CanActivate  {
-    constructor(private store: Store<QuestionlistEditorState>) {
+    constructor(private store: Store<AppState>) {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {

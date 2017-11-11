@@ -1,30 +1,23 @@
 /// <reference path="../types.ts" />
 
 import {Component, EventEmitter, OnInit} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
-
 
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import Guid = System.Guid;
 import QuestionListModel = QuestionList.QuestionListModel;
 
-import {QuestionListService} from "./questionlist.service";
-import {AlertService} from "../alert/alert.service";
 import {ICanComponentDeactivate} from "../can-deactivate-guard.service";
 import {ConfirmSaveQuestionListComponent, ResultAction} from "./confirm-save-question.component";
 import {BsModalService} from "ngx-bootstrap";
 
-import _ from "lodash";
 import {Store} from "@ngrx/store";
 import {
-    QuestionlistEditorState, selectQuestionListOverview,
+    AppState, selectIsPristine, selectIsValid, selectQuestionListOverview,
     selectSelectedQuestionList
 } from "./store/questionlist.state";
-import {
-    LoadQuestionListOverview, LoadQuestionListOverviewFailed,
-    LoadQuestionListOverviewSuccess, RemoveQuestionList, SaveQuestionList
-} from "./store/questionlist.actions";
+import {QuestionListEdited, RemoveQuestionList, SaveQuestionList} from "./store/questionlist.actions";
 
 @Component({
     templateUrl: 'questionlist-editor.component.html'
@@ -34,16 +27,18 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
     questionLists$: Observable<QuestionListOverviewModel[]>;
     selectedList$: Observable<QuestionListModel>;
 
-    listIsValid: boolean;
-    listIsPristine: boolean;
+    listIsValid$: Observable<boolean>;
+    listIsPristine$: Observable<boolean>;
 
     constructor(
-        private store: Store<QuestionlistEditorState>,
+        private store: Store<AppState>,
         private router: Router,
         private modalService: BsModalService)
     {
         this.questionLists$ = this.store.select(selectQuestionListOverview);
         this.selectedList$ = this.store.select(selectSelectedQuestionList);
+        this.listIsValid$ = this.store.select(selectIsValid);
+        this.listIsPristine$ = this.store.select(selectIsPristine);
     }
 
     ngOnInit(): void {
@@ -66,6 +61,11 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
         this.store.dispatch(new SaveQuestionList(questionList));
     }
 
+    changed(questionList: QuestionListModel) {
+        console.log(questionList);
+        this.store.dispatch(new QuestionListEdited(questionList));
+    }
+
     delete(questionList: QuestionListModel) {
         this.store.dispatch(new RemoveQuestionList(questionList));
     }
@@ -73,10 +73,13 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
     canDeactivate(): Observable<boolean> {
         return this.selectedList$
             .switchMap(list => {
-                if (!list || this.listIsPristine) {
-                    return Promise.resolve(true);
-                }
+                //if (!list || this.listIsPristine) {
+                //    return Promise.resolve(true);
+                //}
 
+                return Promise.resolve(true);
+
+                /*
                 let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
                 let event = (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
                     switch (x.action) {
@@ -95,7 +98,7 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
                     }
                 });
 
-                return event;
+                return event;*/
             });
     }
 }

@@ -14,10 +14,11 @@
     <div class="col-md-8">
         <questionlist-form
             [questionList]="selectedList$ | async"
+            [isValid]="listIsValid$ | async"
+            [isPristine]="listIsPristine$ | async"
             (onSave)="save($event, false)"
             (onDelete)="delete($event)"
-            (validChange)="listIsValid = $event"
-            (pristineChange)="listIsPristine = $event"
+            (onChange)="changed($event)"
             *ngIf="!!(selectedList$ | async)"></questionlist-form>
         <no-questionlist-selected *ngIf="!(selectedList$ | async)"></no-questionlist-selected>
     </div>

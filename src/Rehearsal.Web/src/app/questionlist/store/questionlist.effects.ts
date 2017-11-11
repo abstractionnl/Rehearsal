@@ -15,6 +15,7 @@ import {
 import {of} from "rxjs/observable/of";
 import {empty} from "rxjs/observable/empty";
 import {Router} from "@angular/router";
+import {stripEmptyQuestions} from "./questionlist.state";
 
 @Injectable()
 export class QuestionlistEffects {
@@ -44,12 +45,14 @@ export class QuestionlistEffects {
     @Effect() saveQuestionList$: Observable<Action> = this.actions$
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
         .switchMap(action => {
-            let save = action.payload.id !== null
-                ? this.questionListService.update(action.payload).map(_ => action.payload.id)
-                : this.questionListService.create(action.payload);
+            let list = stripEmptyQuestions(action.payload);
+
+            let save = list.id !== null
+                ? this.questionListService.update(list).map(_ => list.id)
+                : this.questionListService.create(list);
 
             return save
-                .map(id => new SaveQuestionListSuccess({...action.payload, id: id }))
+                .map(id => new SaveQuestionListSuccess({...list, id: id }))
                 .catch(err => of(new SaveQuestionListFailed(err)));
         });
 
