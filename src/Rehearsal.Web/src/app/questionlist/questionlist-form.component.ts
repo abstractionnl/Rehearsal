@@ -109,5 +109,20 @@ export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
         return this.questionList && !!this.questionList.id;
     }
 
+    swap() {
+        let current = this.form.value;
 
+        let turned = {
+            ...current,
+            questionTitle: current.answerTitle,
+            answerTitle: current.questionTitle,
+            questions: current.questions.map(q => ({
+                ...q,
+                question: q.answer,
+                answer: q.question
+            }))
+        };
+
+        this.onChange.emit(turned);
+    }
 }

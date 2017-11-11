@@ -1,8 +1,18 @@
 ﻿<form [formGroup]="form" (submit)="save()" *ngIf="questionList">
-    <div class="btn-group pull-right">
+    <div class="btn-group pull-right" dropdown>
         <button type="submit" class="btn btn-success" [disabled]="!canSave()"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
-        <button type="button" class="btn btn-danger" *ngIf="canDelete()" (click)="delete()"><span class="glyphicon glyphicon-remove"></span> Verwijderen</button>
+        <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"><a class="dropdown-item" (click)="swap()">Vraag/antwoord omkeren</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem" *ngIf="canDelete()"><a class="dropdown-item" (click)="delete()">Verwijderen</a></li>
+        </ul>
+        <!--<button type="button" class="btn btn-danger" *ngIf="canDelete()" (click)="delete()"><span class="glyphicon glyphicon-remove"></span> Verwijderen</button>-->
     </div>
+
     <div class="clearfix"></div>
 
     <div class="row">

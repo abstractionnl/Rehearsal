@@ -6,7 +6,7 @@ import { RouterModule } from "@angular/router";
 
 import {StoreModule} from "@ngrx/store";
 
-import { ModalModule } from 'ngx-bootstrap';
+import {BsDropdownModule, ModalModule} from 'ngx-bootstrap';
 
 import { QuestionlistOverviewComponent } from './questionlist-overview.component';
 import {QuestionlistFormComponent} from './questionlist-form.component';
@@ -34,6 +34,7 @@ import {QuestionlistEffects} from "./store/questionlist.effects";
         StoreModule.forRoot({
             questionListEditor: questionListReducer
         }),
+        BsDropdownModule.forRoot(),
         EffectsModule.forRoot([QuestionlistEffects])
     ],
     entryComponents: [ ConfirmSaveQuestionComponent ],
