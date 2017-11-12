@@ -50,6 +50,10 @@ export function selectCanSwap(state: AppState): boolean {
     return state.questionListEditor.list !== null;
 }
 
+export function selectCanCopy(state: AppState): boolean {
+    return state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null && state.questionListEditor.isValid;
+}
+
 export function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
     return {
         ...list,

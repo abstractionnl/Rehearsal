@@ -8,7 +8,6 @@ export interface ResultAction {
 }
 
 @Component({
-    selector: 'modal-content',
     template: `
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{title}}</h4>
@@ -26,9 +25,9 @@ export interface ResultAction {
         </div>
     `
 })
-export class ConfirmSaveQuestionListComponent {
-    title: string = "Wil je de wijzigingen opslaan?";
-    body: string = "Je hebt nog onopgeslagen wijzigingen, wil je deze nog opslaan?";
+export class ConfirmRemoveQuestionlistComponent {
+    title: string = "Woordenlijst verwijderen";
+    body: string = "Je staat op het punt deze woordenlijst te verwijderen";
     actions: ResultAction[];
     selected = new EventEmitter<ResultAction>();
 
@@ -38,13 +37,9 @@ export class ConfirmSaveQuestionListComponent {
             label: 'Annuleren',
             btnType: 'default',
         },{
-            action: 'continue',
-            label: 'Niet opslaan',
+            action: 'remove',
+            label: 'Verwijderen',
             btnType: 'danger',
-        },{
-            action: 'save',
-            label: 'Opslaan',
-            btnType: 'primary',
         }];
     }
 

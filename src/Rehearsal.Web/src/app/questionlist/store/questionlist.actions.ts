@@ -19,6 +19,7 @@ export const REMOVE_LIST = '[QuestionList] Remove list';
 export const REMOVE_LIST_SUCCESS = '[QuestionList] Remove list success';
 export const REMOVE_LIST_FAILED = '[QuestionList] Remove list failed';
 export const SWAP_LIST = '[QuestionList] Swap list';
+export const COPY_LIST = '[QuestionList] Copy list';
 
 export class LoadQuestionListOverview implements Action {
     readonly type = LOAD_OVERVIEW;
@@ -95,10 +96,15 @@ export class SwapQuestionList implements Action {
     constructor() { }
 }
 
+export class CopyQuestionList implements Action {
+    readonly type = COPY_LIST;
+    constructor(public payload: { newTitle: string }) { }
+}
+
 export type All =
     LoadQuestionListOverview | LoadQuestionListOverviewSuccess | LoadQuestionListOverviewFailed |
     NewQuestionList | QuestionListEdited |
     LoadQuestionList | LoadQuestionListSuccess | LoadQuestionListFailed |
     SaveQuestionList | SaveQuestionListSuccess | SaveQuestionListFailed |
     RemoveQuestionList | RemoveQuestionListSuccess | RemoveQuestionListFailed |
-    SwapQuestionList;
+    SwapQuestionList | CopyQuestionList;

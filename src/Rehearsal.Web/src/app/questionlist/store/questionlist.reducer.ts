@@ -2,7 +2,6 @@ import * as QuestionListActions from "./questionlist.actions";
 import {initialState, QuestionlistEditorState, stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
 
 import _ from "lodash";
-import QuestionListModel = QuestionList.QuestionListModel;
 
 export function questionListReducer(state: QuestionlistEditorState = initialState, action: QuestionListActions.All): QuestionlistEditorState {
     switch (action.type) {
@@ -96,6 +95,21 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
                 isPristine: false,
                 list: swappedList
             };
+
+        case QuestionListActions.COPY_LIST:
+            let copiedList = {
+                ...state.list,
+                id: null,
+                title: action.payload.newTitle
+            };
+
+            return {
+                ...state,
+                isValid: validateQuestionList(stripEmptyQuestions(copiedList)),
+                isPristine: false,
+                list: copiedList
+            };
+
         default:
             return state;
     }

@@ -13,15 +13,17 @@
     </div>
     <div class="col-md-8">
         <questionlist-buttons
-            (onSave)="save($event, false)"
+            (onSave)="save()"
             [canSave]="canSave$ | async"
-            (onDelete)="delete($event)"
+            (onDelete)="delete()"
             [canDelete]="canDelete$ | async"
-            (onSwap)="swap(event)"
+            (onCopy)="copy()"
+            [canCopy]="canCopy$ | async"
+            (onSwap)="swap()"
             [canSwap]="canSwap$ | async"></questionlist-buttons>
         <questionlist-form
             [questionList]="selectedList$ | async"
-            (onSave)="save($event, false)"
+            (onSave)="save()"
             [canSave]="canSave$ | async"
             (onChange)="changed($event)"
             *ngIf="!!(selectedList$ | async)"></questionlist-form>

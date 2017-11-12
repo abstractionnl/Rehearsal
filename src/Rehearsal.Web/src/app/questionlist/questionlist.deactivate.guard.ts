@@ -3,7 +3,7 @@ import {CanDeactivate} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Store} from "@ngrx/store";
 import {AppState, selectIsPristine} from "./store/questionlist.state";
-import {ConfirmSaveQuestionListComponent, ResultAction} from "./confirm-save-question.component";
+import {ConfirmSaveQuestionlistComponent, ResultAction} from "./confirm-save-questionlist.component";
 import {SAVE_LIST_FAILED, SAVE_LIST_SUCCESS, SaveQuestionList} from "./store/questionlist.actions";
 import {Actions} from "@ngrx/effects";
 import {BsModalService} from "ngx-bootstrap";
@@ -25,7 +25,7 @@ export class QuestionListDeactivateGuard implements CanDeactivate<any> {
                 if (pristine)
                     return Promise.resolve(true);
 
-                let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
+                let ref = this.modalService.show(ConfirmSaveQuestionlistComponent);
                 return (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
                     switch (x.action) {
                         case 'continue':
