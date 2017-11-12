@@ -1,33 +1,30 @@
 ﻿import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 import {Store} from "@ngrx/store";
 
 import {Observable} from "rxjs/Observable";
-import "rxjs/add/operator/take";
 
 import {AppState, selectQuestionListOverview} from "./store/questionlist.state";
 import {LoadQuestionListOverview} from "./store/questionlist.actions";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
+import {AbstractActivateGuard} from "../abstract-activate-guard";
+
 @Injectable()
-export class QuestionlistOverviewGuard implements CanActivate  {
-    constructor(private store: Store<AppState>) {
+export class QuestionlistOverviewGuard extends AbstractActivateGuard<QuestionListOverviewModel[]> {
+    constructor(protected store: Store<AppState>) {
+        super();
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        const hasLists = (lists: QuestionListOverviewModel[]) => lists && lists.length > 0;
+    selectState(): Observable<QuestionList.QuestionListOverviewModel[]> {
+        return this.store.select(selectQuestionListOverview);
+    }
 
-        return this.store
-            .select(selectQuestionListOverview)
-            .do(
-                lists => {
-                    if (!hasLists(lists))
-                        this.store.dispatch(new LoadQuestionListOverview());
-                }
-            )
-            .filter(hasLists)
-            .take(1)
-            .map(_ => true)
-            .timeoutWith(5000, Observable.of(false));
+    triggerLoad(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot, state: QuestionList.QuestionListOverviewModel[]): void {
+        this.store.dispatch(new LoadQuestionListOverview());
+    }
+
+    hasLoaded(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot, lists: QuestionList.QuestionListOverviewModel[]): boolean {
+        return lists && lists.length > 0;
     }
 }

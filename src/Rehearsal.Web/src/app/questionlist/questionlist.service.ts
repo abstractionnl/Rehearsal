@@ -21,20 +21,10 @@ import QuestionListModel = QuestionList.QuestionListModel;
 
 @Injectable()
 export class QuestionListService {
-
     private apiUrl = 'api/questionlist';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
-    private fetchTrigger = new BehaviorSubject(null);
-    private all: Observable<QuestionListOverviewModel[]>;
-    private hasLoaded: boolean;
-
     constructor(private http: AuthHttp) {
-        this.all = this.fetchTrigger
-            .throttleTime(500)
-            .do(() => this.hasLoaded = true)
-            .switchMap(() => this.fetchAll())
-            .publishReplay(1).refCount();
     }
 
     private fetchAll(): Observable<QuestionListOverviewModel[]> {

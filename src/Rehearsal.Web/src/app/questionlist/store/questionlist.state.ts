@@ -55,10 +55,10 @@ const validationSchema = Joi.object().keys({
             'answer': Joi.string().required()
         })
     )
-});
+}).unknown();
 
-export function validateQuestionList(list: QuestionListModel) {
-    const {error, value} = Joi.validate(stripEmptyQuestions(list), validationSchema);
+export function validateQuestionList(list: QuestionListModel): boolean {
+    const {error, value} = Joi.validate(list, validationSchema);
 
     return error === null;
 }

@@ -1,5 +1,5 @@
 import * as QuestionListActions from "./questionlist.actions";
-import {initialState, QuestionlistEditorState, validateQuestionList} from "./questionlist.state";
+import {initialState, QuestionlistEditorState, stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
 
 import _ from "lodash";
 
@@ -9,6 +9,12 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
             return {
                 ...state,
                 questionListOverview: action.payload
+            };
+
+        case QuestionListActions.LOAD_OVERVIEW_FAILED:
+            return {
+                ...state,
+                questionListOverview: []
             };
 
         case QuestionListActions.NEW_LIST:
@@ -37,6 +43,14 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
                 list: action.payload
             };
 
+        case QuestionListActions.LOAD_LIST_FAILED:
+            return {
+                ...state,
+                isValid: false,
+                isPristine: false,
+                list: null
+            };
+
         case QuestionListActions.SAVE_LIST_SUCCESS:
             return {
                 ...state,
@@ -48,7 +62,7 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.LIST_EDITED:
             return {
                 ...state,
-                isValid: validateQuestionList(action.payload),
+                isValid: validateQuestionList(stripEmptyQuestions(action.payload)),
                 isPristine: false,
                 list: _.extend({}, state.list, action.payload)
             };

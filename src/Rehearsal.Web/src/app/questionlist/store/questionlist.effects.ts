@@ -12,10 +12,10 @@ import {
     SaveQuestionList, SaveQuestionListFailed, SaveQuestionListSuccess
 } from "./questionlist.actions";
 
-import {of} from "rxjs/observable/of";
-import {empty} from "rxjs/observable/empty";
 import {Router} from "@angular/router";
-import {stripEmptyQuestions} from "./questionlist.state";
+import {stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
+
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class QuestionlistEffects {
@@ -31,7 +31,7 @@ export class QuestionlistEffects {
         .switchMap(action => {
             return this.questionListService.getAll()
                 .map(lists => new LoadQuestionListOverviewSuccess(lists))
-                .catch(err => of(new LoadQuestionListOverviewFailed(err)));
+                .catch(err => Observable.of(new LoadQuestionListOverviewFailed(err)));
         });
 
     @Effect() loadQuestionList$: Observable<Action> = this.actions$
@@ -39,13 +39,18 @@ export class QuestionlistEffects {
         .switchMap(action => {
             return this.questionListService.get(action.payload.id)
                 .map(list => new LoadQuestionListSuccess(list))
-                .catch(err => of(new LoadQuestionListFailed(err)));
+                .catch(err => Observable.of(new LoadQuestionListFailed(err)));
         });
 
     @Effect() saveQuestionList$: Observable<Action> = this.actions$
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
         .switchMap(action => {
             let list = stripEmptyQuestions(action.payload);
+            let valid = validateQuestionList(list);
+
+            if (!valid) {
+                return Observable.of(new SaveQuestionListFailed("Not valid"));
+            }
 
             let save = list.id !== null
                 ? this.questionListService.update(list).map(_ => list.id)
@@ -53,7 +58,7 @@ export class QuestionlistEffects {
 
             return save
                 .map(id => new SaveQuestionListSuccess({...list, id: id }))
-                .catch(err => of(new SaveQuestionListFailed(err)));
+                .catch(err => Observable.of(new SaveQuestionListFailed(err)));
         });
 
     @Effect() removeQuestionList$:  Observable<Action> = this.actions$
@@ -61,24 +66,22 @@ export class QuestionlistEffects {
         .switchMap(action => {
             return this.questionListService.remove(action.payload.id)
                 .map(_ => new RemoveQuestionListSuccess({...action.payload}))
-                .catch(err => of(new RemoveQuestionListFailed(err)));
+                .catch(err => Observable.of(new RemoveQuestionListFailed(err)));
         });
 
     @Effect() reloadQuestionListOverview$: Observable<Action> = this.actions$
         .ofType(QuestionListActions.SAVE_LIST_SUCCESS, QuestionListActions.REMOVE_LIST_SUCCESS)
         .map(_ => new LoadQuestionListOverview());
 
-    @Effect() navigateToListAfterSave$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) navigateToListAfterSave$: Observable<Action> = this.actions$
         .ofType<SaveQuestionListSuccess>(QuestionListActions.SAVE_LIST_SUCCESS)
         .do(action => {
             this.router.navigate(['/questionlists', action.payload.id]);
-        })
-        .switchMap(_ => empty());
+        });
 
-    @Effect() navigateToOverviewAfterRemove$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) navigateToOverviewAfterRemove$: Observable<Action> = this.actions$
         .ofType<SaveQuestionListSuccess>(QuestionListActions.REMOVE_LIST_SUCCESS)
         .do(action => {
             this.router.navigate(['/questionlists']);
-        })
-        .switchMap(_ => empty());
+        });
 }

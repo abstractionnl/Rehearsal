@@ -1,6 +1,6 @@
 /// <reference path="../types.ts" />
 
-import {Component, EventEmitter, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 
@@ -8,21 +8,14 @@ import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import Guid = System.Guid;
 import QuestionListModel = QuestionList.QuestionListModel;
 
-import {ICanComponentDeactivate} from "../can-deactivate-guard.service";
-import {ConfirmSaveQuestionListComponent, ResultAction} from "./confirm-save-question.component";
-import {BsModalService} from "ngx-bootstrap";
-
 import {Store} from "@ngrx/store";
-import {
-    AppState, selectIsPristine, selectIsValid, selectQuestionListOverview,
-    selectSelectedQuestionList
-} from "./store/questionlist.state";
+import {AppState, selectIsPristine, selectIsValid, selectQuestionListOverview, selectSelectedQuestionList} from "./store/questionlist.state";
 import {QuestionListEdited, RemoveQuestionList, SaveQuestionList} from "./store/questionlist.actions";
 
 @Component({
     templateUrl: 'questionlist-editor.component.html'
 })
-export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactivate {
+export class QuestionlistEditorComponent implements OnInit {
 
     questionLists$: Observable<QuestionListOverviewModel[]>;
     selectedList$: Observable<QuestionListModel>;
@@ -32,8 +25,7 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
 
     constructor(
         private store: Store<AppState>,
-        private router: Router,
-        private modalService: BsModalService)
+        private router: Router)
     {
         this.questionLists$ = this.store.select(selectQuestionListOverview);
         this.selectedList$ = this.store.select(selectSelectedQuestionList);
@@ -68,37 +60,5 @@ export class QuestionlistEditorComponent implements OnInit, ICanComponentDeactiv
 
     delete(questionList: QuestionListModel) {
         this.store.dispatch(new RemoveQuestionList(questionList));
-    }
-
-    canDeactivate(): Observable<boolean> {
-        return this.selectedList$
-            .switchMap(list => {
-                //if (!list || this.listIsPristine) {
-                //    return Promise.resolve(true);
-                //}
-
-                return Promise.resolve(true);
-
-                /*
-                let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
-                let event = (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
-                    switch (x.action) {
-                        case 'continue':
-                            return Promise.resolve(true);
-                        case 'save':
-                            if (!this.listIsValid) {
-                                //this.alertService.warning('Er zitten nog fouten in de woordenlijst', null);
-                                return Promise.resolve(false);
-                            }
-
-                            //TODO: We must block until saved, but this is done async so we must wait until success
-                            //return this.save(list);
-                        default:
-                            return Promise.resolve(false);
-                    }
-                });
-
-                return event;*/
-            });
     }
 }
