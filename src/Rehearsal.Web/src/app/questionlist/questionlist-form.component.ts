@@ -29,12 +29,10 @@ export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
 
     public form: FormGroup;
     private _questionList: QuestionList.QuestionListModel;
-    @Output() public onSave: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
-    @Output() public onDelete: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
+    @Output() public onSave: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onChange: EventEmitter<QuestionList.QuestionListModel> = new EventEmitter<QuestionList.QuestionListModel>();
 
-    @Input() public isValid;
-    @Input() public isPristine;
+    @Input() public canSave: boolean;
 
     private isReloading: boolean = false;
 
@@ -54,7 +52,6 @@ export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
             this.questions.removeAt(this.questions.controls.length-1);
         }
 
-        /*this.form.setControl('questions', this.fb.array(value.questions.map(_ => ))));*/
         this.form.patchValue(value, { emitEvent: false });
         this.isReloading = false;
     }
@@ -89,40 +86,8 @@ export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
     }
 
     save() {
-        if (this.canSave()) {
-            this.onSave.emit(this.questionList);
-            this.form.markAsPristine();
+        if (this.canSave) {
+            this.onSave.emit();
         }
-    }
-
-    canSave(): boolean {
-        return !this.isPristine && this.isValid;
-    }
-
-    delete() {
-        if (this.canDelete()) {
-            this.onDelete.emit(this.questionList);
-        }
-    }
-
-    canDelete(): boolean {
-        return this.questionList && !!this.questionList.id;
-    }
-
-    swap() {
-        let current = this.form.value;
-
-        let turned = {
-            ...current,
-            questionTitle: current.answerTitle,
-            answerTitle: current.questionTitle,
-            questions: current.questions.map(q => ({
-                ...q,
-                question: q.answer,
-                answer: q.question
-            }))
-        };
-
-        this.onChange.emit(turned);
     }
 }

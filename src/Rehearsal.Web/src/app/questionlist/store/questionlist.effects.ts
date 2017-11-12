@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {Action} from "@ngrx/store";
+import {Action, Store} from "@ngrx/store";
 import {Actions, Effect} from "@ngrx/effects";
 
 import {QuestionListService} from "../questionlist.service";
@@ -13,16 +13,18 @@ import {
 } from "./questionlist.actions";
 
 import {Router} from "@angular/router";
-import {stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
+import {AppState, selectSelectedQuestionList, stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
 
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/withLatestFrom';
 
 @Injectable()
 export class QuestionlistEffects {
     constructor(
         private questionListService: QuestionListService,
         private router: Router,
-        private actions$: Actions
+        private actions$: Actions,
+        private store: Store<AppState>
     ) {}
 
     @Effect() loadQuestionListOverview$: Observable<Action> = this.actions$
@@ -44,8 +46,9 @@ export class QuestionlistEffects {
 
     @Effect() saveQuestionList$: Observable<Action> = this.actions$
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
-        .switchMap(action => {
-            let list = stripEmptyQuestions(action.payload);
+        .withLatestFrom(this.store.select(selectSelectedQuestionList), (a, l) => l)
+        .switchMap(list => {
+            list = stripEmptyQuestions(list);
             let valid = validateQuestionList(list);
 
             if (!valid) {
@@ -63,9 +66,10 @@ export class QuestionlistEffects {
 
     @Effect() removeQuestionList$:  Observable<Action> = this.actions$
         .ofType<RemoveQuestionList>(QuestionListActions.REMOVE_LIST)
-        .switchMap(action => {
-            return this.questionListService.remove(action.payload.id)
-                .map(_ => new RemoveQuestionListSuccess({...action.payload}))
+        .withLatestFrom(this.store.select(selectSelectedQuestionList), (a, l) => l)
+        .switchMap(list => {
+            return this.questionListService.remove(list.id)
+                .map(_ => new RemoveQuestionListSuccess({...list}))
                 .catch(err => Observable.of(new RemoveQuestionListFailed(err)));
         });
 

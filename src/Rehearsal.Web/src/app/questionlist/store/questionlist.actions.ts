@@ -18,6 +18,7 @@ export const SAVE_LIST_FAILED = '[QuestionList] Save list failed';
 export const REMOVE_LIST = '[QuestionList] Remove list';
 export const REMOVE_LIST_SUCCESS = '[QuestionList] Remove list success';
 export const REMOVE_LIST_FAILED = '[QuestionList] Remove list failed';
+export const SWAP_LIST = '[QuestionList] Swap list';
 
 export class LoadQuestionListOverview implements Action {
     readonly type = LOAD_OVERVIEW;
@@ -61,7 +62,7 @@ export class QuestionListEdited implements Action {
 
 export class SaveQuestionList implements Action {
     readonly type = SAVE_LIST;
-    constructor(public payload: QuestionListModel) { }
+    constructor() { }
 }
 
 export class SaveQuestionListSuccess implements Action {
@@ -76,7 +77,7 @@ export class SaveQuestionListFailed implements Action {
 
 export class RemoveQuestionList implements Action {
     readonly type = REMOVE_LIST;
-    constructor(public payload: QuestionListModel) { }
+    constructor() { }
 }
 
 export class RemoveQuestionListSuccess implements Action {
@@ -89,9 +90,15 @@ export class RemoveQuestionListFailed implements Action {
     constructor(public payload: any) { }
 }
 
+export class SwapQuestionList implements Action {
+    readonly type = SWAP_LIST;
+    constructor() { }
+}
+
 export type All =
     LoadQuestionListOverview | LoadQuestionListOverviewSuccess | LoadQuestionListOverviewFailed |
     NewQuestionList | QuestionListEdited |
     LoadQuestionList | LoadQuestionListSuccess | LoadQuestionListFailed |
     SaveQuestionList | SaveQuestionListSuccess | SaveQuestionListFailed |
-    RemoveQuestionList | RemoveQuestionListSuccess | RemoveQuestionListFailed;
+    RemoveQuestionList | RemoveQuestionListSuccess | RemoveQuestionListFailed |
+    SwapQuestionList;

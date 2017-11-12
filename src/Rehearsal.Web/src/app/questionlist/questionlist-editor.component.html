@@ -12,12 +12,17 @@
         <a class="btn btn-default" (click)="new()">Nieuwe woordenlijst</a>
     </div>
     <div class="col-md-8">
+        <questionlist-buttons
+            (onSave)="save($event, false)"
+            [canSave]="canSave$ | async"
+            (onDelete)="delete($event)"
+            [canDelete]="canDelete$ | async"
+            (onSwap)="swap(event)"
+            [canSwap]="canSwap$ | async"></questionlist-buttons>
         <questionlist-form
             [questionList]="selectedList$ | async"
-            [isValid]="listIsValid$ | async"
-            [isPristine]="listIsPristine$ | async"
             (onSave)="save($event, false)"
-            (onDelete)="delete($event)"
+            [canSave]="canSave$ | async"
             (onChange)="changed($event)"
             *ngIf="!!(selectedList$ | async)"></questionlist-form>
         <no-questionlist-selected *ngIf="!(selectedList$ | async)"></no-questionlist-selected>

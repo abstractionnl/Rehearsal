@@ -1,0 +1,12 @@
+﻿<div class="btn-group pull-right" dropdown>
+    <button type="button" class="btn btn-success" [disabled]="!canSave" (click)="save($event)"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
+    <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+        <li role="menuitem" [class.disabled]="!canSwap"><a class="dropdown-item" (click)="swap($event)">Vraag/antwoord omkeren</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem" [class.disabled]="!canDelete"><a class="dropdown-item" (click)="delete($event)">Verwijderen</a></li>
+    </ul>
+</div>

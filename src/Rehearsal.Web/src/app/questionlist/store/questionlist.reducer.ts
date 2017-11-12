@@ -2,6 +2,7 @@ import * as QuestionListActions from "./questionlist.actions";
 import {initialState, QuestionlistEditorState, stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
 
 import _ from "lodash";
+import QuestionListModel = QuestionList.QuestionListModel;
 
 export function questionListReducer(state: QuestionlistEditorState = initialState, action: QuestionListActions.All): QuestionlistEditorState {
     switch (action.type) {
@@ -18,21 +19,23 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
             };
 
         case QuestionListActions.NEW_LIST:
+            let newList = {
+                id: null,
+                title: 'Nieuwe lijst',
+                questionTitle: '',
+                answerTitle: '',
+                questions: [{
+                    question: '',
+                    answer: ''
+                }],
+                version: 0
+            };
+
             return {
                 ...state,
                 isValid: false,
                 isPristine: true,
-                list: {
-                    id: null,
-                    title: 'Nieuwe lijst',
-                    questionTitle: '',
-                    answerTitle: '',
-                    questions: [{
-                        question: '',
-                        answer: ''
-                    }],
-                    version: 0
-                }
+                list: newList
             };
 
         case QuestionListActions.LOAD_LIST_SUCCESS:
@@ -75,6 +78,24 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
                 list: state.list.id == action.payload.id ? null : state.list
             };
 
+        case QuestionListActions.SWAP_LIST:
+            let swappedList = {
+                ...state.list,
+                questionTitle: state.list.answerTitle,
+                answerTitle: state.list.questionTitle,
+                questions: state.list.questions.map(q => ({
+                    ...q,
+                    question: q.answer,
+                    answer: q.question
+                }))
+            };
+
+            return {
+                ...state,
+                isValid: validateQuestionList(stripEmptyQuestions(swappedList)),
+                isPristine: false,
+                list: swappedList
+            };
         default:
             return state;
     }

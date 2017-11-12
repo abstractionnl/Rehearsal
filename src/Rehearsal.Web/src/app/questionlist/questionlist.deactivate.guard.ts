@@ -2,12 +2,11 @@ import {EventEmitter, Injectable} from "@angular/core";
 import {CanDeactivate} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Store} from "@ngrx/store";
-import {AppState} from "./store/questionlist.state";
+import {AppState, selectIsPristine} from "./store/questionlist.state";
 import {ConfirmSaveQuestionListComponent, ResultAction} from "./confirm-save-question.component";
-import { SAVE_LIST_FAILED, SAVE_LIST_SUCCESS, SaveQuestionList } from "./store/questionlist.actions";
+import {SAVE_LIST_FAILED, SAVE_LIST_SUCCESS, SaveQuestionList} from "./store/questionlist.actions";
 import {Actions} from "@ngrx/effects";
 import {BsModalService} from "ngx-bootstrap";
-import QuestionListModel = QuestionList.QuestionListModel;
 
 @Injectable()
 export class QuestionListDeactivateGuard implements CanDeactivate<any> {
@@ -21,18 +20,18 @@ export class QuestionListDeactivateGuard implements CanDeactivate<any> {
 
     canDeactivate(component: any) : Observable<boolean> {
         return this.store
-            .select(x => x.questionListEditor)
-            .switchMap(state => {
-                if (state.isPristine)
+            .select(selectIsPristine)
+            .switchMap(pristine => {
+                if (pristine)
                     return Promise.resolve(true);
 
                 let ref = this.modalService.show(ConfirmSaveQuestionListComponent);
-                let event = (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
+                return (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
                     switch (x.action) {
                         case 'continue':
                             return Promise.resolve(true);
                         case 'save':
-                            this.save(state.list);
+                            this.save();
 
                             return this.updates$
                                 .ofType(SAVE_LIST_SUCCESS, SAVE_LIST_FAILED)
@@ -41,12 +40,10 @@ export class QuestionListDeactivateGuard implements CanDeactivate<any> {
                             return Promise.resolve(false);
                     }
                 });
-
-                return event;
             });
     }
 
-    private save(questionList: QuestionListModel) {
-        this.store.dispatch(new SaveQuestionList(questionList));
+    private save() {
+        this.store.dispatch(new SaveQuestionList());
     }
 }

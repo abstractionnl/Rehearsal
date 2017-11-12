@@ -1,17 +1,17 @@
-﻿import { NgModule } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { RouterModule } from "@angular/router";
+﻿import {NgModule} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {ReactiveFormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {RouterModule} from "@angular/router";
 
 import {StoreModule} from "@ngrx/store";
 
 import {BsDropdownModule, ModalModule} from 'ngx-bootstrap';
 
-import { QuestionlistOverviewComponent } from './questionlist-overview.component';
+import {QuestionlistOverviewComponent} from './questionlist-overview.component';
 import {QuestionlistFormComponent} from './questionlist-form.component';
-import { NoQuestionlistSelectedComponent } from './no-questionlist-selected.component';
-import { ConfirmSaveQuestionListComponent as ConfirmSaveQuestionComponent } from "./confirm-save-question.component";
+import {NoQuestionlistSelectedComponent} from './no-questionlist-selected.component';
+import {ConfirmSaveQuestionListComponent} from "./confirm-save-question.component";
 
 import {QuestionlistEditorComponent} from "./questionlist-editor.component";
 import {QuestionListService} from './questionlist.service';
@@ -19,6 +19,7 @@ import {QuestionlistRoutingModule} from "./questionlist-routing.module";
 import {questionListReducer} from "./store/questionlist.reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {QuestionlistEffects} from "./store/questionlist.effects";
+import {QuestionlistButtonsComponent} from "./questionlist-buttons.component";
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import {QuestionlistEffects} from "./store/questionlist.effects";
         QuestionlistOverviewComponent,
         QuestionlistFormComponent,
         NoQuestionlistSelectedComponent,
-        ConfirmSaveQuestionComponent
+        ConfirmSaveQuestionListComponent,
+        QuestionlistButtonsComponent
     ],
     imports: [
         CommonModule, ReactiveFormsModule, HttpModule, RouterModule,
@@ -37,7 +39,7 @@ import {QuestionlistEffects} from "./store/questionlist.effects";
         BsDropdownModule.forRoot(),
         EffectsModule.forRoot([QuestionlistEffects])
     ],
-    entryComponents: [ ConfirmSaveQuestionComponent ],
+    entryComponents: [ ConfirmSaveQuestionListComponent ],
     providers: [
         QuestionListService
     ]

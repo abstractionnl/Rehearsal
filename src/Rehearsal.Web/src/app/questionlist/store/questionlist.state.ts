@@ -38,6 +38,18 @@ export function selectIsPristine(state: AppState): boolean {
     return state.questionListEditor.isPristine;
 }
 
+export function selectCanSave(state: AppState): boolean {
+    return !state.questionListEditor.isPristine && state.questionListEditor.list !== null && state.questionListEditor.isValid;
+}
+
+export function selectCanDelete(state: AppState): boolean {
+    return state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null;
+}
+
+export function selectCanSwap(state: AppState): boolean {
+    return state.questionListEditor.list !== null;
+}
+
 export function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
     return {
         ...list,
