@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Route, Router, RouterState, RouterStateSnapshot} from "@angular/router";
-import { Observable } from "rxjs/Observable";
-
-import { QuestionListService } from "./questionlist/questionlist.service";
+import {ActivatedRoute, ParamMap} from "@angular/router";
 import {RehearsalService} from "./rehearsal.service";
+import {map, switchMap} from "rxjs/operators";
 
-import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
-import QuestionListModel = QuestionList.QuestionListModel;
-import OpenRehearsalQuestionModel = Rehearsal.OpenRehearsalQuestionModel;
 import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
 import AnswerResultModel = Rehearsal.AnswerResultModel;
 
@@ -37,8 +32,10 @@ export class RehearsalComponent implements OnInit {
     ngOnInit() {
         this.route
             .paramMap
-            .map(x => x.get('id'))
-            .switchMap(id => this.rehearsalService.get(id))
+            .pipe(
+                map((x: ParamMap) => x.get('id')),
+                switchMap(id => this.rehearsalService.get(id))
+            )
             .subscribe(rehearsal => this.startRehearsal(rehearsal));
     }
 
@@ -51,8 +48,7 @@ export class RehearsalComponent implements OnInit {
 
     submitAnswer(answer: string) {
         this.rehearsalService.giveAnswer(this.rehearsal.id, this.currentQuestion.id, answer)
-            .toPromise()
-            .then(answerResult => {
+            .subscribe(answerResult => {
                 this.answerResult = answerResult;
             });
     }

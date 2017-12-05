@@ -3,6 +3,7 @@ import {AlertService} from "../alert.service";
 import {Actions, Effect} from "@ngrx/effects";
 import {Observable} from "rxjs/Observable";
 import {Action} from "@ngrx/store";
+import {tap} from "rxjs/operators";
 
 import * as QuestionListActions from "../../questionlist/store/questionlist.actions";
 import {
@@ -13,7 +14,6 @@ import {
 } from "../../questionlist/store/questionlist.actions";
 
 import QuestionListModel = QuestionList.QuestionListModel;
-import 'rxjs/add/operator/do';
 
 @Injectable()
 export class AlertEffects {
@@ -24,23 +24,33 @@ export class AlertEffects {
 
     @Effect({ dispatch: false }) LoadQuestionListFailed: Observable<Action> = this.actions$
         .ofType<LoadQuestionListFailed>(QuestionListActions.LOAD_LIST_FAILED)
-        .do(this.showFailed('Fout bij het laden van de woordenlijst'));
+        .pipe(
+            tap(this.showFailed('Fout bij het laden van de woordenlijst'))
+        );
 
     @Effect({ dispatch: false }) SaveQuestionListSuccess: Observable<Action> = this.actions$
         .ofType<SaveQuestionListSuccess>(QuestionListActions.SAVE_LIST_SUCCESS)
-        .do(this.showSuccess<QuestionListModel>(questionList => `Woordenlijst ${questionList.title} opgeslagen`));
+        .pipe(
+            tap(this.showSuccess<QuestionListModel>(questionList => `Woordenlijst ${questionList.title} opgeslagen`))
+        );
 
     @Effect({ dispatch: false }) SaveQuestionListFailed: Observable<Action> = this.actions$
         .ofType<SaveQuestionListFailed>(QuestionListActions.SAVE_LIST_FAILED)
-        .do(this.showFailed('Fout bij het opslaan van de woordenlijst'));
+        .pipe(
+            tap(this.showFailed('Fout bij het opslaan van de woordenlijst'))
+        );
 
     @Effect({ dispatch: false }) RemoveQuestionListSuccess: Observable<Action> = this.actions$
         .ofType<RemoveQuestionListSuccess>(QuestionListActions.REMOVE_LIST_SUCCESS)
-        .do(this.showSuccessT('Woordenlijst verwijderd'));
+        .pipe(
+            tap(this.showSuccessT('Woordenlijst verwijderd'))
+        );
 
     @Effect({ dispatch: false }) RemoveQuestionListFailed: Observable<Action> = this.actions$
         .ofType<RemoveQuestionListFailed>(QuestionListActions.REMOVE_LIST_FAILED)
-        .do(this.showFailed('Fout bij het verwijderen van de woordenlijst'));
+        .pipe(
+            tap(this.showFailed('Fout bij het verwijderen van de woordenlijst'))
+        );
 
     private showSuccess<T>(createMessage: (payload: T) => string): (action: { type: string, payload: T }) => void {
         return action => {

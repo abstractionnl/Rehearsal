@@ -1,8 +1,7 @@
 /// <reference path="types.ts" />
 
-import { Injectable, OnInit } from '@angular/core';
-import { Headers } from '@angular/http';
-import { AuthHttp } from "angular2-jwt";
+import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 import { Observable } from 'rxjs/Observable';
 
@@ -16,16 +15,16 @@ import GiveAnswerRequest = Rehearsal.GiveAnswerRequest;
 export class RehearsalService {
     private apiUrl = 'api/rehearsal';
 
-    private headers = new Headers({ 'Content-Type': 'application/json' });
+    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    constructor(private http: AuthHttp) {
+    constructor(private http: HttpClient) {
 
     }
 
     public start(request: StartRehearsalRequest): Promise<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(request), { headers: this.headers })
-            .map(response => response.json() as Guid)
+            .map(response => response as Guid)
             .toPromise();
     }
 
@@ -33,7 +32,7 @@ export class RehearsalService {
         const url = `${this.apiUrl}/${id}`;
         return this.http
             .get(url)
-            .map(response => response.json() as RehearsalSessionModel);
+            .map(response => response as RehearsalSessionModel);
     }
 
     public giveAnswer(rehearsalId: Guid, questionId: Guid, answer: string): Observable<AnswerResultModel> {
@@ -45,6 +44,6 @@ export class RehearsalService {
 
         return this.http
             .put(url, JSON.stringify(model), { headers: this.headers })
-            .map(response => response.json() as AnswerResultModel);
+            .map(response => response as AnswerResultModel);
     }
 }

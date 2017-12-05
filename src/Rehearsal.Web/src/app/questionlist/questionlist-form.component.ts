@@ -3,11 +3,7 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, NgForm} from "@angular/forms";
 
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/delay";
 import {Subscription} from "rxjs/Subscription";
-
-import _ from "lodash";
 
 @Component({
     selector: 'questionlist-form',

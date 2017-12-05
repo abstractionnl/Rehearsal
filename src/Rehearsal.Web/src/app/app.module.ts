@@ -1,7 +1,7 @@
 ﻿import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AlertModule, ModalModule } from 'ngx-bootstrap';
 
@@ -36,7 +36,7 @@ import {AlertEffects} from "./alert/store/alert.effects";
         FocusDirective
     ],
     imports: [
-        BrowserModule, FormsModule, HttpModule,
+        BrowserModule, FormsModule, HttpClientModule,
         AlertModule.forRoot(), ModalModule.forRoot(),
         QuestionlistModule,
         AuthModule, AppRoutingModule,

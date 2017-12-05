@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable} from "@angular/core";
 import {CanDeactivate} from "@angular/router";
 import {Observable} from "rxjs/Observable";
+import {switchMap} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {AppState, selectIsPristine} from "./store/questionlist.state";
 import {ConfirmSaveQuestionlistComponent, ResultAction} from "./confirm-save-questionlist.component";
@@ -21,26 +22,28 @@ export class QuestionListDeactivateGuard implements CanDeactivate<any> {
     canDeactivate(component: any) : Observable<boolean> {
         return this.store
             .select(selectIsPristine)
-            .switchMap(pristine => {
-                if (pristine)
-                    return Promise.resolve(true);
+            .pipe(
+                switchMap(pristine => {
+                    if (pristine)
+                        return Promise.resolve(true);
 
-                let ref = this.modalService.show(ConfirmSaveQuestionlistComponent);
-                return (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
-                    switch (x.action) {
-                        case 'continue':
-                            return Promise.resolve(true);
-                        case 'save':
-                            this.save();
+                    let ref = this.modalService.show(ConfirmSaveQuestionlistComponent);
+                    return (<EventEmitter<ResultAction>>(ref.content.selected)).flatMap(x => {
+                        switch (x.action) {
+                            case 'continue':
+                                return Promise.resolve(true);
+                            case 'save':
+                                this.save();
 
-                            return this.updates$
-                                .ofType(SAVE_LIST_SUCCESS, SAVE_LIST_FAILED)
-                                .map(action => action.type == SAVE_LIST_SUCCESS);
-                        default:
-                            return Promise.resolve(false);
-                    }
-                });
-            });
+                                return this.updates$
+                                    .ofType(SAVE_LIST_SUCCESS, SAVE_LIST_FAILED)
+                                    .map(action => action.type == SAVE_LIST_SUCCESS);
+                            default:
+                                return Promise.resolve(false);
+                        }
+                    });
+                })
+            );
     }
 
     private save() {

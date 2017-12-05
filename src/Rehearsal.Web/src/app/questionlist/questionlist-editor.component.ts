@@ -4,6 +4,7 @@ import {Component, EventEmitter, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
+import {first, switchMap} from "rxjs/operators";
 
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import Guid = System.Guid;
@@ -18,7 +19,6 @@ import {
     SwapQuestionList
 } from "./store/questionlist.actions";
 
-import 'rxjs/add/operator/first';
 import {ConfirmCopyQuestionlistComponent, ModalResult} from "./confirm-copy-questionlist.component";
 import {BsModalService} from "ngx-bootstrap";
 import {ConfirmRemoveQuestionlistComponent} from "./confirm-remove-questionlist.component";
@@ -72,7 +72,9 @@ export class QuestionlistEditorComponent implements OnInit {
         let ref = this.modalService.show(ConfirmRemoveQuestionlistComponent);
 
         (<EventEmitter<ModalResult>>(ref.content.selected))
-            .first()
+            .pipe(
+                first()
+            )
             .subscribe(result => {
                 if (result.action == 'remove') {
                     this.store.dispatch(new RemoveQuestionList());
@@ -85,20 +87,21 @@ export class QuestionlistEditorComponent implements OnInit {
     }
 
     copy() {
-        this.selectedList$
-            .first()
-            .switchMap(list => {
+        this.selectedList$.pipe(
+            first(),
+            switchMap(list => {
                 let ref = this.modalService.show(ConfirmCopyQuestionlistComponent);
                 ref.content.newTitle = 'Kopie ' + list.title;
 
                 return (<EventEmitter<ModalResult>>(ref.content.selected));
-            })
-            .first()
-            .subscribe((modalResult: ModalResult) => {
-                if (modalResult.action == 'confirm') {
-                    this.store.dispatch(new CopyQuestionList({newTitle: modalResult.newTitle}));
-                    this.store.dispatch(new SaveQuestionList())
-                }
-            });
+            }),
+            first()
+        )
+        .subscribe((modalResult: ModalResult) => {
+            if (modalResult.action == 'confirm') {
+                this.store.dispatch(new CopyQuestionList({newTitle: modalResult.newTitle}));
+                this.store.dispatch(new SaveQuestionList())
+            }
+        });
     }
 }

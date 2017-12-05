@@ -64,7 +64,7 @@ namespace Rehearsal.WebApi.QuestionList
 
             await CommandSender.Send(command);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete, Route("{id:guid}")]
@@ -77,7 +77,7 @@ namespace Rehearsal.WebApi.QuestionList
 
             await CommandSender.Send(command);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

@@ -5,7 +5,7 @@ import { NgModel } from "@angular/forms";
 
 import { Subject } from "rxjs/Subject";
 import { Subscription } from "rxjs/Subscription";
-import "rxjs/add/operator/distinctUntilChanged";
+import {distinctUntilChanged} from "rxjs/operators";
 
 @Directive({
     selector: '[formValidationStyle]'
@@ -26,7 +26,9 @@ export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDe
 
     ngOnInit(): void {
         this.errorSubjectSubscription = this.errorSubject
-            .distinctUntilChanged()
+            .pipe(
+                distinctUntilChanged()
+            )
             .subscribe((hasError) => {
                 if (hasError) {
                     this.renderer.addClass(this.element.nativeElement, FormValidationStyleDirective.ERROR_STYLE);
