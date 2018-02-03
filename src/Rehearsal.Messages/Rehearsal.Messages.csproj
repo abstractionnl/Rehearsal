@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="CqrsLite" Version="0.14.4" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="LanguageExt.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\.nuget\packages\languageext.core\2.1.18\lib\netstandard1.3\LanguageExt.Core.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CqrsLite" Version="0.18.1" />
   </ItemGroup>
 </Project>

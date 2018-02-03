@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CQRSlite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\CqrsLite.0.14.4\lib\net452\CQRSlite.dll</HintPath>
+      <HintPath>..\..\packages\CqrsLite.0.18.1\lib\net452\CQRSlite.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
