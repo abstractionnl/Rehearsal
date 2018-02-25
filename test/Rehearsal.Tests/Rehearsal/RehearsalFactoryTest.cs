@@ -34,5 +34,39 @@ namespace Rehearsal.Tests.Rehearsal
             
             Check.That(cmd.Questions).HasSize(questionList.Questions.Count);
         }
+
+        [Fact]
+        public async Task WhenQuestionHasMultipleCorrectAnswersQuestionIsGrouped()
+        {
+            var q = Faker.Lorem.Word();
+            
+            var questionList = Faker.QuestionList(Faker.Question(q), Faker.Question(q));
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .Create();
+
+            Check.That(cmd.Questions)
+                .HasOneElementOnly()
+                .And.HasElementThatMatches(s => s.Question == q);
+        }
+        
+        [Fact]
+        public async Task WhenQuestionHasMultipleCorrectAnswersMultipleAnswersAreCorrect()
+        {
+            var q = Faker.Lorem.Word();
+            var answers = Faker.Lorem.Words(2);
+            
+            var questionList = Faker.QuestionList(Faker.Question(q, answers[0]), Faker.Question(q, answers[1]));
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .Create();
+
+            Check.That(cmd.Questions)
+                .HasElementThatMatches(s => s.Question == q)
+                .Which.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
+                .ContainsExactly(answers);
+        }
     }
 }

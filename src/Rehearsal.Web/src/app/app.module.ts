@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgPlural } from '@angular/common';
 
 import { AlertModule, ModalModule } from 'ngx-bootstrap';
 

@@ -39,7 +39,7 @@ namespace Rehearsal.Rehearsal
                 QuestionTitle = question.QuestionTitle,
                 Question = question.Question,
                 AnswerTitle = question.AnswerTitle,
-                CorrectAnswer = question.Answer
+                CorrectAnswers = question.Answers.ToList()
             };
         }
 
@@ -47,31 +47,49 @@ namespace Rehearsal.Rehearsal
         {
             foreach (var question in questionList.Questions)
             {
-                Questions.Add(new QuestionDefinition(
-                    questionList.QuestionTitle,
-                    question.Question,
-                    questionList.AnswerTitle,
-                    question.Answer
-                ));
+                GetOrAddQuestion(questionList.QuestionTitle, question.Question, questionList.AnswerTitle)
+                    .AddAnswer(question.Answer);
             }
 
             return this;
         }
 
-        public class QuestionDefinition
+        private QuestionDefinition GetOrAddQuestion(string questionTitle, string question, string answerTitle) => 
+            Questions
+                .Where(q => q.Question == question && q.QuestionTitle == questionTitle && q.AnswerTitle == answerTitle)
+                .HeadOrNone()
+                .IfNone(() =>
+                {
+                    var q = new QuestionDefinition(
+                        questionTitle,
+                        question,
+                        answerTitle
+                    );
+                    
+                    Questions.Add(q);
+    
+                    return q;
+                });
+
+        private class QuestionDefinition
         {
-            public QuestionDefinition(string questionTitle, string question, string answerTitle, string answer)
+            public QuestionDefinition(string questionTitle, string question, string answerTitle)
             {
                 QuestionTitle = questionTitle;
                 Question = question;
                 AnswerTitle = answerTitle;
-                Answer = answer;
+                Answers = new List<string>();
+            }
+
+            public void AddAnswer(string answer)
+            {
+                Answers.Add(answer);
             }
 
             public string QuestionTitle { get; }
             public string Question { get; }
             public string AnswerTitle { get; }
-            public string Answer { get; }
+            public ICollection<string> Answers { get; }
         }
     }
 }

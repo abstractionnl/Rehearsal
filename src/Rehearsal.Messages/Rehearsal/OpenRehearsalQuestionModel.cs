@@ -1,7 +1,9 @@
-﻿namespace Rehearsal.Messages.Rehearsal
+﻿using System.Collections.Generic;
+
+namespace Rehearsal.Messages.Rehearsal
 {
     public class OpenRehearsalQuestionModel : RehearsalQuestionModel
     {
-        public string CorrectAnswer { get; set; }
+        public ICollection<string> CorrectAnswers { get; set; }
     }
 }

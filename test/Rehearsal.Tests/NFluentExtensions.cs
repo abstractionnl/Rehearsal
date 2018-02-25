@@ -21,6 +21,14 @@ namespace Rehearsal.Tests
             }
         }
 
+        public static ICheck<TOut> Selecting<T, TOut>(this ICheck<T> check, Func<T, TOut> selector)
+        {
+            var checker  = ExtensibilityHelper.ExtractChecker(check);
+            var newValue = selector(checker.Value);
+
+            return Check.That(newValue);
+        }
+
         public static ICheckLinkWhich<ICheck<IEnumerable<T>>, ICheck<TInstance>> ContainsInstanceOf<T, TInstance>(this ICheck<IEnumerable<T>> check)
             where TInstance: T
         {

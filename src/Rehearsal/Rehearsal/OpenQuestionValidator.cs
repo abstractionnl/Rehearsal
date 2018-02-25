@@ -14,11 +14,11 @@ namespace Rehearsal.Rehearsal
         
         public Task<AnswerResultModel> Validate(string answer)
         {
-            var isCorrect = Question.CorrectAnswer == answer;
+            var isCorrect = Question.CorrectAnswers.Contains(answer);
             
             return Task.FromResult(new AnswerResultModel()
             {
-                CorrectAnswer = Question.CorrectAnswer,
+                CorrectAnswers = Question.CorrectAnswers,
                 GivenAnswer = answer,
                 IsCorrect = isCorrect
             });
