@@ -10,9 +10,12 @@ namespace Rehearsal.Rehearsal
 {
     public class RehearsalFactory : IRehearsalFactory
     {
+        private IQuestionGenerator QuestionGenerator { get; set; }
+        
         public RehearsalFactory()
         {
             Questions = new List<QuestionDefinition>();
+            QuestionGenerator = new OpenRehearsalQuestionGenerator();
         }
 
         private IList<QuestionDefinition> Questions { get; }
@@ -30,17 +33,8 @@ namespace Rehearsal.Rehearsal
             return Task.FromResult(cmd);
         }
 
-        private RehearsalQuestionModel PrepareQuestion(QuestionDefinition question)
-        {
-            return new OpenRehearsalQuestionModel()
-            {
-                Id = Guid.NewGuid(),
-                QuestionTitle = question.QuestionTitle,
-                Question = question.Question,
-                AnswerTitle = question.AnswerTitle,
-                CorrectAnswers = question.Answers.ToList()
-            };
-        }
+        private RehearsalQuestionModel PrepareQuestion(QuestionDefinition question) => 
+            QuestionGenerator.PrepareQuestion(question);
 
         public IRehearsalFactory AddQuestionList(QuestionListModel questionList)
         {
@@ -49,6 +43,13 @@ namespace Rehearsal.Rehearsal
                 GetOrAddQuestion(questionList.QuestionTitle, question.Question, questionList.AnswerTitle)
                     .AddAnswer(question.Answer);
             }
+
+            return this;
+        }
+
+        public IRehearsalFactory UseOpenQuestions()
+        {
+            QuestionGenerator = new OpenRehearsalQuestionGenerator();
 
             return this;
         }
@@ -89,6 +90,26 @@ namespace Rehearsal.Rehearsal
             public string Question { get; }
             public string AnswerTitle { get; }
             public ISet<string> Answers { get; }
+        }
+
+        private class OpenRehearsalQuestionGenerator : IQuestionGenerator
+        {
+            public RehearsalQuestionModel PrepareQuestion(QuestionDefinition question)
+            {
+                return new OpenRehearsalQuestionModel()
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionTitle = question.QuestionTitle,
+                    Question = question.Question,
+                    AnswerTitle = question.AnswerTitle,
+                    CorrectAnswers = question.Answers.ToList()
+                };
+            }
+        }
+        
+        private interface IQuestionGenerator
+        {
+            RehearsalQuestionModel PrepareQuestion(QuestionDefinition question);
         }
     }
 }
