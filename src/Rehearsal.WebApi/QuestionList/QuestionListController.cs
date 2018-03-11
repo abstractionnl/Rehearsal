@@ -26,7 +26,7 @@ namespace Rehearsal.WebApi.QuestionList
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(QuestionListRepository.GetAll());
+            return Ok(QuestionListRepository.GetAllOrderedByTitle());
         }
 
         [HttpGet, Route("{id:guid}")]

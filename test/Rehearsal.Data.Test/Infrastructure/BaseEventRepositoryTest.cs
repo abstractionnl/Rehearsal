@@ -9,6 +9,7 @@ using CQRSlite.Events;
 using NFluent;
 using Rehearsal.Data.Infrastructure;
 using Rehearsal.Data.Test.Mocks;
+using Rehearsal.Xunit;
 using Xunit;
 
 namespace Rehearsal.Data.Test.Infrastructure

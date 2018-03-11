@@ -4,6 +4,7 @@ using NFluent;
 using Rehearsal.Messages.Rehearsal;
 using Rehearsal.Rehearsal;
 using Rehearsal.Tests.Mocks;
+using Rehearsal.Xunit;
 using Xunit;
 
 namespace Rehearsal.Tests.Rehearsal

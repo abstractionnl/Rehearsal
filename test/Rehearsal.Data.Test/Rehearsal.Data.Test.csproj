@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Bogus" Version="21.0.2" />
+    <PackageReference Include="Bogus" Version="22.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="NFluent" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -15,6 +15,7 @@
       <Project>{22B293DD-C8B0-4CE9-9F21-57DFCF6D2255}</Project>
       <Name>Rehearsal.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rehearsal.Xunit\Rehearsal.Xunit.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

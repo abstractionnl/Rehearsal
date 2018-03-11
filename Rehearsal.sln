@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Data.Test", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.WebApi.Test", "test\Rehearsal.WebApi.Test\Rehearsal.WebApi.Test.csproj", "{B45BD79C-2D2A-4C1A-AE58-3B097023E095}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Xunit", "test\Rehearsal.Xunit\Rehearsal.Xunit.csproj", "{0983F362-E5E3-4674-A8C0-E0B223318A9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{B45BD79C-2D2A-4C1A-AE58-3B097023E095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B45BD79C-2D2A-4C1A-AE58-3B097023E095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B45BD79C-2D2A-4C1A-AE58-3B097023E095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

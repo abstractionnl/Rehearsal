@@ -4,6 +4,7 @@ using Bogus;
 using CQRSlite.Domain;
 using CQRSlite.Events;
 using NFluent;
+using Rehearsal.Xunit;
 
 namespace Rehearsal.Tests
 {
