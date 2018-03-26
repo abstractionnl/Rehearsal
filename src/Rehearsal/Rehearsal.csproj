@@ -8,6 +8,7 @@
     <PackageReference Include="LanguageExt.Core" Version="2.1.29" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rehearsal.Common\Rehearsal.Common.csproj" />
     <ProjectReference Include="..\Rehearsal.Messages\Rehearsal.Messages.csproj" />
   </ItemGroup>
 </Project>

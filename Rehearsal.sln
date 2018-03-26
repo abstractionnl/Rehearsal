@@ -23,6 +23,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.WebApi.Test", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Xunit", "test\Rehearsal.Xunit\Rehearsal.Xunit.csproj", "{0983F362-E5E3-4674-A8C0-E0B223318A9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Common", "src\Rehearsal.Common\Rehearsal.Common.csproj", "{E08ABEC8-423D-4152-B0A8-683689617434}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D88727C3-6C8B-4942-9227-080A8AA2A852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rehearsal.Common.Test", "test\Rehearsal.Common.Test\Rehearsal.Common.Test.csproj", "{F5CFEC38-B710-404D-85F4-701D92711002}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,8 +75,23 @@ Global
 		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0983F362-E5E3-4674-A8C0-E0B223318A9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E08ABEC8-423D-4152-B0A8-683689617434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08ABEC8-423D-4152-B0A8-683689617434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08ABEC8-423D-4152-B0A8-683689617434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08ABEC8-423D-4152-B0A8-683689617434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5CFEC38-B710-404D-85F4-701D92711002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5CFEC38-B710-404D-85F4-701D92711002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5CFEC38-B710-404D-85F4-701D92711002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5CFEC38-B710-404D-85F4-701D92711002}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5FBA0984-9E81-40C7-82F7-19136A0E4BC4} = {D88727C3-6C8B-4942-9227-080A8AA2A852}
+		{00BD527B-0E0F-4DC5-980D-194DC85E9468} = {D88727C3-6C8B-4942-9227-080A8AA2A852}
+		{B45BD79C-2D2A-4C1A-AE58-3B097023E095} = {D88727C3-6C8B-4942-9227-080A8AA2A852}
+		{0983F362-E5E3-4674-A8C0-E0B223318A9D} = {D88727C3-6C8B-4942-9227-080A8AA2A852}
+		{F5CFEC38-B710-404D-85F4-701D92711002} = {D88727C3-6C8B-4942-9227-080A8AA2A852}
 	EndGlobalSection
 EndGlobal

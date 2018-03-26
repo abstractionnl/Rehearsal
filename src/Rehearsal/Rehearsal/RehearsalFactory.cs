@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
+using Rehearsal.Common;
 using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
 using Rehearsal.Messages.Rehearsal;
@@ -25,7 +26,7 @@ namespace Rehearsal.Rehearsal
             var cmd = new StartRehearsalCommand()
             {
                 Id = id,
-                Questions = Questions.Select(PrepareQuestion).ToList()
+                Questions = Questions.Randomize().Select(PrepareQuestion).ToList()
             };
             
             return Task.FromResult(cmd);
