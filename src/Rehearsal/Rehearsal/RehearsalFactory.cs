@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CQRSlite.Commands;
 using Rehearsal.Common;
-using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
 using Rehearsal.Messages.Rehearsal;
 
@@ -79,7 +77,7 @@ namespace Rehearsal.Rehearsal
                 QuestionTitle = questionTitle;
                 Question = question;
                 AnswerTitle = answerTitle;
-                Answers = new List<string>();
+                Answers = new HashSet<string>();
             }
 
             public void AddAnswer(string answer)
@@ -90,7 +88,7 @@ namespace Rehearsal.Rehearsal
             public string QuestionTitle { get; }
             public string Question { get; }
             public string AnswerTitle { get; }
-            public ICollection<string> Answers { get; }
+            public ISet<string> Answers { get; }
         }
     }
 }

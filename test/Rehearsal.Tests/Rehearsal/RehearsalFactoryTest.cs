@@ -69,5 +69,23 @@ namespace Rehearsal.Tests.Rehearsal
                 .Which.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
                 .ContainsExactly(answers);
         }
+        
+        [Fact]
+        public async Task WithMultipleSameAnswersOneAnswerIsCorrect()
+        {
+            var q = Faker.Lorem.Word();
+            var a = Faker.Lorem.Word();
+            
+            var questionList = Faker.QuestionList(Faker.Question(q, a), Faker.Question(q, a));
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .Create();
+
+            Check.That(cmd.Questions)
+                .HasElementThatMatches(s => s.Question == q)
+                .Which.Selecting(p => ((OpenRehearsalQuestionModel) p).CorrectAnswers)
+                .ContainsExactly(a);
+        }
     }
 }
