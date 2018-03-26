@@ -63,7 +63,7 @@ export class QuestionlistEffects {
                 }
 
                 let save = list.id !== null
-                    ? this.questionListService.update(list).map(_ => list.id)
+                    ? this.questionListService.update(list).pipe(map(_ => list.id))
                     : this.questionListService.create(list);
 
                 return save.pipe(

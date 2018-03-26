@@ -1,21 +1,25 @@
 ﻿import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 
+import {map, filter} from "rxjs/operators";
+
 export abstract class AbstractActivateGuard<TState> implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         return this.selectState()
-            .map( (state, i) => {
-                if (this.hasLoaded(route, routerState, state))
-                    return true;
+            .pipe(
+                map( (state, i) => {
+                    if (this.hasLoaded(route, routerState, state))
+                        return true;
 
-                if (i === 0) {
-                    this.triggerLoad(route, routerState, state);
-                    return null;
-                } else {
-                    return false;
-                }
-            })
-            .filter(x => x !== null);
+                    if (i === 0) {
+                        this.triggerLoad(route, routerState, state);
+                        return null;
+                    } else {
+                        return false;
+                    }
+                }),
+                filter(x => x !== null)
+            );
     }
 
     abstract selectState(): Observable<TState>;

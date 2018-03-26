@@ -20,8 +20,11 @@ export class QuestionListService {
     }
 
     private fetchAll(): Observable<QuestionListOverviewModel[]> {
-        return this.http.get(this.apiUrl, { headers: this.headers })
-            .map(response => response as QuestionListOverviewModel[]);
+        return this.http
+            .get(this.apiUrl, { headers: this.headers })
+            .pipe(
+                map(response => response as QuestionListOverviewModel[])
+            );
     }
 
     getAll(): Observable<QuestionListOverviewModel[]> {
@@ -30,14 +33,19 @@ export class QuestionListService {
 
     get(id: System.Guid): Observable<QuestionListModel> {
         const url = `${this.apiUrl}/${id}`;
-        return this.http.get(url)
-            .map(response => response as QuestionListModel);
+        return this.http
+            .get(url)
+            .pipe(
+                map(response => response as QuestionListModel)
+            );
     }
 
     create(questionList: QuestionListModel): Observable<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(questionList), { headers: this.headers })
-            .map(response => response as Guid);
+            .pipe(
+                map(response => response as Guid)
+            );
     }
 
     update(questionList: QuestionListModel): Observable<void> {

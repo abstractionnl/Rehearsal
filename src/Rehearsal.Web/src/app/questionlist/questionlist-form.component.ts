@@ -4,6 +4,7 @@ import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from 
 import {FormArray, FormBuilder, FormGroup, NgForm} from "@angular/forms";
 
 import {Subscription} from "rxjs/Subscription";
+import {debounceTime, filter, map} from "rxjs/operators";
 
 @Component({
     selector: 'questionlist-form',
@@ -62,9 +63,11 @@ export class QuestionlistFormComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.valueChangeSubscription = this.form.valueChanges
-            .filter(_ => !this.isReloading)
-            .debounceTime(250)
-            .map(_ => this.form.value)
+            .pipe(
+                filter(_ => !this.isReloading),
+                debounceTime(250),
+                map(_ => this.form.value)
+            )
             .subscribe(x => this.onChange.emit(x));
     }
 

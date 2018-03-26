@@ -32,7 +32,7 @@ declare namespace QuestionList {
 }
 declare namespace Rehearsal {
   interface AnswerResultModel {
-    correctAnswer: string;
+    correctAnswers: string[];
     givenAnswer: string;
     isCorrect: boolean;
   }
@@ -41,7 +41,7 @@ declare namespace Rehearsal {
     questionId: System.Guid;
   }
   interface OpenRehearsalQuestionModel extends Rehearsal.RehearsalQuestionModel {
-    correctAnswer: string;
+    correctAnswers: string[];
   }
   interface RehearsalQuestionModel {
     answerTitle: string;

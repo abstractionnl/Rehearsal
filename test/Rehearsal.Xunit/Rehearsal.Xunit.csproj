@@ -1,16 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Bogus" Version="22.0.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="LanguageExt.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\.nuget\packages\languageext.core\2.1.18\lib\netstandard1.3\LanguageExt.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NFluent, Version=2.1.0.99, Culture=neutral, PublicKeyToken=18828b37b84b1437">
-      <HintPath>..\..\..\..\.nuget\packages\nfluent\2.1.0\lib\netstandard1.3\NFluent.dll</HintPath>
-    </Reference>
+    <PackageReference Include="LanguageExt.Core" Version="2.1.29" />
+    <PackageReference Include="NFluent" Version="2.1.0" />
   </ItemGroup>
 </Project>

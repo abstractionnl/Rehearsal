@@ -7,6 +7,10 @@ import {AuthGuard} from "./auth-guard.service";
 import {LoginComponent} from "./login.component";
 import {AuthRoutingModule} from "./auth-routing.module";
 
+export function getToken() {
+    return localStorage.getItem('token');
+}
+
 @NgModule({
     declarations: [
         LoginComponent
@@ -16,9 +20,7 @@ import {AuthRoutingModule} from "./auth-routing.module";
         AuthRoutingModule,
         JwtModule.forRoot({
             config: {
-                tokenGetter: () => {
-                    return localStorage.getItem('token');
-                },
+                tokenGetter: getToken,
                 whitelistedDomains: ['localhost:5000', 'localhost:4200']
             }
         })

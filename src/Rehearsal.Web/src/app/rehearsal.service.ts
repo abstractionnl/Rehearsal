@@ -11,6 +11,8 @@ import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
 import AnswerResultModel = Rehearsal.AnswerResultModel;
 import GiveAnswerRequest = Rehearsal.GiveAnswerRequest;
 
+import {map} from "rxjs/operators";
+
 @Injectable()
 export class RehearsalService {
     private apiUrl = 'api/rehearsal';
@@ -24,7 +26,9 @@ export class RehearsalService {
     public start(request: StartRehearsalRequest): Promise<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(request), { headers: this.headers })
-            .map(response => response as Guid)
+            .pipe(
+                map(response => response as Guid)
+            )
             .toPromise();
     }
 
@@ -32,7 +36,9 @@ export class RehearsalService {
         const url = `${this.apiUrl}/${id}`;
         return this.http
             .get(url)
-            .map(response => response as RehearsalSessionModel);
+            .pipe(
+                map(response => response as RehearsalSessionModel)
+            );
     }
 
     public giveAnswer(rehearsalId: Guid, questionId: Guid, answer: string): Observable<AnswerResultModel> {
@@ -44,6 +50,8 @@ export class RehearsalService {
 
         return this.http
             .put(url, JSON.stringify(model), { headers: this.headers })
-            .map(response => response as AnswerResultModel);
+            .pipe(
+                map(response => response as AnswerResultModel)
+            );
     }
 }

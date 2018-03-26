@@ -3,11 +3,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LanguageExt.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\.nuget\packages\languageext.core\2.1.18\lib\netstandard1.3\LanguageExt.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="netstandard" />
+    <PackageReference Include="LanguageExt.Core" Version="2.1.29" />
     <PackageReference Include="CqrsLite" Version="0.18.1" />
   </ItemGroup>
 </Project>
