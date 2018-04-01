@@ -1,6 +1,8 @@
 /// <reference path="types.ts" />
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import * as Joi from "joi";
+import {IValidationResult} from "./validation";
 
 @Component({
     selector: 'rehearsal-question',
@@ -49,7 +51,8 @@ export class RehearsalQuestionComponent {
     submit(): void {
         if (this.canSubmit()) {
             this._answerGiven = true;
-            this.onSubmit.emit(this.answer);
+            RehearsalQuestionComponent.validateAnswer(this.answer)
+                .then(a => this.onSubmit.emit(a));
         }
         if (this.canGotoNext()) {
             this.onNext.emit();
@@ -57,7 +60,7 @@ export class RehearsalQuestionComponent {
     }
 
     canSubmit(): boolean {
-        return !this._answerGiven && !!this.answer;
+        return !this._answerGiven && RehearsalQuestionComponent.validateAnswer(this.answer).error == null;
     }
 
     canGotoNext(): boolean {
@@ -70,5 +73,11 @@ export class RehearsalQuestionComponent {
 
     isInCorrect(): boolean {
         return this.answerResult && !this.answerResult.isCorrect;
+    }
+
+    static readonly validationSchema = Joi.string().trim().required();
+
+    static validateAnswer(answer: string): IValidationResult<string> {
+        return Joi.validate(answer, RehearsalQuestionComponent.validationSchema);
     }
 }

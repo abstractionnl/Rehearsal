@@ -15,7 +15,9 @@ import {
 } from "./questionlist.actions";
 
 import {Router} from "@angular/router";
-import {AppState, selectSelectedQuestionList, stripEmptyQuestions, validateQuestionList} from "./questionlist.state";
+import {
+    AppState, sanitizeQuestionList, selectSelectedQuestionList
+} from "./questionlist.state";
 import QuestionListModel = QuestionList.QuestionListModel;
 
 @Injectable()
@@ -54,23 +56,17 @@ export class QuestionlistEffects {
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
         .pipe(
             withLatestFrom(this.store.select(selectSelectedQuestionList), (a, l) => l),
+            switchMap(list => sanitizeQuestionList(list)),
             switchMap((list: QuestionListModel) => {
-                list = stripEmptyQuestions(list);
-                let valid = validateQuestionList(list);
-
-                if (!valid) {
-                    return ArrayObservable.of(new SaveQuestionListFailed("Not valid"));
-                }
-
                 let save = list.id !== null
                     ? this.questionListService.update(list).pipe(map(_ => list.id))
                     : this.questionListService.create(list);
 
                 return save.pipe(
-                    map(id => new SaveQuestionListSuccess({...list, id: id })),
-                    catchError(err => ArrayObservable.of(new SaveQuestionListFailed(err)))
+                    map(id => new SaveQuestionListSuccess({...list, id: id }))
                 );
-            })
+            }),
+            catchError(err => ArrayObservable.of(new SaveQuestionListFailed(err)))
         );
 
     @Effect() removeQuestionList$:  Observable<Action> = this.actions$

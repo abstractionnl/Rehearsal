@@ -3,6 +3,7 @@
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
 import * as Joi from "joi";
+import {IValidationResult} from "../../validation";
 
 export interface QuestionlistEditorState {
     questionListOverview: QuestionListOverviewModel[];
@@ -54,7 +55,7 @@ export function selectCanCopy(state: AppState): boolean {
     return state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null && state.questionListEditor.isValid;
 }
 
-export function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
+function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
     return {
         ...list,
         questions: list.questions.filter(q => q.question || q.answer)
@@ -62,19 +63,17 @@ export function stripEmptyQuestions(list: QuestionListModel): QuestionListModel 
 }
 
 const validationSchema = Joi.object().keys({
-    'title': Joi.string().required(),
-    'questionTitle': Joi.string().required(),
-    'answerTitle': Joi.string().required(),
+    'title': Joi.string().trim().required(),
+    'questionTitle': Joi.string().trim().required(),
+    'answerTitle': Joi.string().trim().required(),
     'questions': Joi.array().items(
         Joi.object().keys({
-            'question': Joi.string().required(),
-            'answer': Joi.string().required()
+            'question': Joi.string().trim().required(),
+            'answer': Joi.string().trim().required()
         })
     )
 }).unknown();
 
-export function validateQuestionList(list: QuestionListModel): boolean {
-    const {error, value} = Joi.validate(list, validationSchema);
-
-    return error === null;
+export function sanitizeQuestionList(list: QuestionListModel): IValidationResult<QuestionListModel> {
+    return Joi.validate(stripEmptyQuestions(list), validationSchema);
 }
