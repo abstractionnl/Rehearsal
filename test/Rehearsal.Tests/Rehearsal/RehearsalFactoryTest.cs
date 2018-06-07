@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using CQRSlite.Commands;
 using NFluent;
 using Rehearsal.Messages.Rehearsal;
@@ -66,7 +67,8 @@ namespace Rehearsal.Tests.Rehearsal
 
             Check.That(cmd.Questions)
                 .HasElementThatMatches(s => s.Question == q)
-                .Which.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
+                .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
+                .And.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
                 .ContainsExactly(answers);
         }
         
@@ -84,8 +86,79 @@ namespace Rehearsal.Tests.Rehearsal
 
             Check.That(cmd.Questions)
                 .HasElementThatMatches(s => s.Question == q)
-                .Which.Selecting(p => ((OpenRehearsalQuestionModel) p).CorrectAnswers)
+                .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
+                .And.Selecting(p => ((OpenRehearsalQuestionModel) p).CorrectAnswers)
                 .ContainsExactly(a);
+        }
+
+        [Fact]
+        public async Task CanCreateMultipleChoiceRehearsal()
+        {
+            var questionList = Faker.QuestionList(3);
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .UseMultipleChoiceQuestions(3)
+                .Create();
+
+            var q = questionList.Questions.First();
+            
+            Check.That(cmd.Questions)
+                .HasElementThatMatches(s => s.Question == q.Question)
+                .Which.IsInstanceOf<MultipleChoiceQuestionModel>()
+                .And.Selecting(x => (MultipleChoiceQuestionModel)x)
+                .Satisfies(
+                    qm => qm.Selecting(x => x.AvailableAnswers).Contains(questionList.Questions.Select(x => x.Answer)),
+                    qm => qm.Selecting(x => x.AvailableAnswers[x.CorrectAnswer]).IsEqualTo(q.Answer)
+                );
+        }
+
+        [Fact]
+        public async Task MultipleChoiceCanHandleTooLittleOtherAnswers()
+        {
+            var questionList = Faker.QuestionList(3);
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .UseMultipleChoiceQuestions(10)
+                .Create();
+            
+            var q = questionList.Questions.First();
+            
+            Check.That(cmd.Questions)
+                .HasElementThatMatches(s => s.Question == q.Question)
+                .Which.IsInstanceOf<RehearsalQuestionModel, MultipleChoiceQuestionModel>()
+                .And.Satisfies(
+                    qm => qm.Selecting(x => x.AvailableAnswers).Contains(questionList.Questions.Select(x => x.Answer)),
+                    qm => qm.Selecting(x => x.AvailableAnswers[x.CorrectAnswer]).IsEqualTo(q.Answer)
+                );
+        }
+
+        [Fact]
+        public async Task MultipleChoiceDoesNotShowSameAnswerTwice()
+        {
+            var a = Faker.Lorem.Word();
+            
+            var questionList = Faker.QuestionList(
+                Faker.Question(Faker.Lorem.Word(), a), 
+                Faker.Question(Faker.Lorem.Word(), a),
+                Faker.Question(),
+                Faker.Question());
+            
+            var cmd = await new RehearsalFactory()
+                .AddQuestionList(questionList)
+                .UseMultipleChoiceQuestions(3)
+                .Create();
+            
+            var q = questionList.Questions.First();
+
+            Check.That(cmd.Questions)
+                .HasElementThatMatches(s => s.Question == q.Question)
+                .Which.IsInstanceOf<RehearsalQuestionModel, MultipleChoiceQuestionModel>()
+                .And.Satisfies(
+                    qm => qm.Selecting(x => x.AvailableAnswers).HasSize(3)
+                        .And.Contains(questionList.Questions.Select(x => x.Answer).Distinct())
+                );
         }
     }
 }

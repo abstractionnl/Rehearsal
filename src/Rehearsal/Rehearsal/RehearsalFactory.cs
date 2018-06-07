@@ -11,11 +11,14 @@ namespace Rehearsal.Rehearsal
     public class RehearsalFactory : IRehearsalFactory
     {
         private IQuestionGenerator QuestionGenerator { get; set; }
+        private Randomizer _randomizer;
         
         public RehearsalFactory()
         {
             Questions = new List<QuestionDefinition>();
             QuestionGenerator = new OpenRehearsalQuestionGenerator();
+
+            _randomizer = new Randomizer();
         }
 
         private IList<QuestionDefinition> Questions { get; }
@@ -27,7 +30,7 @@ namespace Rehearsal.Rehearsal
             var cmd = new StartRehearsalCommand()
             {
                 Id = id,
-                Questions = Questions.Randomize().Select(PrepareQuestion).ToList()
+                Questions = _randomizer.Randomize(Questions).Select(PrepareQuestion).ToList()
             };
             
             return Task.FromResult(cmd);
@@ -50,6 +53,13 @@ namespace Rehearsal.Rehearsal
         public IRehearsalFactory UseOpenQuestions()
         {
             QuestionGenerator = new OpenRehearsalQuestionGenerator();
+
+            return this;
+        }
+
+        public IRehearsalFactory UseMultipleChoiceQuestions(int answerNumber)
+        {
+            QuestionGenerator = new MultipleChoiceQuestionGenerator(answerNumber, Questions, _randomizer);
 
             return this;
         }
@@ -103,6 +113,44 @@ namespace Rehearsal.Rehearsal
                     Question = question.Question,
                     AnswerTitle = question.AnswerTitle,
                     CorrectAnswers = question.Answers.ToList()
+                };
+            }
+        }
+
+        private class MultipleChoiceQuestionGenerator : IQuestionGenerator
+        {
+            private readonly int _answerNumber;
+            private readonly IList<QuestionDefinition> _allQuestions;
+            private readonly Randomizer _randomizer;
+
+            public MultipleChoiceQuestionGenerator(int answerNumber, IList<QuestionDefinition> allQuestions, Randomizer randomizer)
+            {
+                if (answerNumber < 2)
+                    throw new ArgumentOutOfRangeException(nameof(answerNumber), "multiple choice questions must have at least two answers");
+                
+                _answerNumber = answerNumber;
+                _allQuestions = allQuestions ?? throw new ArgumentNullException(nameof(allQuestions));
+                _randomizer = randomizer ?? throw new ArgumentNullException(nameof(randomizer));
+            }
+
+            public RehearsalQuestionModel PrepareQuestion(QuestionDefinition question)
+            {
+                var correctAnswer = _randomizer.PickRandom(question.Answers);
+                var incorrectAnswers = _randomizer.Randomize(_allQuestions.SelectMany(x => x.Answers))
+                    .Where(x => !question.Answers.Contains(x))
+                    .Take(_answerNumber - 1);
+
+                var allAnswers = _randomizer.Randomize(incorrectAnswers.Concat(new[] { correctAnswer })).ToList();
+                var correctAnswerIndex = allAnswers.IndexOf(correctAnswer);
+                
+                return new MultipleChoiceQuestionModel()
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionTitle = question.QuestionTitle,
+                    Question = question.Question,
+                    AnswerTitle = question.AnswerTitle,
+                    AvailableAnswers = allAnswers,
+                    CorrectAnswer = correctAnswerIndex
                 };
             }
         }

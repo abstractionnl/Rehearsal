@@ -20,12 +20,45 @@ namespace Rehearsal.Xunit
             }
         }
 
+        public static void Satisfies<T>(this ICheck<T> check, params Action<ICheck<T>>[] assertions)
+        {
+            foreach (var assertion in assertions)
+            {
+                assertion(check);
+            }
+        }
+        
         public static ICheck<TOut> Selecting<T, TOut>(this ICheck<T> check, Func<T, TOut> selector)
         {
             var checker  = ExtensibilityHelper.ExtractChecker(check);
             var newValue = selector(checker.Value);
 
             return Check.That(newValue);
+        }
+
+        public static ICheckLink<ICheck<TType>> IsInstanceOf<T, TType>(this ICheck<T> check)
+            where TType: class, T
+        {
+            var checker = ExtensibilityHelper.ExtractChecker(check);
+            var valueAsTType = checker.Value as TType;
+            
+            checker.ExecuteNotChainableCheck(
+                () =>
+                {
+                    if (valueAsTType == null)
+                    {
+                        var message = checker.BuildMessage($"The {{0}} is not of type {typeof(TType).Name}.")
+                            .ExpectedType(typeof(TType));
+                        throw new FluentCheckException(message.ToString());
+                    }
+
+                    //return Check.That(valueAsTType);
+                },
+                checker.BuildMessage($"The {{0}} is of type {typeof(TType).Name}, whereas it must not.").ExpectedType(typeof(TType)).ToString()
+            );
+
+            var newcheck = Check.That(valueAsTType);
+            return ExtensibilityHelper.ExtractChecker(newcheck).BuildChainingObject();
         }
 
         public static ICheckLinkWhich<ICheck<IEnumerable<T>>, ICheck<TInstance>> ContainsInstanceOf<T, TInstance>(this ICheck<IEnumerable<T>> check)

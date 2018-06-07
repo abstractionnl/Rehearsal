@@ -9,5 +9,6 @@ namespace Rehearsal.Messages.Rehearsal
         Task<StartRehearsalCommand> Create();
         IRehearsalFactory AddQuestionList(QuestionListModel questionList);
         IRehearsalFactory UseOpenQuestions();
+        IRehearsalFactory UseMultipleChoiceQuestions(int answerNumber);
     }
 }
