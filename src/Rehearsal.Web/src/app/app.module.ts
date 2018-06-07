@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgPlural } from '@angular/common';
 
-import { AlertModule, ModalModule } from 'ngx-bootstrap';
+import { AlertModule, ModalModule, ProgressbarModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard.component';
@@ -24,6 +24,7 @@ import {FocusDirective} from "./focus.directive";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {AlertEffects} from "./alert/store/alert.effects";
+import { RehearsalProgressComponent } from './rehearsal-progress/rehearsal-progress.component';
 
 @NgModule({
     declarations: [
@@ -34,11 +35,12 @@ import {AlertEffects} from "./alert/store/alert.effects";
         StartRehearsalComponent,
         RehearsalComponent,
         RehearsalQuestionComponent,
-        FocusDirective
+        FocusDirective,
+        RehearsalProgressComponent
     ],
     imports: [
         BrowserModule, FormsModule, HttpClientModule,
-        AlertModule.forRoot(), ModalModule.forRoot(),
+        AlertModule.forRoot(), ModalModule.forRoot(), ProgressbarModule.forRoot(),
         QuestionlistModule,
         AuthModule, AppRoutingModule,
         EffectsModule.forFeature([AlertEffects]),

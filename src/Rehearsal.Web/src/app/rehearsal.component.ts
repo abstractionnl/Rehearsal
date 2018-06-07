@@ -10,6 +10,8 @@ import AnswerResultModel = Rehearsal.AnswerResultModel;
     template: `
     <div class="row">
         <div class="col-lg-offset-3 col-lg-6" style="margin-top: 50px;">
+            <rehearsal-progress [currentQuestion]="questionIndex" [totalQuestions]="rehearsal.questions.length"></rehearsal-progress>
+            
             <div class="well well-lg">
                 <rehearsal-question [question]="currentQuestion" [answerResult]="answerResult" (onSubmit)="submitAnswer($event)" (onNext)="gotoNext()" *ngIf="currentQuestion"></rehearsal-question>
                 <p class="text-info text-center" *ngIf="isDone()">Dat wassum</p>
@@ -44,6 +46,10 @@ export class RehearsalComponent implements OnInit {
             return this.rehearsal.questions[this._questionIndex];
 
         return null;
+    }
+
+    get questionIndex() {
+        return this._questionIndex;
     }
 
     submitAnswer(answer: string) {
