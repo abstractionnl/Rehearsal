@@ -3,7 +3,7 @@
 import {Component, EventEmitter, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {first, switchMap} from "rxjs/operators";
 
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;

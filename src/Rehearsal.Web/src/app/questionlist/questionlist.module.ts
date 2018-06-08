@@ -1,7 +1,7 @@
 ﻿import {NgModule} from '@angular/core';
 import {CommonModule} from "@angular/common";
+import {HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
 import {RouterModule} from "@angular/router";
 
 import {StoreModule} from "@ngrx/store";
@@ -35,7 +35,7 @@ import {ConfirmRemoveQuestionlistComponent} from "./confirm-remove-questionlist.
         QuestionlistButtonsComponent
     ],
     imports: [
-        CommonModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule,
+        CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule,
         ModalModule.forRoot(), QuestionlistRoutingModule,
         StoreModule.forRoot({
             questionListEditor: questionListReducer

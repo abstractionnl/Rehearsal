@@ -3,8 +3,7 @@ import {
 } from "@angular/core";
 import { NgModel } from "@angular/forms";
 
-import { Subject } from "rxjs/Subject";
-import { Subscription } from "rxjs/Subscription";
+import { Subject ,  Subscription } from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
 
 @Directive({

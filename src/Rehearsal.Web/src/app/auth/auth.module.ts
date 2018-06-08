@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from "@angular/common/http";
-import {Http, RequestOptions} from '@angular/http';
 import {JwtModule} from '@auth0/angular-jwt';
 import {Auth} from "./auth.service";
 import {AuthGuard} from "./auth-guard.service";

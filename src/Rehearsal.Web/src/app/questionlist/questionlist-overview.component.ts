@@ -1,7 +1,7 @@
-﻿/// <reference path="../types.ts" />
+/// <reference path="../types.ts" />
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { QuestionListService } from './questionlist.service';
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;

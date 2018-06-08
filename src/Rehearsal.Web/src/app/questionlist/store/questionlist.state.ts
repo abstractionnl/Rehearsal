@@ -2,7 +2,7 @@
 
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
-import * as Joi from "joi";
+import * as Joi from "joi-browser";
 import {IValidationResult} from "../../validation";
 
 export interface QuestionlistEditorState {

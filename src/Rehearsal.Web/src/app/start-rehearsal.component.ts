@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 import { QuestionListService } from "./questionlist/questionlist.service";
 import {RehearsalService} from "./rehearsal.service";

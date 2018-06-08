@@ -1,7 +1,7 @@
 /// <reference path="types.ts" />
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import * as Joi from "joi";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
+import * as Joi from "joi-browser";
 import {IValidationResult} from "./validation";
 
 @Component({

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {AlertService} from "../alert.service";
 import {Actions, Effect} from "@ngrx/effects";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {Action} from "@ngrx/store";
 import {tap} from "rxjs/operators";
 

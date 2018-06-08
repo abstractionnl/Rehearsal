@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {ArrayObservable} from "rxjs/observable/ArrayObservable";
+import {Observable, of} from "rxjs";
 import {catchError, map, switchMap, tap, throttleTime, withLatestFrom} from "rxjs/operators";
 import {Action, Store} from "@ngrx/store";
 import {Actions, Effect} from "@ngrx/effects";
@@ -19,6 +18,7 @@ import {
     AppState, sanitizeQuestionList, selectSelectedQuestionList
 } from "./questionlist.state";
 import QuestionListModel = QuestionList.QuestionListModel;
+import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
 @Injectable()
 export class QuestionlistEffects {
@@ -36,7 +36,7 @@ export class QuestionlistEffects {
             switchMap(action => {
                 return this.questionListService.getAll().pipe(
                     map(lists => new LoadQuestionListOverviewSuccess(lists)),
-                    catchError(err => ArrayObservable.of<Action>(new LoadQuestionListOverviewFailed(err)))
+                    catchError(err => of<Action>(new LoadQuestionListOverviewFailed(err)))
                 );
             })
         );
@@ -47,7 +47,7 @@ export class QuestionlistEffects {
             switchMap(action => {
                 return this.questionListService.get(action.payload.id).pipe(
                     map(list => new LoadQuestionListSuccess(list)),
-                    catchError(err => ArrayObservable.of(new LoadQuestionListFailed(err)))
+                    catchError(err => of(new LoadQuestionListFailed(err)))
                 )
             })
         );
@@ -66,7 +66,7 @@ export class QuestionlistEffects {
                     map(id => new SaveQuestionListSuccess({...list, id: id }))
                 );
             }),
-            catchError(err => ArrayObservable.of(new SaveQuestionListFailed(err)))
+            catchError(err => of(new SaveQuestionListFailed(err)))
         );
 
     @Effect() removeQuestionList$:  Observable<Action> = this.actions$
@@ -76,7 +76,7 @@ export class QuestionlistEffects {
             switchMap((list: QuestionListModel) => {
                 return this.questionListService.remove(list.id).pipe(
                     map(_ => new RemoveQuestionListSuccess({...list})),
-                    catchError(err => ArrayObservable.of(new RemoveQuestionListFailed(err)))
+                    catchError(err => of(new RemoveQuestionListFailed(err)))
                 );
             })
         );

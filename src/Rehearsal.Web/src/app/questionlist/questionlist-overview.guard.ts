@@ -1,8 +1,8 @@
-﻿import {Injectable} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 import {Store} from "@ngrx/store";
 
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 
 import {AppState, selectQuestionListOverview} from "./store/questionlist.state";
 import {LoadQuestionListOverview} from "./store/questionlist.actions";
