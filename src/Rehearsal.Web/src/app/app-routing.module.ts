@@ -1,30 +1,16 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from './dashboard.component';
-import { CanDeactivateGuard } from './can-deactivate-guard.service';
-import { AuthModule } from "./auth/auth.module";
-import { AuthGuard } from "./auth/auth-guard.service";
-import { LoginComponent } from "./auth/login.component";
-import { StartRehearsalComponent } from "./start-rehearsal.component";
-import { RehearsalComponent } from "./rehearsal.component";
+import {DashboardComponent} from './dashboard.component';
+import {CanDeactivateGuard } from './shared/guards/can-deactivate-guard.service';
+import {AuthModule} from "./modules/auth/auth.module";
+import {AuthGuard} from "./modules/auth/guards/auth-guard.service";
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'login', component: LoginComponent },
     {
         path: 'dashboard',
         component: DashboardComponent,
-        canActivate: [ AuthGuard ]
-    },
-    {
-        path: 'rehearsal',
-        component: StartRehearsalComponent,
-        canActivate: [ AuthGuard ]
-    },
-    {
-        path: 'rehearsal/:id',
-        component: RehearsalComponent,
         canActivate: [ AuthGuard ]
     }
 ];
