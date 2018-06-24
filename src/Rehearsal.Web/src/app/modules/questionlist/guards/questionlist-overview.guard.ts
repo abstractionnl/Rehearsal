@@ -4,7 +4,7 @@ import {Store} from "@ngrx/store";
 
 import {Observable} from "rxjs";
 
-import {AppState, selectQuestionListOverview} from "../store/questionlist.state";
+import {QuestionlistState, selectQuestionListOverview} from "../store/questionlist.state";
 import {LoadQuestionListOverview} from "../store/questionlist.actions";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
@@ -12,7 +12,7 @@ import {AbstractActivateGuard} from "../../../shared/guards/abstract-activate-gu
 
 @Injectable()
 export class QuestionlistOverviewGuard extends AbstractActivateGuard<QuestionListOverviewModel[]> {
-    constructor(protected store: Store<AppState>) {
+    constructor(protected store: Store<QuestionlistState>) {
         super();
     }
 

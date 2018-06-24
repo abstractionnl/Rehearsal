@@ -4,6 +4,7 @@ import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
 import * as Joi from "joi-browser";
 import {IValidationResult} from "../../../validation";
+import {createFeatureSelector, createSelector} from "@ngrx/store";
 
 export interface QuestionlistEditorState {
     questionListOverview: QuestionListOverviewModel[];
@@ -12,7 +13,7 @@ export interface QuestionlistEditorState {
     list: QuestionListModel
 }
 
-export interface AppState {
+export interface QuestionlistState {
     questionListEditor: QuestionlistEditorState;
 }
 
@@ -23,37 +24,47 @@ export const initialState: QuestionlistEditorState = {
     isValid: false
 };
 
-export function selectQuestionListOverview(state: AppState): QuestionListOverviewModel[]  {
-    return state.questionListEditor.questionListOverview;
-}
+export const selectFeature = createFeatureSelector<QuestionlistState>('questionlist');
 
-export function selectSelectedQuestionList(state: AppState): QuestionListModel {
-    return state.questionListEditor.list;
-}
+export const selectQuestionListOverview = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.questionListOverview
+);
 
-export function selectIsValid(state: AppState): boolean {
-    return state.questionListEditor.isValid;
-}
+export const selectSelectedQuestionList = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.list
+);
 
-export function selectIsPristine(state: AppState): boolean {
-    return state.questionListEditor.isPristine;
-}
+export const selectIsValid = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.isValid
+);
 
-export function selectCanSave(state: AppState): boolean {
-    return !state.questionListEditor.isPristine && state.questionListEditor.list !== null && state.questionListEditor.isValid;
-}
+export const selectIsPristine = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.isPristine
+);
 
-export function selectCanDelete(state: AppState): boolean {
-    return state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null;
-}
+export const selectCanSave = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => !state.questionListEditor.isPristine && state.questionListEditor.list !== null && state.questionListEditor.isValid
+);
 
-export function selectCanSwap(state: AppState): boolean {
-    return state.questionListEditor.list !== null;
-}
+export const selectCanDelete = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null
+);
 
-export function selectCanCopy(state: AppState): boolean {
-    return state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null && state.questionListEditor.isValid;
-}
+export const selectCanSwap = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.list !== null
+);
+
+export const selectCanCopy = createSelector(
+    selectFeature,
+    (state: QuestionlistState) => state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null && state.questionListEditor.isValid
+);
 
 function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
     return {

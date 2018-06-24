@@ -3,7 +3,7 @@ import {CanDeactivate} from "@angular/router";
 import {Observable} from "rxjs";
 import {map,flatMap,switchMap} from "rxjs/operators";
 import {Store} from "@ngrx/store";
-import {AppState, selectIsPristine} from "../store/questionlist.state";
+import {QuestionlistState, selectIsPristine} from "../store/questionlist.state";
 import {ConfirmSaveQuestionlistComponent, ResultAction} from "../components/confirm-save-questionlist/confirm-save-questionlist.component";
 import {SAVE_LIST_FAILED, SAVE_LIST_SUCCESS, SaveQuestionList} from "../store/questionlist.actions";
 import {Actions} from "@ngrx/effects";
@@ -12,7 +12,7 @@ import {BsModalService} from "ngx-bootstrap";
 @Injectable()
 export class QuestionListDeactivateGuard implements CanDeactivate<any> {
     constructor(
-        private store: Store<AppState>,
+        private store: Store<QuestionlistState>,
         private updates$: Actions,
         private modalService: BsModalService
     ) {

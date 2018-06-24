@@ -13,7 +13,12 @@ import Guid = System.Guid;
 import QuestionListModel = QuestionList.QuestionListModel;
 
 import {
-    AppState, selectCanCopy, selectCanDelete, selectCanSave, selectCanSwap, selectQuestionListOverview,
+    QuestionlistState,
+    selectCanCopy,
+    selectCanDelete,
+    selectCanSave,
+    selectCanSwap,
+    selectQuestionListOverview,
     selectSelectedQuestionList
 } from "../../store/questionlist.state";
 import {
@@ -38,7 +43,7 @@ export class QuestionlistEditorPage implements OnInit {
     public canCopy$: Observable<boolean>;
 
     constructor(
-        private store: Store<AppState>,
+        private store: Store<QuestionlistState>,
         private router: Router,
         private modalService: BsModalService)
     {

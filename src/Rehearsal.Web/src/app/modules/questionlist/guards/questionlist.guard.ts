@@ -7,13 +7,13 @@ import QuestionListModel = QuestionList.QuestionListModel;
 
 import {Store} from "@ngrx/store";
 
-import {AppState, selectSelectedQuestionList} from "../store/questionlist.state";
+import {QuestionlistState, selectSelectedQuestionList} from "../store/questionlist.state";
 import {LoadQuestionList, NewQuestionList} from "../store/questionlist.actions";
 import {AbstractActivateGuard} from "../../../shared/guards/abstract-activate-guard";
 
 @Injectable()
 export class QuestionListGuard extends AbstractActivateGuard<QuestionListModel> {
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<QuestionlistState>) {
         super();
     }
 

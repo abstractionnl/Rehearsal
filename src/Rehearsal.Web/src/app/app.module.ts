@@ -16,24 +16,26 @@ import {NotificationModule} from "./modules/notification/notification.module";
 import {QuestionlistModule} from "./modules/questionlist/questionlist.module";
 import {RehearsalModule} from "./modules/rehearsal/rehearsal.module";
 
-import {FocusDirective} from "./shared/directives/focus.directive";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {StoreModule} from "@ngrx/store";
 
 @NgModule({
     declarations: [
         AppComponent,
         DashboardComponent,
-        FormValidationStyleDirective,
-        FocusDirective
+        FormValidationStyleDirective
     ],
     imports: [
         BrowserModule, FormsModule, HttpClientModule,
-        AlertModule.forRoot(), ModalModule.forRoot(), ProgressbarModule.forRoot(),
+        AlertModule.forRoot(), ModalModule.forRoot(),
         QuestionlistModule, NotificationModule, RehearsalModule,
         AuthModule, AppRoutingModule,
+        StoreModule.forRoot({}),
         StoreDevtoolsModule.instrument({
             maxAge: 25 //  Retains last 25 states
         })
+    ],
+    exports: [
     ],
     providers: [
 

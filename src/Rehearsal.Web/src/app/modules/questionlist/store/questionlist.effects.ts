@@ -15,7 +15,7 @@ import {
 } from "./questionlist.actions";
 
 import {
-    AppState, sanitizeQuestionList, selectSelectedQuestionList
+    QuestionlistState, sanitizeQuestionList, selectSelectedQuestionList
 } from "./questionlist.state";
 import QuestionListModel = QuestionList.QuestionListModel;
 
@@ -25,7 +25,7 @@ export class QuestionlistEffects {
         private questionListService: QuestionListService,
         private router: Router,
         private actions$: Actions,
-        private store: Store<AppState>
+        private store: Store<QuestionlistState>
     ) {}
 
     @Effect() loadQuestionListOverview$: Observable<Action> = this.actions$
