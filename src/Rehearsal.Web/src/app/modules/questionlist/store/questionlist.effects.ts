@@ -15,7 +15,7 @@ import {
 } from "./questionlist.actions";
 
 import {
-    QuestionlistState, sanitizeQuestionList, selectSelectedQuestionList
+    QuestionlistState, selectSanitizedQuestionList, selectSelectedQuestionList
 } from "./questionlist.state";
 import QuestionListModel = QuestionList.QuestionListModel;
 
@@ -54,9 +54,8 @@ export class QuestionlistEffects {
     @Effect() saveQuestionList$: Observable<Action> = this.actions$
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
         .pipe(
-            withLatestFrom(this.store.select(selectSelectedQuestionList), (a, l) => l),
-            switchMap(list => sanitizeQuestionList(list)),
-            switchMap((list: QuestionListModel) => {
+            withLatestFrom(this.store.select(selectSanitizedQuestionList), (a, l) => l.value),
+            switchMap((list) => {
                 let save = list.id !== null
                     ? this.questionListService.update(list).pipe(map(_ => list.id))
                     : this.questionListService.create(list);

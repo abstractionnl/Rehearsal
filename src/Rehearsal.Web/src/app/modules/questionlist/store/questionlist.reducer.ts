@@ -1,6 +1,6 @@
 import * as QuestionListActions from "./questionlist.actions";
 import {
-    initialState, QuestionlistEditorState, sanitizeQuestionList
+    initialState, QuestionlistEditorState
 } from "./questionlist.state";
 
 import _ from "lodash";
@@ -34,7 +34,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
 
             return {
                 ...state,
-                isValid: false,
                 isPristine: true,
                 list: newList
             };
@@ -42,7 +41,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.LOAD_LIST_SUCCESS:
             return {
                 ...state,
-                isValid: true,
                 isPristine: true,
                 list: action.payload
             };
@@ -50,7 +48,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.LOAD_LIST_FAILED:
             return {
                 ...state,
-                isValid: false,
                 isPristine: false,
                 list: null
             };
@@ -58,7 +55,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.SAVE_LIST_SUCCESS:
             return {
                 ...state,
-                isValid: true,
                 isPristine: true,
                 list: action.payload
             };
@@ -66,7 +62,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.LIST_EDITED:
             return {
                 ...state,
-                isValid: sanitizeQuestionList(action.payload).error === null,
                 isPristine: false,
                 list: _.extend({}, state.list, action.payload)
             };
@@ -74,7 +69,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
         case QuestionListActions.REMOVE_LIST_SUCCESS:
             return {
                 ...state,
-                isValid: false,
                 isPristine: true,
                 list: state.list.id == action.payload.id ? null : state.list
             };
@@ -93,7 +87,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
 
             return {
                 ...state,
-                isValid: sanitizeQuestionList(swappedList).error === null,
                 isPristine: false,
                 list: swappedList
             };
@@ -107,7 +100,6 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
 
             return {
                 ...state,
-                isValid: sanitizeQuestionList(swappedList).error === null,
                 isPristine: false,
                 list: copiedList
             };

@@ -9,7 +9,6 @@ import {createFeatureSelector, createSelector} from "@ngrx/store";
 export interface QuestionlistEditorState {
     questionListOverview: QuestionListOverviewModel[];
     isPristine: boolean,
-    isValid: boolean,
     list: QuestionListModel
 }
 
@@ -20,8 +19,7 @@ export interface QuestionlistState {
 export const initialState: QuestionlistEditorState = {
     questionListOverview: [],
     list: null,
-    isPristine: false,
-    isValid: false
+    isPristine: false
 };
 
 export const selectFeature = createFeatureSelector<QuestionlistState>('questionlist');
@@ -36,34 +34,55 @@ export const selectSelectedQuestionList = createSelector(
     (state: QuestionlistState) => state.questionListEditor.list
 );
 
+export const selectSanitizedQuestionList = createSelector(
+    selectSelectedQuestionList,
+    (list: QuestionListModel) => list !== null ? sanitizeQuestionList(list) : null
+);
+
+export const selectHasQuestionList = createSelector(
+    selectSelectedQuestionList,
+    (list: QuestionListModel) => list !== null
+);
+
+export const selectHasNewQuestionList = createSelector(
+    selectSelectedQuestionList,
+    (list: QuestionListModel) => list !== null && list.id === null
+);
+
 export const selectIsValid = createSelector(
-    selectFeature,
-    (state: QuestionlistState) => state.questionListEditor.isValid
+    selectSanitizedQuestionList,
+    (validationResult: IValidationResult<QuestionListModel>) => validationResult !== null && validationResult.error === null
 );
 
 export const selectIsPristine = createSelector(
+    selectHasQuestionList,
     selectFeature,
-    (state: QuestionlistState) => state.questionListEditor.isPristine
+    // Hacky? No questionlist is also pristine
+    (hasQuestionList: boolean, state: QuestionlistState) => !hasQuestionList || state.questionListEditor.isPristine
 );
 
 export const selectCanSave = createSelector(
-    selectFeature,
-    (state: QuestionlistState) => !state.questionListEditor.isPristine && state.questionListEditor.list !== null && state.questionListEditor.isValid
+    selectIsPristine,
+    selectIsValid,
+    (pristine: boolean, valid: boolean) => !pristine && valid
 );
 
 export const selectCanDelete = createSelector(
-    selectFeature,
-    (state: QuestionlistState) => state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null
+    selectHasQuestionList,
+    selectHasNewQuestionList,
+    (hasQuestionList: boolean, hasNewQuestionList: boolean) => hasQuestionList && !hasNewQuestionList
 );
 
 export const selectCanSwap = createSelector(
-    selectFeature,
-    (state: QuestionlistState) => state.questionListEditor.list !== null
+    selectHasQuestionList,
+    (hasQuestionList: boolean) => hasQuestionList
 );
 
 export const selectCanCopy = createSelector(
-    selectFeature,
-    (state: QuestionlistState) => state.questionListEditor.list  !== null && state.questionListEditor.list.id !== null && state.questionListEditor.isValid
+    selectHasQuestionList,
+    selectHasNewQuestionList,
+    selectIsValid,
+    (hasQuestionList: boolean, hasNewQuestionList: boolean, isValid: boolean) => hasQuestionList && !hasNewQuestionList && isValid
 );
 
 function stripEmptyQuestions(list: QuestionListModel): QuestionListModel {
@@ -85,6 +104,7 @@ const validationSchema = Joi.object().keys({
     )
 }).unknown();
 
-export function sanitizeQuestionList(list: QuestionListModel): IValidationResult<QuestionListModel> {
+function sanitizeQuestionList(list: QuestionListModel): IValidationResult<QuestionListModel> {
+    console.log('sanitize');
     return Joi.validate(stripEmptyQuestions(list), validationSchema);
 }
