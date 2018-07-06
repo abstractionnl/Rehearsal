@@ -3,6 +3,7 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import * as Joi from "joi-browser";
 import {IValidationResult} from "../../../../validation";
+import {RehearsalSessionStateQuestion} from "../../store/rehearsal.state";
 
 @Component({
     selector: 'rehearsal-question',
@@ -35,7 +36,7 @@ export class RehearsalQuestionComponent {
     }
 
     get answerGiven() {
-        return this._answerGiven;
+        return this._answerGiven || this._answerResult;
     }
 
     @Input('answerResult')

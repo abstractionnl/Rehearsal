@@ -41,10 +41,10 @@ import {ConfirmRemoveQuestionlistComponent} from "./components/confirm-remove-qu
         CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule,
         ModalModule.forRoot(), QuestionlistRoutingModule,
         StoreModule.forFeature('questionlist', {
-            questionListEditor: questionListReducer
-        }),
+            questionListEditor: questionListReducer,
+        }, ),
         BsDropdownModule.forRoot(),
-        EffectsModule.forRoot([QuestionlistEffects])
+        EffectsModule.forFeature([QuestionlistEffects])
     ],
     entryComponents: [ ConfirmSaveQuestionlistComponent, ConfirmCopyQuestionlistComponent, ConfirmRemoveQuestionlistComponent ],
     providers: [

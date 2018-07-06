@@ -23,13 +23,12 @@ export class RehearsalService {
 
     }
 
-    public start(request: StartRehearsalRequest): Promise<Guid> {
+    public start(request: StartRehearsalRequest): Observable<Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(request), { headers: this.headers })
             .pipe(
                 map(response => response as Guid)
             )
-            .toPromise();
     }
 
     public get(id: Guid): Observable<RehearsalSessionModel> {

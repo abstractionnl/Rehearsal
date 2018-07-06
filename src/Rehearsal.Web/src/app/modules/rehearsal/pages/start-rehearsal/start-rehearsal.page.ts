@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
 import { Observable } from "rxjs";
-
-import {QuestionListService} from "../../../questionlist/services/questionlist.service";
-import {RehearsalService} from "../../services/rehearsal.service";
 
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
+import {QuestionlistState, selectQuestionListOverview} from "../../../questionlist/store/questionlist.state";
+import {Store} from "@ngrx/store";
+import {RehearsalState} from "../../store/rehearsal.state";
+import {CreateRehearsal} from "../../store/rehearsal.actions";
 
 @Component({
     templateUrl: './start-rehearsal.page.html'
@@ -16,22 +16,17 @@ export class StartRehearsalPage implements OnInit {
     questionList: QuestionListModel;
 
     constructor(
-        private questionListService: QuestionListService,
-        private rehearsalService : RehearsalService,
-        private router: Router) {
+        private questionListStore: Store<QuestionlistState>,
+        private store: Store<RehearsalState>) {
 
     }
 
     ngOnInit(): void {
-        this.questionLists = this.questionListService.getAll();         // TODO: Remove dependency to questionlist service
+        this.questionLists = this.questionListStore.select(selectQuestionListOverview); // TODO: Remove dependecy to other module?
     }
 
     start(): void {
-        this.rehearsalService.start({
-            questionListId: this.questionList.id
-        }).then(id => {
-            this.router.navigate(['/rehearsal', id]);
-        });
+        this.store.dispatch(new CreateRehearsal({ questionListId: this.questionList.id }));
     }
 
     canStart(): boolean {

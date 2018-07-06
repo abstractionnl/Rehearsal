@@ -13,6 +13,10 @@ import {RehearsalProgressComponent} from "./components/rehearsal-progress/rehear
 import {RehearsalService} from "./services/rehearsal.service";
 import {RehearsalRoutingModule} from "./rehearsal-routing.module";
 import {FocusDirective} from "../../shared/directives/focus.directive";
+import {EffectsModule} from "@ngrx/effects";
+import {RehearsalEffects} from "./store/rehearsal.effects";
+import {StoreModule} from "@ngrx/store";
+import {rehearsalReducer} from "./store/rehearsal.reducer";
 
 @NgModule({
     declarations: [
@@ -24,7 +28,9 @@ import {FocusDirective} from "../../shared/directives/focus.directive";
     ],
     imports: [
         CommonModule, HttpClientModule, RehearsalRoutingModule, FormsModule,
-        ProgressbarModule.forRoot()
+        ProgressbarModule.forRoot(),
+        StoreModule.forFeature('rehearsal', rehearsalReducer),
+        EffectsModule.forFeature([RehearsalEffects])
     ],
     providers: [
         RehearsalService

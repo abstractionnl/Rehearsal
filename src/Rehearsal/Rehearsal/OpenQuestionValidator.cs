@@ -18,6 +18,7 @@ namespace Rehearsal.Rehearsal
             
             return Task.FromResult(new AnswerResultModel()
             {
+                QuestionId = Question.Id,
                 CorrectAnswers = Question.CorrectAnswers,
                 GivenAnswer = answer,
                 IsCorrect = isCorrect

@@ -35,6 +35,7 @@ declare namespace Rehearsal {
     correctAnswers: string[];
     givenAnswer: string;
     isCorrect: boolean;
+    questionId: System.Guid;
   }
   interface GiveAnswerRequest {
     answer: string;

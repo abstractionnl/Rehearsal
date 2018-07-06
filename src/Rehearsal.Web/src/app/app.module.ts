@@ -18,6 +18,7 @@ import {RehearsalModule} from "./modules/rehearsal/rehearsal.module";
 
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {StoreModule} from "@ngrx/store";
+import {EffectsModule} from "@ngrx/effects";
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import {StoreModule} from "@ngrx/store";
         QuestionlistModule, NotificationModule, RehearsalModule,
         AuthModule, AppRoutingModule,
         StoreModule.forRoot({}),
+        EffectsModule.forRoot([]),
         StoreDevtoolsModule.instrument({
             maxAge: 25 //  Retains last 25 states
         })
