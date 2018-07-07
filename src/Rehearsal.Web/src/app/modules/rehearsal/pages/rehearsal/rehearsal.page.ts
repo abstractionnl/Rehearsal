@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, ParamMap} from "@angular/router";
 import {RehearsalService} from "../../services/rehearsal.service";
-import {map, switchMap} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 
+import {Rehearsal} from "../../../../types";
 import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
 import AnswerResultModel = Rehearsal.AnswerResultModel;
+import RehearsalQuestionModel = Rehearsal.RehearsalQuestionModel;
+
 import {
     RehearsalState, selectAnsweredQuestionCount,
     selectCurrentQuestion, selectCurrentResult, selectIsFinished,
@@ -13,7 +14,6 @@ import {
 } from "../../store/rehearsal.state";
 import {Observable} from "rxjs/index";
 import {GiveAnswer, NextQuestion} from "../../store/rehearsal.actions";
-import RehearsalQuestionModel = Rehearsal.RehearsalQuestionModel;
 
 @Component({
     templateUrl: './rehearsal.page.html'

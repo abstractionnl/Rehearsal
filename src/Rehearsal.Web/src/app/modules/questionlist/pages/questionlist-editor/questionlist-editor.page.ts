@@ -8,6 +8,7 @@ import {first, switchMap} from "rxjs/operators";
 
 import {BsModalService} from "ngx-bootstrap";
 
+import {QuestionList, System} from "../../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import Guid = System.Guid;
 import QuestionListModel = QuestionList.QuestionListModel;

@@ -3,6 +3,7 @@ import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 
 import {Observable} from "rxjs";
 
+import {QuestionList} from "../../../types";
 import QuestionListModel = QuestionList.QuestionListModel;
 
 import {Store} from "@ngrx/store";

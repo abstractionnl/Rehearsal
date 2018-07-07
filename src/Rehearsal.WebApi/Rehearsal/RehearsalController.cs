@@ -37,6 +37,7 @@ namespace Rehearsal.WebApi.Rehearsal
             var cmd = await RehearsalSessionRepository
                 .New()
                 .AddQuestionList(questionList)
+                .SetQuestionType(request.QuestionType)
                 .Create();
 
             await CommandSender.Send(cmd);

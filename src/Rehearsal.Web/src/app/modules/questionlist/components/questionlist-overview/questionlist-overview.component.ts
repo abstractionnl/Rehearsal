@@ -1,7 +1,6 @@
-/// <reference path="../../../../types.ts" />
-
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
+import {QuestionList, System} from "../../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import Guid = System.Guid;
 

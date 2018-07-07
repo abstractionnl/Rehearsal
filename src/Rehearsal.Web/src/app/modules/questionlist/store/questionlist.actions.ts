@@ -1,7 +1,6 @@
-/// <reference path="../../../types.ts" />
-
 import {Action} from "@ngrx/store";
 
+import {QuestionList, System} from "../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
 

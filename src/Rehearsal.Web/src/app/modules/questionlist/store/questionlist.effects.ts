@@ -17,6 +17,8 @@ import {
 import {
     QuestionlistState, selectSanitizedQuestionList, selectSelectedQuestionList
 } from "./questionlist.state";
+
+import {QuestionList} from "../../../types";
 import QuestionListModel = QuestionList.QuestionListModel;
 
 @Injectable()

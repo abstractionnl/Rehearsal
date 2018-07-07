@@ -10,6 +10,14 @@
                 <option *ngFor="let questionList of questionLists | async" [ngValue]="questionList">{{questionList.title}} ({{questionList.questionTitle}} - {{questionList.answerTitle}})</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="questionType">
+                Type overhoring
+            </label>
+            <select class="form-control" id="questionType" name="questionType" [(ngModel)]="questionType">
+                <option *ngFor="let questionType of questionTypes" [ngValue]="questionType.questionType">{{questionType.label}}</option>
+            </select>
+        </div>
         <button class="btn btn-primary" type="submit" [disabled]="!canStart()">Starten</button>
     </form>
 </div>

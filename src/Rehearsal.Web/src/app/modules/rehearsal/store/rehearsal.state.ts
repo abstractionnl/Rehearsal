@@ -1,5 +1,6 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
 
+import {Rehearsal, System} from "../../../types";
 import AnswerResultModel = Rehearsal.AnswerResultModel;
 
 export interface RehearsalState {

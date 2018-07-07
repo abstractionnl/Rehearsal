@@ -1,9 +1,8 @@
-/// <reference path="../../../../types.ts" />
-
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import * as Joi from "joi-browser";
 import {IValidationResult} from "../../../../validation";
-import {RehearsalSessionStateQuestion} from "../../store/rehearsal.state";
+
+import {Rehearsal} from "../../../../types";
 
 @Component({
     selector: 'rehearsal-question',
@@ -11,7 +10,7 @@ import {RehearsalSessionStateQuestion} from "../../store/rehearsal.state";
     //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RehearsalQuestionComponent {
-    private _question: Rehearsal.OpenRehearsalQuestionModel;
+    private _question: Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel;
     private _answerGiven: boolean;
     private _answerResult: Rehearsal.AnswerResultModel;
 
@@ -24,14 +23,14 @@ export class RehearsalQuestionComponent {
     answer: string = '';
 
     @Input('question')
-    set question(value: Rehearsal.OpenRehearsalQuestionModel) {
+    set question(value: Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel) {
         this._question = value;
         this.answer = '';
         this._answerGiven = false;
         this.focusAnswerField.emit();
     }
 
-    get question() {
+    get question(): Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel {
         return this._question;
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Rehearsal.Messages.Infrastructure;
 using StructureMap;
 using StructureMap.Graph;
@@ -16,6 +17,8 @@ namespace Rehearsal.WebApi.Infrastructure.StructureMap
             {
                 Converters = kernel.GetAllInstances<JsonConverter>().ToList()
             }));
+
+            For<JsonConverter>().Add(new StringEnumConverter());
             
             Scan(_ =>
             {

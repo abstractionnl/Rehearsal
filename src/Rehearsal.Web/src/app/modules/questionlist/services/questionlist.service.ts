@@ -1,13 +1,10 @@
-﻿/// <reference path="../../../types.ts" />
-
-import {Injectable} from '@angular/core';
+﻿import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 import {Observable} from 'rxjs';
 import {map} from "rxjs/operators";
 
-import Guid = System.Guid;
-
+import {QuestionList, System} from "../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
 
@@ -40,11 +37,11 @@ export class QuestionListService {
             );
     }
 
-    create(questionList: QuestionListModel): Observable<Guid> {
+    create(questionList: QuestionListModel): Observable<System.Guid> {
         return this.http
             .post(this.apiUrl, JSON.stringify(questionList), { headers: this.headers })
             .pipe(
-                map(response => response as Guid)
+                map(response => response as System.Guid)
             );
     }
 

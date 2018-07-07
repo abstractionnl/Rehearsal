@@ -33,7 +33,7 @@ export class RehearsalEffects {
         .pipe(
             switchMap(action =>
                 this.rehearsalService
-                    .start({ questionListId: action.payload.questionListId })
+                    .start(action.payload)
                     .pipe(
                         map(id => new CreateRehearsalSuccess({rehearsalId: id})),
                         catchError(err => of(new CreateRehearsalFailed(err)))

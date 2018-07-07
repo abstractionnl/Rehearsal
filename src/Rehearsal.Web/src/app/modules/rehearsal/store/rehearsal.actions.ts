@@ -1,9 +1,9 @@
-/// <reference path="../../../types.ts" />
-
 import {Action} from "@ngrx/store";
 
+import {Rehearsal, System} from "../../../types";
 import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
 import AnswerResultModel = Rehearsal.AnswerResultModel;
+import RehearsalQuestionType = Rehearsal.RehearsalQuestionType;
 
 export const CREATE_REHEARSAL = '[Rehearsal] Create rehearsal';
 export const CREATE_REHEARSAL_SUCCESS = '[Rehearsal] Create rehearsal success';
@@ -18,7 +18,7 @@ export const NEXT_QUESTION = '[Rehearsal] Next question';
 
 export class CreateRehearsal implements Action {
     readonly type = CREATE_REHEARSAL;
-    constructor(public payload: { questionListId: System.Guid }) { }
+    constructor(public payload: { questionListId: System.Guid, questionType: RehearsalQuestionType }) { }
 }
 
 export class CreateRehearsalSuccess implements Action {

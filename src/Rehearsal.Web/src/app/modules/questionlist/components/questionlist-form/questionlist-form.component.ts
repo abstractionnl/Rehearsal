@@ -1,10 +1,10 @@
-/// <reference path="../../../../types.ts" />
-
 import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, NgForm} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 
 import {Subscription} from "rxjs";
 import {debounceTime, filter, map} from "rxjs/operators";
+
+import {QuestionList} from "../../../../types";
 
 @Component({
     selector: 'questionlist-form',

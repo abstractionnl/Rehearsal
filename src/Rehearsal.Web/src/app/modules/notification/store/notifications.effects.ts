@@ -13,6 +13,7 @@ import {
     SaveQuestionListSuccess
 } from "../../questionlist/store/questionlist.actions";
 
+import {QuestionList} from "../../../types";
 import QuestionListModel = QuestionList.QuestionListModel;
 
 @Injectable()

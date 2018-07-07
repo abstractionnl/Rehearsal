@@ -6,6 +6,8 @@ import {Observable} from "rxjs";
 
 import {QuestionlistState, selectQuestionListOverview} from "../store/questionlist.state";
 import {LoadQuestionListOverview} from "../store/questionlist.actions";
+
+import {QuestionList} from "../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 
 import {AbstractActivateGuard} from "../../../shared/guards/abstract-activate-guard";

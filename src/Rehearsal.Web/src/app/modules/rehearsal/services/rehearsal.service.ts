@@ -1,10 +1,9 @@
-/// <reference path="../../../types.ts" />
-
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 import { Observable } from 'rxjs';
 
+import {Rehearsal, System} from "../../../types";
 import StartRehearsalRequest = Rehearsal.StartRehearsalRequest;
 import Guid = System.Guid;
 import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;

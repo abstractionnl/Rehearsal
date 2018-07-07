@@ -1,7 +1,7 @@
-﻿/// <reference path="../../../types.ts" />
-
+﻿import {QuestionList} from "../../../types";
 import QuestionListOverviewModel = QuestionList.QuestionListOverviewModel;
 import QuestionListModel = QuestionList.QuestionListModel;
+
 import * as Joi from "joi-browser";
 import {IValidationResult} from "../../../validation";
 import {createFeatureSelector, createSelector} from "@ngrx/store";

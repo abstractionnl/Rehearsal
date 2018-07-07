@@ -1,15 +1,15 @@
 
-declare namespace Authorization {
-  interface TokenRequestModel {
+export namespace Authorization {
+  export interface TokenRequestModel {
     userName: string;
   }
-  interface UserModel {
+  export interface UserModel {
     id: System.Guid;
     userName: string;
   }
 }
-declare namespace QuestionList {
-  interface QuestionListModel {
+export namespace QuestionList {
+  export interface QuestionListModel {
     answerTitle: string;
     id: System.Guid;
     questions: QuestionList.QuestionModel[];
@@ -17,7 +17,7 @@ declare namespace QuestionList {
     title: string;
     version: number;
   }
-  interface QuestionListOverviewModel {
+  export interface QuestionListOverviewModel {
     answerTitle: string;
     id: System.Guid;
     isDeleted: boolean;
@@ -25,41 +25,50 @@ declare namespace QuestionList {
     questionTitle: string;
     title: string;
   }
-  interface QuestionModel {
+  export interface QuestionModel {
     answer: string;
     question: string;
   }
 }
-declare namespace Rehearsal {
-  interface AnswerResultModel {
+export namespace Rehearsal {
+  export enum RehearsalQuestionType {
+    Open = "Open",
+    MultipleChoice = "MultipleChoice"
+  }
+  export interface AnswerResultModel {
     correctAnswers: string[];
     givenAnswer: string;
     isCorrect: boolean;
     questionId: System.Guid;
   }
-  interface GiveAnswerRequest {
+  export interface GiveAnswerRequest {
     answer: string;
     questionId: System.Guid;
   }
-  interface OpenRehearsalQuestionModel extends Rehearsal.RehearsalQuestionModel {
+  export interface MultipleChoiceQuestionModel extends Rehearsal.RehearsalQuestionModel {
+    availableAnswers: string[];
+    correctAnswer: number;
+  }
+  export interface OpenRehearsalQuestionModel extends Rehearsal.RehearsalQuestionModel {
     correctAnswers: string[];
   }
-  interface RehearsalQuestionModel {
+  export interface RehearsalQuestionModel {
     answerTitle: string;
     id: System.Guid;
     question: string;
     questionTitle: string;
     type: string;
   }
-  interface RehearsalSessionModel {
+  export interface RehearsalSessionModel {
     id: System.Guid;
     questions: Rehearsal.RehearsalQuestionModel[];
   }
-  interface StartRehearsalRequest {
+  export interface StartRehearsalRequest {
     questionListId: System.Guid;
+    questionType: Rehearsal.RehearsalQuestionType;
   }
 }
-declare namespace System {
-  interface Guid {
+export namespace System {
+  export interface Guid {
   }
 }
