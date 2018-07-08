@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, HostListener, Input, Output} from "@angular/core";
 
 import {Rehearsal} from "../../../../types";
 
@@ -16,7 +16,7 @@ export class MultipleChoiceQuestionComponent {
     @Output() onSubmit: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNext: EventEmitter<void> = new EventEmitter<void>();
 
-    public focusAnswerField = new EventEmitter<void>();
+    public focusCheckButton = new EventEmitter<void>();
     public focusNextButton = new EventEmitter<void>();
 
     answer: string;
@@ -26,7 +26,7 @@ export class MultipleChoiceQuestionComponent {
         this._question = value;
         this.answer = null;
         this._answerGiven = false;
-        this.focusAnswerField.emit();
+        this.focusCheckButton.emit();
     }
 
     get question(): Rehearsal.MultipleChoiceQuestionModel {
@@ -76,5 +76,17 @@ export class MultipleChoiceQuestionComponent {
 
     isGivenAnswer(answer: number): boolean {
         return this.answer && this.answer === String(answer);
+    }
+
+    @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        let keyAsNumber = Number(event.key);
+
+        if (!Number.isNaN(keyAsNumber)) {
+            keyAsNumber = keyAsNumber-1;        // Numbers should be one indexed
+            if (keyAsNumber in this._question.availableAnswers) {
+                this.answer = String(keyAsNumber);
+                this.focusCheckButton.emit();
+            }
+        }
     }
 }
