@@ -11,6 +11,8 @@
             <div class="radio" *ngFor="let availableAnswer of question.availableAnswers; let i = index" [class.has-error]="isInCorrect(i)" [class.has-success]="isCorrect(i)">
                 <label [class.given-answer]="isGivenAnswer(i)">
                     <input type="radio" name="answer" id="answer{{i}}" value="{{i}}" [(ngModel)]="answer" [disabled]="answerGiven">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" *ngIf="isGivenAnswer(i) && isCorrect(i)"></span>
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" *ngIf="isGivenAnswer(i) && isInCorrect(i)"></span>
                     {{availableAnswer}}
                 </label>
             </div>
