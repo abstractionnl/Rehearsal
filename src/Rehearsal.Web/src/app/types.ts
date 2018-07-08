@@ -49,7 +49,7 @@ export namespace Rehearsal {
     availableAnswers: string[];
     correctAnswer: number;
   }
-  export interface OpenRehearsalQuestionModel extends Rehearsal.RehearsalQuestionModel {
+  export interface OpenQuestionModel extends Rehearsal.RehearsalQuestionModel {
     correctAnswers: string[];
   }
   export interface RehearsalQuestionModel {

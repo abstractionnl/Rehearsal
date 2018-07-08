@@ -5,12 +5,12 @@ namespace Rehearsal.Rehearsal
 {
     public class OpenQuestionValidator : IAnswerValidator
     {
-        public OpenQuestionValidator(OpenRehearsalQuestionModel question)
+        public OpenQuestionValidator(OpenQuestionModel question)
         {
             Question = question;
         }
 
-        private OpenRehearsalQuestionModel Question { get; }
+        private OpenQuestionModel Question { get; }
         
         public Task<AnswerResultModel> Validate(string answer)
         {

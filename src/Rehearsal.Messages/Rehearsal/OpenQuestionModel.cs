@@ -2,7 +2,7 @@
 
 namespace Rehearsal.Messages.Rehearsal
 {
-    public class OpenRehearsalQuestionModel : RehearsalQuestionModel
+    public class OpenQuestionModel : RehearsalQuestionModel
     {
         public ICollection<string> CorrectAnswers { get; set; }
     }

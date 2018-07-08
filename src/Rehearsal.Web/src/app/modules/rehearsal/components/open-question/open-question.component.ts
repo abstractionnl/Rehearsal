@@ -5,12 +5,12 @@ import {IValidationResult} from "../../../../validation";
 import {Rehearsal} from "../../../../types";
 
 @Component({
-    selector: 'open-rehearsal-question',
-    templateUrl: './open-rehearsal-question.component.html',
+    selector: 'open-question',
+    templateUrl: './open-question.component.html',
     //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OpenRehearsalQuestionComponent {
-    private _question: Rehearsal.OpenRehearsalQuestionModel;
+export class OpenQuestionComponent {
+    private _question: Rehearsal.OpenQuestionModel;
     private _answerGiven: boolean;
     private _answerResult: Rehearsal.AnswerResultModel;
 
@@ -23,14 +23,14 @@ export class OpenRehearsalQuestionComponent {
     answer: string = '';
 
     @Input('question')
-    set question(value: Rehearsal.OpenRehearsalQuestionModel) {
+    set question(value: Rehearsal.OpenQuestionModel) {
         this._question = value;
         this.answer = '';
         this._answerGiven = false;
         this.focusAnswerField.emit();
     }
 
-    get question(): Rehearsal.OpenRehearsalQuestionModel {
+    get question(): Rehearsal.OpenQuestionModel {
         return this._question;
     }
 
@@ -51,7 +51,7 @@ export class OpenRehearsalQuestionComponent {
     submit(): void {
         if (this.canSubmit()) {
             this._answerGiven = true;
-            OpenRehearsalQuestionComponent.validateAnswer(this.answer)
+            OpenQuestionComponent.validateAnswer(this.answer)
                 .then(a => this.onSubmit.emit(a));
         }
         if (this.canGotoNext()) {
@@ -60,7 +60,7 @@ export class OpenRehearsalQuestionComponent {
     }
 
     canSubmit(): boolean {
-        return !this._answerGiven && OpenRehearsalQuestionComponent.validateAnswer(this.answer).error == null;
+        return !this._answerGiven && OpenQuestionComponent.validateAnswer(this.answer).error == null;
     }
 
     canGotoNext(): boolean {
@@ -78,6 +78,6 @@ export class OpenRehearsalQuestionComponent {
     static readonly validationSchema = Joi.string().trim().required();
 
     static validateAnswer(answer: string): IValidationResult<string> {
-        return Joi.validate(answer, OpenRehearsalQuestionComponent.validationSchema);
+        return Joi.validate(answer, OpenQuestionComponent.validationSchema);
     }
 }

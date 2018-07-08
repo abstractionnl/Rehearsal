@@ -9,7 +9,7 @@ namespace Rehearsal.Rehearsal
         {
             switch (questionModel)
             {
-                case OpenRehearsalQuestionModel o:
+                case OpenQuestionModel o:
                     return new OpenQuestionValidator(o);
                 case MultipleChoiceQuestionModel mc:
                     return new MultipleChoiceQuestionValidator(mc);

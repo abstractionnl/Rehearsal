@@ -16,7 +16,7 @@ namespace Rehearsal.Rehearsal
         public RehearsalFactory()
         {
             Questions = new List<QuestionDefinition>();
-            QuestionGenerator = new OpenRehearsalQuestionGenerator();
+            QuestionGenerator = new OpenQuestionGenerator();
 
             _randomizer = new Randomizer();
         }
@@ -52,7 +52,7 @@ namespace Rehearsal.Rehearsal
 
         public IRehearsalFactory UseOpenQuestions()
         {
-            QuestionGenerator = new OpenRehearsalQuestionGenerator();
+            QuestionGenerator = new OpenQuestionGenerator();
 
             return this;
         }
@@ -102,11 +102,11 @@ namespace Rehearsal.Rehearsal
             public ISet<string> Answers { get; }
         }
 
-        private class OpenRehearsalQuestionGenerator : IQuestionGenerator
+        private class OpenQuestionGenerator : IQuestionGenerator
         {
             public RehearsalQuestionModel PrepareQuestion(QuestionDefinition question)
             {
-                return new OpenRehearsalQuestionModel()
+                return new OpenQuestionModel()
                 {
                     Id = Guid.NewGuid(),
                     QuestionTitle = question.QuestionTitle,
