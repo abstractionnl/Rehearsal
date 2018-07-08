@@ -3,7 +3,11 @@
         <rehearsal-progress [currentQuestion]="answeredQuestions | async" [totalQuestions]="totalQuestions | async"></rehearsal-progress>
 
         <div class="well well-lg">
-            <rehearsal-question [question]="currentQuestion | async" [answerResult]="currentResult | async" (onSubmit)="submitAnswer($event)" (onNext)="gotoNext()" *ngIf="!(isFinished | async)"></rehearsal-question>
+            <ng-container [ngSwitch]="(currentQuestion | async).type" *ngIf="!(isFinished | async)">
+                <open-rehearsal-question *ngSwitchCase="'OpenRehearsalQuestion'" [question]="currentQuestion | async" [answerResult]="currentResult | async" (onSubmit)="submitAnswer($event)" (onNext)="gotoNext()"></open-rehearsal-question>
+                <multiplechoice-question *ngSwitchCase="'MultipleChoiceQuestion'" [question]="currentQuestion | async" [answerResult]="currentResult | async" (onSubmit)="submitAnswer($event)" (onNext)="gotoNext()"></multiplechoice-question>
+            </ng-container>
+
             <p class="text-info text-center" *ngIf="isFinished | async">Dat wassum</p>
         </div>
     </div>

@@ -7,9 +7,14 @@ namespace Rehearsal.Rehearsal
     {
         public IAnswerValidator GetValidatorFor(RehearsalQuestionModel questionModel)
         {
-            if (questionModel is OpenRehearsalQuestionModel o)
-                return new OpenQuestionValidator(o);
-            
+            switch (questionModel)
+            {
+                case OpenRehearsalQuestionModel o:
+                    return new OpenQuestionValidator(o);
+                case MultipleChoiceQuestionModel mc:
+                    return new MultipleChoiceQuestionValidator(mc);
+            }
+
             throw new InvalidOperationException($"Unsupported question type {questionModel.GetType().FullName}");
         }
     }

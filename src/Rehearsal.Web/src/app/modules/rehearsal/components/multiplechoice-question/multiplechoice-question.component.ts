@@ -1,16 +1,15 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import * as Joi from "joi-browser";
-import {IValidationResult} from "../../../../validation";
 
 import {Rehearsal} from "../../../../types";
 
 @Component({
-    selector: 'rehearsal-question',
-    templateUrl: './rehearsal-question.component.html',
+    selector: 'multiplechoice-question',
+    templateUrl: './multiplechoice-question.component.html',
+    styleUrls: [ './multiplechoice-question.component.css' ]
     //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RehearsalQuestionComponent {
-    private _question: Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel;
+export class MultipleChoiceQuestionComponent {
+    private _question: Rehearsal.MultipleChoiceQuestionModel;
     private _answerGiven: boolean;
     private _answerResult: Rehearsal.AnswerResultModel;
 
@@ -20,17 +19,17 @@ export class RehearsalQuestionComponent {
     public focusAnswerField = new EventEmitter<void>();
     public focusNextButton = new EventEmitter<void>();
 
-    answer: string = '';
+    answer: string;
 
     @Input('question')
-    set question(value: Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel) {
+    set question(value: Rehearsal.MultipleChoiceQuestionModel) {
         this._question = value;
-        this.answer = '';
+        this.answer = null;
         this._answerGiven = false;
         this.focusAnswerField.emit();
     }
 
-    get question(): Rehearsal.OpenRehearsalQuestionModel | Rehearsal.MultipleChoiceQuestionModel {
+    get question(): Rehearsal.MultipleChoiceQuestionModel {
         return this._question;
     }
 
@@ -40,6 +39,7 @@ export class RehearsalQuestionComponent {
 
     @Input('answerResult')
     set answerResult(value: Rehearsal.AnswerResultModel) {
+        this.answer = value !== null ? value.givenAnswer : null;
         this._answerResult = value;
         this.focusNextButton.emit();
     }
@@ -51,8 +51,7 @@ export class RehearsalQuestionComponent {
     submit(): void {
         if (this.canSubmit()) {
             this._answerGiven = true;
-            RehearsalQuestionComponent.validateAnswer(this.answer)
-                .then(a => this.onSubmit.emit(a));
+            this.onSubmit.emit(this.answer);
         }
         if (this.canGotoNext()) {
             this.onNext.emit();
@@ -60,24 +59,22 @@ export class RehearsalQuestionComponent {
     }
 
     canSubmit(): boolean {
-        return !this._answerGiven && RehearsalQuestionComponent.validateAnswer(this.answer).error == null;
+        return !this._answerGiven && this.answer !== null;
     }
 
     canGotoNext(): boolean {
         return !!this.answerResult;
     }
 
-    isCorrect(): boolean {
-        return this.answerResult && this.answerResult.isCorrect;
+    isCorrect(answer: number): boolean {
+        return this.answerResult && this.answerResult.correctAnswers.includes(String(answer));
     }
 
-    isInCorrect(): boolean {
-        return this.answerResult && !this.answerResult.isCorrect;
+    isInCorrect(answer: number): boolean {
+        return this.answerResult && !this.answerResult.correctAnswers.includes(String(answer));
     }
 
-    static readonly validationSchema = Joi.string().trim().required();
-
-    static validateAnswer(answer: string): IValidationResult<string> {
-        return Joi.validate(answer, RehearsalQuestionComponent.validationSchema);
+    isGivenAnswer(answer: number): boolean {
+        return this.answer && this.answer === String(answer);
     }
 }

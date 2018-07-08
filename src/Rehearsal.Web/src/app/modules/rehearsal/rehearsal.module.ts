@@ -8,7 +8,6 @@ import {ProgressbarModule} from "ngx-bootstrap";
 import {StartRehearsalPage} from "./pages/start-rehearsal/start-rehearsal.page";
 import {RehearsalPage} from "./pages/rehearsal/rehearsal.page";
 
-import {RehearsalQuestionComponent} from "./components/rehearsal-question/rehearsal-question.component";
 import {RehearsalProgressComponent} from "./components/rehearsal-progress/rehearsal-progress.component";
 import {RehearsalService} from "./services/rehearsal.service";
 import {RehearsalRoutingModule} from "./rehearsal-routing.module";
@@ -17,12 +16,15 @@ import {EffectsModule} from "@ngrx/effects";
 import {RehearsalEffects} from "./store/rehearsal.effects";
 import {StoreModule} from "@ngrx/store";
 import {rehearsalReducer} from "./store/rehearsal.reducer";
+import {OpenRehearsalQuestionComponent} from "./components/open-rehearsal-question/open-rehearsal-question.component";
+import {MultipleChoiceQuestionComponent} from "./components/multiplechoice-question/multiplechoice-question.component";
 
 @NgModule({
     declarations: [
         StartRehearsalPage,
         RehearsalPage,
-        RehearsalQuestionComponent,
+        OpenRehearsalQuestionComponent,
+        MultipleChoiceQuestionComponent,
         RehearsalProgressComponent,
         FocusDirective
     ],
