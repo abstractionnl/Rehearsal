@@ -15,6 +15,7 @@ export const GIVE_ANSWER = '[Rehearsal] Give answer';
 export const GIVE_ANSWER_SUCCESS = '[Rehearsal] Give answer success';
 export const GIVE_ANSWER_FAILED = '[Rehearsal] Give answer failed';
 export const NEXT_QUESTION = '[Rehearsal] Next question';
+export const PREVIOUS_QUESTION = '[Rehearsal] Previous question';
 
 export class CreateRehearsal implements Action {
     readonly type = CREATE_REHEARSAL;
@@ -66,7 +67,12 @@ export class NextQuestion implements Action {
     constructor() {}
 }
 
+export class PreviousQuestion implements Action {
+    readonly type = PREVIOUS_QUESTION;
+    constructor() {}
+}
+
 export type All =
     CreateRehearsal | CreateRehearsalSuccess | CreateRehearsalFailed |
     LoadRehearsal | LoadRehearsalSuccess | LoadRehearsalFailed |
-    GiveAnswer | GiveAnswerSuccess | GiveAnswerFailed | NextQuestion;
+    GiveAnswer | GiveAnswerSuccess | GiveAnswerFailed | NextQuestion | PreviousQuestion;

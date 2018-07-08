@@ -1,6 +1,6 @@
 import * as RehearsalActions from "./rehearsal.actions";
 import {initialState, RehearsalSessionStateQuestion, RehearsalState} from "./rehearsal.state";
-import {GIVE_ANSWER_SUCCESS, LOAD_REHEARSAL_SUCCESS, NEXT_QUESTION} from "./rehearsal.actions";
+import {GIVE_ANSWER_SUCCESS, LOAD_REHEARSAL_SUCCESS, NEXT_QUESTION, PREVIOUS_QUESTION} from "./rehearsal.actions";
 
 export function rehearsalReducer(state: RehearsalState = initialState, action: RehearsalActions.All): RehearsalState {
     switch (action.type) {
@@ -36,6 +36,17 @@ export function rehearsalReducer(state: RehearsalState = initialState, action: R
                     currentQuestion: state.session.currentQuestion + 1
                 }
             };
+
+        case PREVIOUS_QUESTION:
+            if (state.session.currentQuestion > 0)
+                return {
+                    ...state,
+                    session: {
+                        ...state.session,
+                        currentQuestion: state.session.currentQuestion - 1
+                    }
+                };
+            return state;
 
         default: return state;
     }

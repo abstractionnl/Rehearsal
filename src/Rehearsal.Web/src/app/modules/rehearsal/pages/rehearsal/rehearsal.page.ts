@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {RehearsalService} from "../../services/rehearsal.service";
 import {Store} from "@ngrx/store";
 
@@ -13,7 +13,7 @@ import {
     selectQuestionCount
 } from "../../store/rehearsal.state";
 import {Observable} from "rxjs/index";
-import {GiveAnswer, NextQuestion} from "../../store/rehearsal.actions";
+import {GiveAnswer, NextQuestion, PreviousQuestion} from "../../store/rehearsal.actions";
 
 @Component({
     templateUrl: './rehearsal.page.html'
@@ -42,18 +42,18 @@ export class RehearsalPage {
 
     submitAnswer(answer: string) {
         this.store.dispatch(new GiveAnswer(answer));
-
-        /*this.rehearsalService.giveAnswer(this.rehearsal.id, this.currentQuestion.id, answer)
-            .subscribe(answerResult => {
-                this.answerResult = answerResult;
-            });*/
     }
 
     gotoNext() {
         this.store.dispatch(new NextQuestion());
     }
 
-    isDone(): boolean {
-        return this.rehearsal && this.rehearsal.questions.length <= this._questionIndex;
+    @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        if (event.key === 'ArrowLeft') {
+            this.store.dispatch(new PreviousQuestion());
+        }
+        if (event.key === 'ArrowRight') {
+            this.store.dispatch(new NextQuestion());
+        }
     }
 }
