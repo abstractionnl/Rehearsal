@@ -33,15 +33,20 @@ export class MultipleChoiceQuestionComponent {
         return this._question;
     }
 
-    get answerGiven() {
-        return this._answerGiven || this._answerResult;
+    answerGiven(): boolean {
+        return this._answerGiven;
     }
 
     @Input('answerResult')
     set answerResult(value: Rehearsal.AnswerResultModel) {
-        this.answer = value !== null ? value.givenAnswer : null;
         this._answerResult = value;
-        this.focusNextButton.emit();
+
+        if (value != null) {
+            this.answer = value.givenAnswer;
+            this._answerGiven = true;
+
+            this.focusNextButton.emit();
+        }
     }
 
     get answerResult() {
@@ -79,6 +84,8 @@ export class MultipleChoiceQuestionComponent {
     }
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        if (this.answerGiven()) return;
+
         let keyAsNumber = Number(event.key);
 
         if (!Number.isNaN(keyAsNumber)) {
