@@ -16,14 +16,14 @@ import {EffectsModule} from "@ngrx/effects";
 import {RehearsalEffects} from "./store/rehearsal.effects";
 import {StoreModule} from "@ngrx/store";
 import {rehearsalReducer} from "./store/rehearsal.reducer";
-import {OpenQuestionComponent} from "./components/open-question/open-question.component";
+import {OpenRehearsalQuestionComponent} from "./components/open-rehearsal-question/open-rehearsal-question.component";
 import {MultipleChoiceQuestionComponent} from "./components/multiplechoice-question/multiplechoice-question.component";
 
 @NgModule({
     declarations: [
         StartRehearsalPage,
         RehearsalPage,
-        OpenQuestionComponent,
+        OpenRehearsalQuestionComponent,
         MultipleChoiceQuestionComponent,
         RehearsalProgressComponent,
         FocusDirective

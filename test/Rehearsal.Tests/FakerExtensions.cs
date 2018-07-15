@@ -38,8 +38,8 @@ namespace Rehearsal.Tests
             Version = 1
         };
 
-        public static OpenQuestionModel OpenQuestion(this Faker faker) =>
-            new OpenQuestionModel()
+        public static OpenRehearsalQuestionModel OpenRehearsalQuestion(this Faker faker) =>
+            new OpenRehearsalQuestionModel()
             {
                 Id = Guid.NewGuid(),
                 QuestionTitle = faker.Lorem.Word(),
@@ -48,8 +48,8 @@ namespace Rehearsal.Tests
                 CorrectAnswers = new [] { faker.Lorem.Sentence() }
             };
         
-        public static OpenQuestionModel OpenQuestion(this Faker faker, params string[] correctAnswers) =>
-            new OpenQuestionModel()
+        public static OpenRehearsalQuestionModel OpenRehearsalQuestion(this Faker faker, params string[] correctAnswers) =>
+            new OpenRehearsalQuestionModel()
             {
                 Id = Guid.NewGuid(),
                 QuestionTitle = faker.Lorem.Word(),

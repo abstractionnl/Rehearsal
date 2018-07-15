@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CQRSlite.Commands;
 using NFluent;
 using Rehearsal.Messages.Rehearsal;
 using Rehearsal.Rehearsal;
+using Rehearsal.Tests.Mocks;
 using Rehearsal.Xunit;
 using Xunit;
 
@@ -65,8 +67,8 @@ namespace Rehearsal.Tests.Rehearsal
 
             Check.That(cmd.Questions)
                 .HasElementThatMatches(s => s.Question == q)
-                .Which.IsInstanceOf<OpenQuestionModel>()
-                .And.Selecting(p => ((OpenQuestionModel)p).CorrectAnswers)
+                .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
+                .And.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
                 .ContainsExactly(answers);
         }
         
@@ -84,8 +86,8 @@ namespace Rehearsal.Tests.Rehearsal
 
             Check.That(cmd.Questions)
                 .HasElementThatMatches(s => s.Question == q)
-                .Which.IsInstanceOf<OpenQuestionModel>()
-                .And.Selecting(p => ((OpenQuestionModel) p).CorrectAnswers)
+                .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
+                .And.Selecting(p => ((OpenRehearsalQuestionModel) p).CorrectAnswers)
                 .ContainsExactly(a);
         }
 

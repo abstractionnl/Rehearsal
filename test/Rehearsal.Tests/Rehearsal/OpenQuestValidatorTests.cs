@@ -11,12 +11,12 @@ namespace Rehearsal.Tests.Rehearsal
     {
         public class GivenValidator : OpenQuestionValidatorTests
         {
-            private OpenQuestionModel Question { get; }
+            private OpenRehearsalQuestionModel Question { get; }
             private IAnswerValidator Validator { get; }
         
             public GivenValidator()
             {
-                Question = Faker.OpenQuestion();
+                Question = Faker.OpenRehearsalQuestion();
                 Validator = new OpenQuestionValidator(Question);
             }
 
@@ -39,12 +39,12 @@ namespace Rehearsal.Tests.Rehearsal
 
         public class GivenValidatorWithMultipleCorrectAnswers : OpenQuestionValidatorTests
         {
-            private OpenQuestionModel Question { get; }
+            private OpenRehearsalQuestionModel Question { get; }
             private IAnswerValidator Validator { get; }
             
             public GivenValidatorWithMultipleCorrectAnswers()
             {
-                Question = Faker.OpenQuestion(Faker.Lorem.Sentence(), Faker.Lorem.Sentence(), Faker.Lorem.Sentence());
+                Question = Faker.OpenRehearsalQuestion(Faker.Lorem.Sentence(), Faker.Lorem.Sentence(), Faker.Lorem.Sentence());
                 Validator = new OpenQuestionValidator(Question);
             }
 

@@ -5,12 +5,12 @@ import {IValidationResult} from "../../../../validation";
 import {Rehearsal} from "../../../../types";
 
 @Component({
-    selector: 'open-question',
-    templateUrl: './open-question.component.html',
+    selector: 'open-rehearsal-question',
+    templateUrl: './open-rehearsal-question.component.html',
     //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OpenQuestionComponent {
-    private _question: Rehearsal.OpenQuestionModel;
+export class OpenRehearsalQuestionComponent {
+    private _question: Rehearsal.OpenRehearsalQuestionModel;
     private _answerGiven: boolean;
     private _answerResult: Rehearsal.AnswerResultModel;
 
@@ -23,14 +23,14 @@ export class OpenQuestionComponent {
     answer: string = '';
 
     @Input('question')
-    set question(value: Rehearsal.OpenQuestionModel) {
+    set question(value: Rehearsal.OpenRehearsalQuestionModel) {
         this._question = value;
         this.answer = '';
         this._answerGiven = false;
         this.focusAnswerField.emit();
     }
 
-    get question(): Rehearsal.OpenQuestionModel {
+    get question(): Rehearsal.OpenRehearsalQuestionModel {
         return this._question;
     }
 
@@ -51,7 +51,7 @@ export class OpenQuestionComponent {
     submit(): void {
         if (this.canSubmit()) {
             this._answerGiven = true;
-            OpenQuestionComponent.validateAnswer(this.answer)
+            OpenRehearsalQuestionComponent.validateAnswer(this.answer)
                 .then(a => this.onSubmit.emit(a));
         }
         if (this.canGotoNext()) {
@@ -60,7 +60,7 @@ export class OpenQuestionComponent {
     }
 
     canSubmit(): boolean {
-        return !this._answerGiven && OpenQuestionComponent.validateAnswer(this.answer).error == null;
+        return !this._answerGiven && OpenRehearsalQuestionComponent.validateAnswer(this.answer).error == null;
     }
 
     canGotoNext(): boolean {
@@ -78,6 +78,6 @@ export class OpenQuestionComponent {
     static readonly validationSchema = Joi.string().trim().required();
 
     static validateAnswer(answer: string): IValidationResult<string> {
-        return Joi.validate(answer, OpenQuestionComponent.validationSchema);
+        return Joi.validate(answer, OpenRehearsalQuestionComponent.validationSchema);
     }
 }

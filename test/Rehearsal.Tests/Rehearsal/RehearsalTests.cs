@@ -10,7 +10,7 @@ namespace Rehearsal.Tests.Rehearsal
         [Fact]
         public void CanCreate()
         {
-            var questions = new[] {Faker.OpenQuestion(), Faker.OpenQuestion(), Faker.OpenQuestion()};
+            var questions = new[] {Faker.OpenRehearsalQuestion(), Faker.OpenRehearsalQuestion(), Faker.OpenRehearsalQuestion()};
 
             Given(() => new global::Rehearsal.Rehearsal.Rehearsal(Guid.NewGuid(), questions))
                 .ThenEvent<RehearsalStartedEvent>(
