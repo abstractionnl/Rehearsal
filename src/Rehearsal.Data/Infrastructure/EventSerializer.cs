@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace Rehearsal.Data.Infrastructure
 {
-    public class EventSerializer
+    public class EventSerializer : IEventSerializer
     {
         public EventSerializer(JsonSerializer serializer, params Type[] eventTypes) 
         {
-            Serializer = serializer;
+            Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             EventTypes = new Dictionary<string, Type>();
 
             foreach (var eventType in eventTypes) RegisterEventType(eventType);

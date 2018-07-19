@@ -14,7 +14,7 @@ namespace Rehearsal.Data.Test.Infrastructure
         {
             Connection = new SqliteConnection("Datasource=:memory:;");
             Connection.Open();
-            var eventSerializer = new EventSerializer(JsonSerializer.CreateDefault(), typeof(SomeEvent), typeof(AnotherEvent));
+            var eventSerializer = new MockedEventSerializer();
             
             EventStore = new SqliteEventStore(Connection, eventSerializer, EventPublisher);
             EventStore.ProvisionTable().Wait();

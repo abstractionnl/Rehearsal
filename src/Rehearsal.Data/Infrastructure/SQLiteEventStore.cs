@@ -12,7 +12,7 @@ namespace Rehearsal.Data.Infrastructure
     {
         private IEventPublisher EventPublisher { get; }
         private SqliteConnection Connection { get; }
-        private EventSerializer Serializer { get; }
+        private IEventSerializer Serializer { get; }
 
         const string CreateSyntax = @"CREATE TABLE IF NOT EXISTS events (
 	        Id VARCHAR(36),
@@ -25,11 +25,11 @@ namespace Rehearsal.Data.Infrastructure
         private const string SelectSyntax = @"SELECT Type, Data FROM events WHERE Id = @id AND Version > @fromVersion";
         private const string GetAllEventsSyntax = @"SELECT Type, Data FROM events ORDER BY TimeStamp";
         
-        public SqliteEventStore(SqliteConnection connection, EventSerializer serializer, IEventPublisher eventPublisher)
+        public SqliteEventStore(SqliteConnection connection, IEventSerializer serializer, IEventPublisher eventPublisher)
         {
-            Connection = connection;
-            Serializer = serializer;
-            EventPublisher = eventPublisher;
+            Connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            EventPublisher = eventPublisher ?? throw new ArgumentNullException(nameof(eventPublisher));
         }
         
         public async Task Save(IEnumerable<IEvent> events, CancellationToken cancellationToken = new CancellationToken())
