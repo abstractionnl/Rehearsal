@@ -23,6 +23,7 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
             ForConcreteType<EventRepositoryFactory>();
             For<IEventStore>().Use(y => y.GetInstance<IEventRepository>());
             ForSingletonOf<IEventRepository>().Use(y => y.GetInstance<EventRepositoryFactory>().Create());
+            For<IEventSerializer>().Use<EventSerializer>();
             
             For<IRepository>().Use<Repository>();
             
@@ -32,11 +33,11 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
                 _.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<>));
                 _.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
                 
-                _.Convention<EventSerializerConvention>();
+                _.Convention<EventResolverConvention>();
             });
         }
 
-        private class EventSerializerConvention : IRegistrationConvention
+        private class EventResolverConvention : IRegistrationConvention
         {
             public void ScanTypes(TypeSet types, Registry registry)
             {
@@ -44,8 +45,16 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
                     .Where(type => typeof(IEvent).IsAssignableFrom(type))
                     .ToArray();
 
-                registry.For<EventSerializer>().Use<EventSerializer>()
-                    .Ctor<Type[]>().Is(eventTypes);
+                registry.For<IEventTypeResolver>().Use<RegisteredEventTypeResolver>()
+                    .OnCreation(resolver => RegisterEventTypes(resolver, eventTypes));
+            }
+
+            private void RegisterEventTypes(RegisteredEventTypeResolver resolver, IEnumerable<Type> eventTypes)
+            {
+                foreach (var eventType in eventTypes)
+                {
+                    resolver.RegisterEventType(eventType.Name, eventType);
+                }
             }
         }
     }

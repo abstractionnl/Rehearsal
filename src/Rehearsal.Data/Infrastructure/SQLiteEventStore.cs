@@ -13,6 +13,7 @@ namespace Rehearsal.Data.Infrastructure
         private IEventPublisher EventPublisher { get; }
         private SqliteConnection Connection { get; }
         private IEventSerializer Serializer { get; }
+        private IEventTypeResolver EventTypeResolver { get; }
 
         const string CreateSyntax = @"CREATE TABLE IF NOT EXISTS events (
 	        Id VARCHAR(36),
@@ -25,10 +26,11 @@ namespace Rehearsal.Data.Infrastructure
         private const string SelectSyntax = @"SELECT Type, Data FROM events WHERE Id = @id AND Version > @fromVersion";
         private const string GetAllEventsSyntax = @"SELECT Type, Data FROM events ORDER BY TimeStamp";
         
-        public SqliteEventStore(SqliteConnection connection, IEventSerializer serializer, IEventPublisher eventPublisher)
+        public SqliteEventStore(SqliteConnection connection, IEventSerializer serializer, IEventTypeResolver eventTypeResolver, IEventPublisher eventPublisher)
         {
             Connection = connection ?? throw new ArgumentNullException(nameof(connection));
             Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            EventTypeResolver = eventTypeResolver ?? throw new ArgumentNullException(nameof(eventTypeResolver));
             EventPublisher = eventPublisher ?? throw new ArgumentNullException(nameof(eventPublisher));
         }
         
@@ -49,7 +51,8 @@ namespace Rehearsal.Data.Infrastructure
                     idParam.Value = @event.Id;
                     verionParam.Value = @event.Version;
                     timestampParam.Value = @event.TimeStamp;
-                    (typeParam.Value, dataParam.Value) = Serializer.Serialize(@event);
+                    typeParam.Value = EventTypeResolver.TypeToString(@event.GetType());
+                    dataParam.Value = Serializer.Serialize(@event);
                         
                     await command.ExecuteNonQueryAsync(cancellationToken);
                 }
@@ -96,8 +99,10 @@ namespace Rehearsal.Data.Infrastructure
                 {
                     var typeAsString = reader.GetString(0);
                     var data = reader.GetString(1);
+
+                    var type = EventTypeResolver.StringToType(typeAsString);
                     
-                    observer.OnNext(Serializer.Deserialize(typeAsString, data));
+                    observer.OnNext(Serializer.Deserialize(type, data));
                 }
 
                 observer.OnCompleted();
@@ -114,8 +119,10 @@ namespace Rehearsal.Data.Infrastructure
                 {
                     var typeAsString = reader.GetString(0);
                     var data = reader.GetString(1);
+                    
+                    var type = EventTypeResolver.StringToType(typeAsString);
 
-                    result.Add(Serializer.Deserialize(typeAsString, data));
+                    result.Add(Serializer.Deserialize(type, data));
                 }
 
                 return result;

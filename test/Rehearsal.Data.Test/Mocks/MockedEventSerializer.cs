@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CQRSlite.Events;
 using Rehearsal.Data.Infrastructure;
+using Xunit.Sdk;
 
 namespace Rehearsal.Data.Test.Mocks
 {
@@ -9,17 +10,22 @@ namespace Rehearsal.Data.Test.Mocks
     {
         private readonly IDictionary<string, IEvent> _events = new Dictionary<string, IEvent>(); 
         
-        public (string type, string data) Serialize(IEvent @event)
+        public string Serialize(IEvent @event)
         {
             var eventId = Guid.NewGuid().ToString();
             _events[eventId] = @event;
 
-            return (@event.GetType().Name, eventId);
+            return eventId;
         }
 
-        public IEvent Deserialize(string type, string data)
+        public IEvent Deserialize(Type type, string data)
         {
-            return _events[data];
+            var @event = _events[data];
+            
+            if (type != @event.GetType())
+                throw new AssertActualExpectedException(type, @event.GetType(), "type to deserialize does not match the type that was serialized");
+            
+            return @event;
         }
     }
 }

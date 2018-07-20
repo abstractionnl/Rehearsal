@@ -18,7 +18,7 @@ namespace Rehearsal.Data.Test
                 TimeStamp = timeStamp ?? faker.Date.Recent(),
                 SomeValue = faker.Lorem.Sentence()
             };
-
+        
         public static SomeEvent[] SomeEventsFor(this Faker faker, Guid entityId, int count) =>
             Enumerable.Range(1, count)
                 .Select(i => faker.SomeEvent(entityId, i, faker.Date.BetweenDaysAgo(i, i+1)))
