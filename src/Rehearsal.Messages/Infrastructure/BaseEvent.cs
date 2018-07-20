@@ -3,7 +3,7 @@ using CQRSlite.Events;
 
 namespace Rehearsal.Messages.Infrastructure
 {
-    public class BaseEvent : IEvent
+    public abstract class BaseEvent : IEvent
     {
         public Guid Id { get; set; }
 

@@ -53,7 +53,7 @@ namespace Rehearsal.Data.Infrastructure.StructureMap
             {
                 foreach (var eventType in eventTypes)
                 {
-                    resolver.RegisterEventType(eventType.Name, eventType);
+                    resolver.RegisterUnderAnnotatedEventNameConvention(eventType);
                 }
             }
         }
