@@ -1,11 +1,11 @@
 ﻿using System;
 using Rehearsal.Messages.Rehearsal;
 
-namespace Rehearsal.WebApi.Rehearsal
+namespace Rehearsal.Rehearsal
 {
     public static class RehearsalFactoryExtensions
     {
-        public static IRehearsalFactory SetQuestionType(this IRehearsalFactory factory, RehearsalQuestionType type)
+        public static RehearsalFactory SetQuestionType(this RehearsalFactory factory, RehearsalQuestionType type)
         {
             switch (type)
             {

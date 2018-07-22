@@ -31,18 +31,16 @@ namespace Rehearsal.WebApi.Rehearsal
         [HttpPost, Route("")]
         public async Task<IActionResult> Start([FromBody] StartRehearsalRequest request)
         {
-            var questionList = QuestionListRepository.GetById(request.QuestionListId)
-                .ValueOrThrow();
+            var rehearsalId = Guid.NewGuid();
             
-            var cmd = await RehearsalSessionRepository
-                .New()
-                .AddQuestionList(questionList)
-                .SetQuestionType(request.QuestionType)
-                .Create();
-
-            await CommandSender.Send(cmd);
+            await CommandSender.Send(new StartRehearsalCommand()
+            {
+                Id = rehearsalId,
+                QuestionListId = request.QuestionListId,
+                QuestionType = request.QuestionType
+            });
             
-            return Ok(cmd.Id);
+            return Ok(rehearsalId);
         }
 
         [HttpGet, Route("{id:guid}")]

@@ -16,11 +16,6 @@ namespace Rehearsal.Data.Rehearsal
         {
             SessionStore = sessionStore;
         }
-        
-        public IRehearsalFactory New()
-        {
-            return new RehearsalFactory();
-        }
 
         public Option<RehearsalSessionModel> GetById(Guid rehearsalId) => 
             SessionStore.GetById(rehearsalId);

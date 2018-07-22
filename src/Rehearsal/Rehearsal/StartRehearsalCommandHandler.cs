@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CQRSlite.Commands;
 using CQRSlite.Domain;
-using Rehearsal.Messages;
 using Rehearsal.Messages.Rehearsal;
 
 namespace Rehearsal.Rehearsal
@@ -17,7 +16,15 @@ namespace Rehearsal.Rehearsal
         
         public async Task Handle(StartRehearsalCommand message)
         {
-            var rehearsal = new Rehearsal(message.Id, message.Questions);
+            var questionList = await _session.Get<QuestionList.QuestionList>(message.QuestionListId);
+            
+            var factory = new RehearsalFactory();
+
+            var questions = factory.AddQuestionList(questionList)
+                .SetQuestionType(message.QuestionType)
+                .Create();
+            
+            var rehearsal = new Rehearsal(message.Id, questions);
             await _session.Add(rehearsal);
             await _session.Commit();
         }

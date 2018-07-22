@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
 using Rehearsal.Messages.Rehearsal;
 
@@ -24,19 +22,20 @@ namespace Rehearsal.Tests
             Answer = answer ?? faker.Lorem.Word()
         };
 
-        public static QuestionListModel QuestionList(this Faker faker, int questionCount = 3) => 
+        public static global::Rehearsal.QuestionList.QuestionList QuestionList(this Faker faker, int questionCount = 3) => 
             faker.QuestionList(
                 Enumerable.Range(0, questionCount).Select(_ => faker.Question()).ToArray()
             );
         
-        public static QuestionListModel QuestionList(this Faker faker, params QuestionModel[] questions) => new QuestionListModel()
-        {
-            Title = faker.Lorem.Word(),
-            QuestionTitle = faker.Lorem.Word(),
-            AnswerTitle = faker.Lorem.Word(),
-            Questions = questions,
-            Version = 1
-        };
+        public static global::Rehearsal.QuestionList.QuestionList QuestionList(this Faker faker, params QuestionModel[] questions) => new global::Rehearsal.QuestionList.QuestionList(
+            Guid.NewGuid(),
+            new QuestionListProperties()
+            {
+                Title = faker.Lorem.Word(),
+                QuestionTitle = faker.Lorem.Word(),
+                AnswerTitle = faker.Lorem.Word(),
+                Questions = questions,
+            });
 
         public static OpenRehearsalQuestionModel OpenRehearsalQuestion(this Faker faker) =>
             new OpenRehearsalQuestionModel()

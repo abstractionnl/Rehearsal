@@ -19,53 +19,53 @@ namespace Rehearsal.Tests.Rehearsal
         [Fact]
         public async Task CanConstructEmptyRehearsalSession()
         {
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .Create();
 
-            Check.That(cmd.Questions).IsEmpty();
+            Check.That(questions).IsEmpty();
         }
 
         [Fact]
-        public async Task CanAddOneQuestionListToSession()
+        public void CanAddOneQuestionListToSession()
         {
             var questionList = Faker.QuestionList();
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .Create();
             
-            Check.That(cmd.Questions).HasSize(questionList.Questions.Count);
+            Check.That(questions).HasSize(questionList.Questions.Count);
         }
 
         [Fact]
-        public async Task WhenQuestionHasMultipleCorrectAnswersQuestionIsGrouped()
+        public void WhenQuestionHasMultipleCorrectAnswersQuestionIsGrouped()
         {
             var q = Faker.Lorem.Word();
             
             var questionList = Faker.QuestionList(Faker.Question(q), Faker.Question(q));
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .Create();
 
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasOneElementOnly()
                 .And.HasElementThatMatches(s => s.Question == q);
         }
         
         [Fact]
-        public async Task WhenQuestionHasMultipleCorrectAnswersMultipleAnswersAreCorrect()
+        public void WhenQuestionHasMultipleCorrectAnswersMultipleAnswersAreCorrect()
         {
             var q = Faker.Lorem.Word();
             var answers = Faker.Lorem.Words(2);
             
             var questionList = Faker.QuestionList(Faker.Question(q, answers[0]), Faker.Question(q, answers[1]));
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .Create();
 
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasElementThatMatches(s => s.Question == q)
                 .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
                 .And.Selecting(p => ((OpenRehearsalQuestionModel)p).CorrectAnswers)
@@ -73,18 +73,18 @@ namespace Rehearsal.Tests.Rehearsal
         }
         
         [Fact]
-        public async Task WithMultipleSameAnswersOneAnswerIsCorrect()
+        public void WithMultipleSameAnswersOneAnswerIsCorrect()
         {
             var q = Faker.Lorem.Word();
             var a = Faker.Lorem.Word();
             
             var questionList = Faker.QuestionList(Faker.Question(q, a), Faker.Question(q, a));
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .Create();
 
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasElementThatMatches(s => s.Question == q)
                 .Which.IsInstanceOf<OpenRehearsalQuestionModel>()
                 .And.Selecting(p => ((OpenRehearsalQuestionModel) p).CorrectAnswers)
@@ -92,18 +92,18 @@ namespace Rehearsal.Tests.Rehearsal
         }
 
         [Fact]
-        public async Task CanCreateMultipleChoiceRehearsal()
+        public void CanCreateMultipleChoiceRehearsal()
         {
             var questionList = Faker.QuestionList(3);
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .UseMultipleChoiceQuestions(3)
                 .Create();
 
             var q = questionList.Questions.First();
             
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasElementThatMatches(s => s.Question == q.Question)
                 .Which.IsInstanceOf<MultipleChoiceQuestionModel>()
                 .And.Selecting(x => (MultipleChoiceQuestionModel)x)
@@ -114,18 +114,18 @@ namespace Rehearsal.Tests.Rehearsal
         }
 
         [Fact]
-        public async Task MultipleChoiceCanHandleTooLittleOtherAnswers()
+        public void MultipleChoiceCanHandleTooLittleOtherAnswers()
         {
             var questionList = Faker.QuestionList(3);
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .UseMultipleChoiceQuestions(10)
                 .Create();
             
             var q = questionList.Questions.First();
             
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasElementThatMatches(s => s.Question == q.Question)
                 .Which.IsInstanceOf<RehearsalQuestionModel, MultipleChoiceQuestionModel>()
                 .And.Satisfies(
@@ -135,24 +135,24 @@ namespace Rehearsal.Tests.Rehearsal
         }
 
         [Fact]
-        public async Task MultipleChoiceDoesNotShowSameAnswerTwice()
+        public void MultipleChoiceDoesNotShowSameAnswerTwice()
         {
-            var a = Faker.Lorem.Word();
+            var a = Faker.Lorem.Words(3);
             
             var questionList = Faker.QuestionList(
-                Faker.Question(Faker.Lorem.Word(), a), 
-                Faker.Question(Faker.Lorem.Word(), a),
-                Faker.Question(),
-                Faker.Question());
+                Faker.Question(Faker.Lorem.Word(), a[0]), 
+                Faker.Question(Faker.Lorem.Word(), a[0]),
+                Faker.Question(Faker.Lorem.Word(), a[1]),
+                Faker.Question(Faker.Lorem.Word(), a[2]));
             
-            var cmd = await new RehearsalFactory()
+            var questions = new RehearsalFactory()
                 .AddQuestionList(questionList)
                 .UseMultipleChoiceQuestions(3)
                 .Create();
             
             var q = questionList.Questions.First();
 
-            Check.That(cmd.Questions)
+            Check.That(questions)
                 .HasElementThatMatches(s => s.Question == q.Question)
                 .Which.IsInstanceOf<RehearsalQuestionModel, MultipleChoiceQuestionModel>()
                 .And.Satisfies(

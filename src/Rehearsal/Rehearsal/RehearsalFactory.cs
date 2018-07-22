@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Rehearsal.Common;
-using Rehearsal.Messages.QuestionList;
 using Rehearsal.Messages.Rehearsal;
 
 namespace Rehearsal.Rehearsal
 {
-    public class RehearsalFactory : IRehearsalFactory
+    public class RehearsalFactory
     {
         private IQuestionGenerator QuestionGenerator { get; set; }
         private Randomizer _randomizer;
@@ -23,23 +21,15 @@ namespace Rehearsal.Rehearsal
 
         private IList<QuestionDefinition> Questions { get; }
         
-        public Task<StartRehearsalCommand> Create()
+        public IList<RehearsalQuestionModel> Create()
         {
-            var id = Guid.NewGuid();
-
-            var cmd = new StartRehearsalCommand()
-            {
-                Id = id,
-                Questions = _randomizer.Randomize(Questions).Select(PrepareQuestion).ToList()
-            };
-            
-            return Task.FromResult(cmd);
+            return _randomizer.Randomize(Questions).Select(PrepareQuestion).ToList();
         }
 
         private RehearsalQuestionModel PrepareQuestion(QuestionDefinition question) => 
             QuestionGenerator.PrepareQuestion(question);
 
-        public IRehearsalFactory AddQuestionList(QuestionListModel questionList)
+        public RehearsalFactory AddQuestionList(QuestionList.QuestionList questionList)
         {
             foreach (var question in questionList.Questions)
             {
@@ -50,14 +40,14 @@ namespace Rehearsal.Rehearsal
             return this;
         }
 
-        public IRehearsalFactory UseOpenQuestions()
+        public RehearsalFactory UseOpenQuestions()
         {
             QuestionGenerator = new OpenRehearsalQuestionGenerator();
 
             return this;
         }
 
-        public IRehearsalFactory UseMultipleChoiceQuestions(int answerNumber)
+        public RehearsalFactory UseMultipleChoiceQuestions(int answerNumber)
         {
             QuestionGenerator = new MultipleChoiceQuestionGenerator(answerNumber, Questions, _randomizer);
 
