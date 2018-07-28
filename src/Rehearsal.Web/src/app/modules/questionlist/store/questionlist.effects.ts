@@ -8,18 +8,20 @@ import {Actions, Effect} from "@ngrx/effects";
 import {QuestionListService} from "../services/questionlist.service";
 import * as QuestionListActions from "./questionlist.actions";
 import {
-    LoadQuestionListOverview,  LoadQuestionListOverviewSuccess, LoadQuestionListOverviewFailed,
+    LoadQuestionListOverview, LoadQuestionListOverviewSuccess, LoadQuestionListOverviewFailed,
     LoadQuestionList, LoadQuestionListFailed, LoadQuestionListSuccess,
     RemoveQuestionList, RemoveQuestionListFailed, RemoveQuestionListSuccess,
-    SaveQuestionList, SaveQuestionListFailed, SaveQuestionListSuccess
+    SaveQuestionList, SaveQuestionListFailed, SaveQuestionListSuccess, AddNewLine
 } from "./questionlist.actions";
 
 import {
-    QuestionlistState, selectSanitizedQuestionList, selectSelectedQuestionList
+    QuestionlistState, selectFormState, selectSanitizedQuestionList, selectSelectedQuestionList
 } from "./questionlist.state";
 
 import {QuestionList} from "../../../types";
 import QuestionListModel = QuestionList.QuestionListModel;
+import {FocusAction} from "ngrx-forms";
+import {delay} from "rxjs/internal/operators";
 
 @Injectable()
 export class QuestionlistEffects {
@@ -56,7 +58,7 @@ export class QuestionlistEffects {
     @Effect() saveQuestionList$: Observable<Action> = this.actions$
         .ofType<SaveQuestionList>(QuestionListActions.SAVE_LIST)
         .pipe(
-            withLatestFrom(this.store.select(selectSanitizedQuestionList), (a, l) => l.value),
+            withLatestFrom(this.store.select(selectSanitizedQuestionList), (a, l) => l),
             switchMap((list) => {
                 let save = list.id !== null
                     ? this.questionListService.update(list).pipe(map(_ => list.id))
@@ -98,4 +100,16 @@ export class QuestionlistEffects {
         .pipe(
             tap(action => this.router.navigate(['/questionlists']))
         );
+
+    @Effect() focusNewLine$: Observable<Action> = this.actions$
+        .ofType<AddNewLine>(QuestionListActions.ADD_NEW_LINE)
+        .pipe(
+            delay(1),
+            withLatestFrom(this.store.select(selectFormState), (a, formState) => formState),
+            map(formState => {
+                let questionToFocus = formState.controls.questions.controls.length -1;
+
+                return new FocusAction(formState.controls.questions.controls[questionToFocus].controls.question.id);
+            })
+        )
 }

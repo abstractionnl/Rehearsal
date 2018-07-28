@@ -6,6 +6,7 @@ import {RouterModule} from "@angular/router";
 
 import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
+import { NgrxFormsModule } from 'ngrx-forms';
 
 import {BsDropdownModule, ModalModule} from 'ngx-bootstrap';
 
@@ -44,7 +45,8 @@ import {ConfirmRemoveQuestionlistComponent} from "./components/confirm-remove-qu
             questionListEditor: questionListReducer,
         }, ),
         BsDropdownModule.forRoot(),
-        EffectsModule.forFeature([QuestionlistEffects])
+        EffectsModule.forFeature([QuestionlistEffects]),
+        NgrxFormsModule
     ],
     entryComponents: [ ConfirmSaveQuestionlistComponent, ConfirmCopyQuestionlistComponent, ConfirmRemoveQuestionlistComponent ],
     providers: [

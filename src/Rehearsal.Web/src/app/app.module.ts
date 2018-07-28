@@ -24,7 +24,6 @@ import {EffectsModule} from "@ngrx/effects";
     declarations: [
         AppComponent,
         DashboardComponent,
-        FormValidationStyleDirective
     ],
     imports: [
         BrowserModule, FormsModule, HttpClientModule,

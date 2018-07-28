@@ -1,11 +1,53 @@
 import * as QuestionListActions from "./questionlist.actions";
 import {
-    initialState, QuestionlistEditorState
+    initialState, QuestionlistEditorState, selectSelectedQuestionList
 } from "./questionlist.state";
 
-import _ from "lodash";
+import {
+    addArrayControl,
+    createFormGroupState,
+    FormArrayState,
+    formGroupReducer, markAsDirty,
+    removeArrayControl, setErrors, updateArray, updateArrayWithFilter, updateGroup,
+    validate
+} from "ngrx-forms";
+import {required} from "ngrx-forms/validation";
+
+import {QuestionList} from "../../../types";
+import QuestionListModel = QuestionList.QuestionListModel;
+import QuestionModel = QuestionList.QuestionModel;
+
+const validateQuestionModel = updateGroup<QuestionModel>({
+    question: validate(required),
+    answer: validate(required)
+});
+
+const noValidateQuestionModel = updateGroup<QuestionModel>({
+    question: setErrors({}),
+    answer: setErrors({})
+});
+
+export const validateAndUpdateForm = updateGroup<QuestionListModel>({
+    title: validate(required),
+    questionTitle: validate(required),
+    answerTitle: validate(required),
+    questions: updateArray<QuestionModel>(state => {
+        if (!state.value.answer && !state.value.question) {
+            return noValidateQuestionModel(state);
+        }
+
+        return validateQuestionModel(state);
+    })
+});
 
 export function questionListReducer(state: QuestionlistEditorState = initialState, action: QuestionListActions.All): QuestionlistEditorState {
+    if (state.formState != null) {
+        const formState = formGroupReducer(state.formState, action);
+        if (formState !== state.formState) {
+            state = { ...state, formState: validateAndUpdateForm(formState) };
+        }
+    }
+
     switch (action.type) {
         case QuestionListActions.LOAD_OVERVIEW_SUCCESS:
             return {
@@ -34,51 +76,40 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
 
             return {
                 ...state,
-                isPristine: true,
-                list: newList
+                formState: createFormGroupState<QuestionListModel>("formid", newList)
             };
 
         case QuestionListActions.LOAD_LIST_SUCCESS:
             return {
                 ...state,
-                isPristine: true,
-                list: action.payload
+                formState: createFormGroupState<QuestionListModel>("formid", action.payload)
             };
 
         case QuestionListActions.LOAD_LIST_FAILED:
             return {
                 ...state,
-                isPristine: false,
-                list: null
+                formState: null
             };
 
         case QuestionListActions.SAVE_LIST_SUCCESS:
             return {
                 ...state,
-                isPristine: true,
-                list: action.payload
-            };
-
-        case QuestionListActions.LIST_EDITED:
-            return {
-                ...state,
-                isPristine: false,
-                list: _.extend({}, state.list, action.payload)
+                formState: createFormGroupState<QuestionListModel>("formid", action.payload)
             };
 
         case QuestionListActions.REMOVE_LIST_SUCCESS:
             return {
                 ...state,
-                isPristine: true,
-                list: state.list.id == action.payload.id ? null : state.list
+                formState: null
             };
 
         case QuestionListActions.SWAP_LIST:
+            const list = state.formState.value;
             let swappedList = {
-                ...state.list,
-                questionTitle: state.list.answerTitle,
-                answerTitle: state.list.questionTitle,
-                questions: state.list.questions.map(q => ({
+                ...list,
+                questionTitle: list.answerTitle,
+                answerTitle: list.questionTitle,
+                questions: list.questions.map(q => ({
                     ...q,
                     question: q.answer,
                     answer: q.question
@@ -87,21 +118,44 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
 
             return {
                 ...state,
-                isPristine: false,
-                list: swappedList
+                formState: markAsDirty(createFormGroupState<QuestionListModel>("formid", swappedList))
             };
 
         case QuestionListActions.COPY_LIST:
+            const list2 = state.formState.value;
             let copiedList = {
-                ...state.list,
+                ...list2,
                 id: null,
                 title: action.payload.newTitle
             };
 
             return {
                 ...state,
-                isPristine: false,
-                list: copiedList
+                formState: markAsDirty(createFormGroupState<QuestionListModel>("formid", copiedList))
+            };
+
+        case QuestionListActions.ADD_NEW_LINE:
+            return {
+                ...state,
+                formState: {
+                    ...state.formState,
+                    controls: {
+                        ...state.formState.controls,
+                        questions: addArrayControl(<FormArrayState>(state.formState.controls.questions), {question: '', answer: ''})
+                    }
+                }
+            };
+
+        case QuestionListActions.REMOVE_LINE:
+            return {
+                ...state,
+                formState: {
+                    ...state.formState,
+                    controls: {
+                        ...state.formState.controls,
+                        questions: removeArrayControl(<FormArrayState>(state.formState.controls.questions), action.index)
+                    }
+                }
             };
 
         default:

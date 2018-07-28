@@ -1,30 +1,30 @@
-﻿<form [formGroup]="form" (submit)="save()" *ngIf="questionList">
+﻿<form *ngIf="formState">
     <div class="clearfix"></div>
 
     <div class="row">
-        <div class="form-group col-sm-10" formValidationStyle>
+        <div class="form-group col-sm-10" formValidationStyle="formState.controls.title">
             <label for="title" class="control-label">Titel</label>
-            <input type="text" class="form-control" id="title" name="title" formControlName="title" />
+            <input type="text" class="form-control" id="title" name="title" [ngrxFormControlState]="formState.controls.title" />
         </div>
     </div>
     <div class="row">
         <div class="form-group col-sm-5" formValidationStyle>
             <label for="questionTitle" class="control-label">Vraagtaal</label>
-            <input type="text" class="form-control" formControlName="questionTitle" />
+            <input type="text" class="form-control" [ngrxFormControlState]="formState.controls.questionTitle" />
         </div>
         <div class="form-group col-sm-5" formValidationStyle>
             <label for="answerTitle" class="control-label">Antwoordtaal</label>
-            <input type="text" class="form-control" formControlName="answerTitle" />
+            <input type="text" class="form-control" [ngrxFormControlState]="formState.controls.answerTitle" />
         </div>
     </div>
     <hr />
-    <div formArrayName="questions">
-        <div class="row" *ngFor="let question of questions.controls;let index = index; let last = last" [formGroupName]="index">
+    <div>
+        <div class="row" *ngFor="let questionGroup of formState.controls.questions.controls; trackBy: trackById; let index = index; let last = last">
             <div class="form-group col-sm-5" formValidationStyle>
-                <input type="text" class="form-control" id="question" formControlName="question" autocapitalize="none" autocomplete="off" />
+                <input type="text" class="form-control" id="question" [ngrxFormControlState]="questionGroup.controls.question" [ngrxEnableFocusTracking]="true" autocapitalize="none" autocomplete="off" />
             </div>
             <div class="form-group col-sm-5" formValidationStyle>
-                <input type="text" class="form-control" id="answer" formControlName="answer" autocapitalize="none" autocomplete="off" (keydown.tab)="!last || addQuestion();" required />
+                <input type="text" class="form-control" id="answer" [ngrxFormControlState]="questionGroup.controls.answer" autocapitalize="none" autocomplete="off" (keydown.tab)="!last || addQuestion();" required />
             </div>
             <div class="col-sm-1">
                 <button class="btn btn-default" type="button" (click)="removeQuestion(index)" tabindex="-1"><span class="glyphicon glyphicon-remove"></span></button>
@@ -35,6 +35,6 @@
         <button class="btn btn-default" type="button" (click)="addQuestion()"><span class="glyphicon glyphicon-plus"></span> regel toevoegen</button>
     </div>
     <div class="btn-group pull-right">
-        <button type="submit" class="btn btn-success" [disabled]="!canSave"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
+        <button type="submit" class="btn btn-success" [disabled]="!canSave()"><span class="glyphicon glyphicon-floppy-disk"></span> Opslaan</button>
     </div>
 </form>

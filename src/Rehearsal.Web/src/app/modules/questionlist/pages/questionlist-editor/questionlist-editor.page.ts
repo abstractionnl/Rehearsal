@@ -18,17 +18,19 @@ import {
     selectCanCopy,
     selectCanDelete,
     selectCanSave,
-    selectCanSwap,
+    selectCanSwap, selectFormState,
     selectQuestionListOverview,
     selectSelectedQuestionList
 } from "../../store/questionlist.state";
 import {
-    CopyQuestionList, QuestionListEdited, RemoveQuestionList, SaveQuestionList,
+    AddNewLine,
+    CopyQuestionList, QuestionListEdited, RemoveLine, RemoveQuestionList, SaveQuestionList,
     SwapQuestionList
 } from "../../store/questionlist.actions";
 
 import {ConfirmCopyQuestionlistComponent, ModalResult} from "../../components/confirm-copy-questionlist/confirm-copy-questionlist.component";
 import {ConfirmRemoveQuestionlistComponent} from "../../components/confirm-remove-questionlist/confirm-remove-questionlist.component";
+import {FormGroupState} from "ngrx-forms";
 
 @Component({
     templateUrl: 'questionlist-editor.page.html'
@@ -37,6 +39,7 @@ export class QuestionlistEditorPage implements OnInit {
 
     public questionLists$: Observable<QuestionListOverviewModel[]>;
     public selectedList$: Observable<QuestionListModel>;
+    public formState$: Observable<FormGroupState<QuestionListModel>>;
 
     public canSave$: Observable<boolean>;
     public canDelete$: Observable<boolean>;
@@ -50,6 +53,7 @@ export class QuestionlistEditorPage implements OnInit {
     {
         this.questionLists$ = this.store.select(selectQuestionListOverview);
         this.selectedList$ = this.store.select(selectSelectedQuestionList);
+        this.formState$ = this.store.select(selectFormState);
         this.canSave$ = this.store.select(selectCanSave);
         this.canDelete$ = this.store.select(selectCanDelete);
         this.canSwap$ = this.store.select(selectCanSwap);
@@ -69,6 +73,14 @@ export class QuestionlistEditorPage implements OnInit {
 
     save() {
         this.store.dispatch(new SaveQuestionList());
+    }
+
+    newLine() {
+        this.store.dispatch(new AddNewLine());
+    }
+
+    removeLine(index: number) {
+        this.store.dispatch(new RemoveLine(index));
     }
 
     changed(questionList: QuestionListModel) {

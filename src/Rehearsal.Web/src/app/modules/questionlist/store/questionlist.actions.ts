@@ -20,6 +20,8 @@ export const REMOVE_LIST_SUCCESS = '[QuestionList] Remove list success';
 export const REMOVE_LIST_FAILED = '[QuestionList] Remove list failed';
 export const SWAP_LIST = '[QuestionList] Swap list';
 export const COPY_LIST = '[QuestionList] Copy list';
+export const ADD_NEW_LINE = '[QuestionList] New line';
+export const REMOVE_LINE = '[QuestionList] Remove line';
 
 export class LoadQuestionListOverview implements Action {
     readonly type = LOAD_OVERVIEW;
@@ -101,10 +103,20 @@ export class CopyQuestionList implements Action {
     constructor(public payload: { newTitle: string }) { }
 }
 
+export class AddNewLine implements Action {
+    readonly type = ADD_NEW_LINE;
+    constructor() {}
+}
+
+export class RemoveLine implements Action {
+    readonly type = REMOVE_LINE;
+    constructor(public index: number) {}
+}
+
 export type All =
     LoadQuestionListOverview | LoadQuestionListOverviewSuccess | LoadQuestionListOverviewFailed |
     NewQuestionList | QuestionListEdited |
     LoadQuestionList | LoadQuestionListSuccess | LoadQuestionListFailed |
     SaveQuestionList | SaveQuestionListSuccess | SaveQuestionListFailed |
     RemoveQuestionList | RemoveQuestionListSuccess | RemoveQuestionListFailed |
-    SwapQuestionList | CopyQuestionList;
+    SwapQuestionList | CopyQuestionList | AddNewLine | RemoveLine;

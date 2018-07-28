@@ -21,12 +21,14 @@
             [canCopy]="canCopy$ | async"
             (onSwap)="swap()"
             [canSwap]="canSwap$ | async"></questionlist-buttons>
-        <questionlist-form
+        <!--<questionlist-form
             [questionList]="selectedList$ | async"
             (onSave)="save()"
             [canSave]="canSave$ | async"
             (onChange)="changed($event)"
-            *ngIf="!!(selectedList$ | async)"></questionlist-form>
+            *ngIf="!!(selectedList$ | async)"></questionlist-form>-->
+        <questionlist-form [formState]="formState$ | async"
+            (onNewLine)="newLine()" (onRemoveLine)="removeLine($event)"></questionlist-form>
         <no-questionlist-selected *ngIf="!(selectedList$ | async)"></no-questionlist-selected>
     </div>
 </div>
