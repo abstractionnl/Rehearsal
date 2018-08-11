@@ -26,6 +26,7 @@ import {ConfirmSaveQuestionlistComponent} from "./components/confirm-save-questi
 import {QuestionlistButtonsComponent} from "./components/questionlist-buttons/questionlist-buttons.component";
 import {ConfirmCopyQuestionlistComponent} from "./components/confirm-copy-questionlist/confirm-copy-questionlist.component";
 import {ConfirmRemoveQuestionlistComponent} from "./components/confirm-remove-questionlist/confirm-remove-questionlist.component";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import {ConfirmRemoveQuestionlistComponent} from "./components/confirm-remove-qu
         QuestionlistButtonsComponent
     ],
     imports: [
+        SharedModule,
         CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule,
         ModalModule.forRoot(), QuestionlistRoutingModule,
         StoreModule.forFeature('questionlist', {

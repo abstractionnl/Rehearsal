@@ -7,7 +7,6 @@ import { AlertModule, ModalModule, ProgressbarModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard.component';
-import { FormValidationStyleDirective } from "./shared/directives/form-validation-style.directive";
 
 import {AppRoutingModule} from './app-routing.module';
 
@@ -23,7 +22,7 @@ import {EffectsModule} from "@ngrx/effects";
 @NgModule({
     declarations: [
         AppComponent,
-        DashboardComponent,
+        DashboardComponent
     ],
     imports: [
         BrowserModule, FormsModule, HttpClientModule,
@@ -35,8 +34,6 @@ import {EffectsModule} from "@ngrx/effects";
         StoreDevtoolsModule.instrument({
             maxAge: 25 //  Retains last 25 states
         })
-    ],
-    exports: [
     ],
     providers: [
 

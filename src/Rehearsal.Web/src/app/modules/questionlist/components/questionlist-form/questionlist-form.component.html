@@ -2,17 +2,17 @@
     <div class="clearfix"></div>
 
     <div class="row">
-        <div class="form-group col-sm-10" formValidationStyle="formState.controls.title">
+        <div class="form-group col-sm-10" [formValidationStyle]="formState.controls.title">
             <label for="title" class="control-label">Titel</label>
             <input type="text" class="form-control" id="title" name="title" [ngrxFormControlState]="formState.controls.title" />
         </div>
     </div>
     <div class="row">
-        <div class="form-group col-sm-5" formValidationStyle>
+        <div class="form-group col-sm-5" [formValidationStyle]="formState.controls.questionTitle">
             <label for="questionTitle" class="control-label">Vraagtaal</label>
             <input type="text" class="form-control" [ngrxFormControlState]="formState.controls.questionTitle" />
         </div>
-        <div class="form-group col-sm-5" formValidationStyle>
+        <div class="form-group col-sm-5" [formValidationStyle]="formState.controls.answerTitle">
             <label for="answerTitle" class="control-label">Antwoordtaal</label>
             <input type="text" class="form-control" [ngrxFormControlState]="formState.controls.answerTitle" />
         </div>
@@ -20,10 +20,10 @@
     <hr />
     <div>
         <div class="row" *ngFor="let questionGroup of formState.controls.questions.controls; trackBy: trackById; let index = index; let last = last">
-            <div class="form-group col-sm-5" formValidationStyle>
+            <div class="form-group col-sm-5" [formValidationStyle]="questionGroup.controls.question">
                 <input type="text" class="form-control" id="question" [ngrxFormControlState]="questionGroup.controls.question" [ngrxEnableFocusTracking]="true" autocapitalize="none" autocomplete="off" />
             </div>
-            <div class="form-group col-sm-5" formValidationStyle>
+            <div class="form-group col-sm-5" [formValidationStyle]="questionGroup.controls.answer">
                 <input type="text" class="form-control" id="answer" [ngrxFormControlState]="questionGroup.controls.answer" autocapitalize="none" autocomplete="off" (keydown.tab)="!last || addQuestion();" required />
             </div>
             <div class="col-sm-1">

@@ -1,14 +1,23 @@
-import {ContentChildren, Directive, ElementRef, OnInit, QueryList, Renderer2, AfterViewInit, OnDestroy} from "@angular/core";
-import { NgModel } from "@angular/forms";
+import {
+    Directive,
+    ElementRef,
+    OnInit,
+    Renderer2,
+    OnDestroy,
+    Input
+} from "@angular/core";
 
 import { Subject ,  Subscription } from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
+import {FormControlState} from "ngrx-forms/src/state";
 
 @Directive({
     selector: '[formValidationStyle]'
 })
-export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDestroy {
-    @ContentChildren(NgModel, {descendants: true}) modelComponents: QueryList<NgModel>;
+export class FormValidationStyleDirective implements OnInit, OnDestroy {
+    @Input("formValidationStyle") public set setState(state: FormControlState<any>) {
+        this.errorSubject.next(!state.isValid);
+    }
 
     static VALID_STYLE: string = 'has-success';
     static ERROR_STYLE: string = 'has-error';
@@ -18,7 +27,6 @@ export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDe
 
     constructor(private element: ElementRef, private renderer: Renderer2)
     {
-        console.log('FormValidationStyleDirective');
     }
 
     ngOnInit(): void {
@@ -38,22 +46,4 @@ export class FormValidationStyleDirective implements OnInit, AfterViewInit, OnDe
     ngOnDestroy(): void {
         this.errorSubjectSubscription.unsubscribe();
     }
-
-    ngAfterViewInit() {
-        this.modelComponents.changes.subscribe(_ => this.update());
-        //this.modelComponents.forEach(ngModel => ngModel..subscribe(() => this.update()));
-        this.modelComponents.forEach(ngModel => ngModel.valueChanges.subscribe(() => this.update()));
-        this.update();
-    }
-
-    private update() {
-        if (!this.modelComponents)
-            return;
-
-        let hasError = this.modelComponents.some(x => !x.valid && (x.touched || x.dirty));
-        let isValid = !this.modelComponents.some(x => !x.valid);
-
-        this.errorSubject.next(hasError);
-    }
-
 }
