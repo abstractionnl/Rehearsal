@@ -141,7 +141,7 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
                     ...state.formState,
                     controls: {
                         ...state.formState.controls,
-                        questions: addArrayControl(<FormArrayState>(state.formState.controls.questions), {question: '', answer: ''})
+                        questions: addArrayControl<QuestionList.QuestionModel>(<FormArrayState<QuestionList.QuestionModel>>(state.formState.controls.questions), {question: '', answer: ''})
                     }
                 }
             };
@@ -153,7 +153,7 @@ export function questionListReducer(state: QuestionlistEditorState = initialStat
                     ...state.formState,
                     controls: {
                         ...state.formState.controls,
-                        questions: removeArrayControl(<FormArrayState>(state.formState.controls.questions), action.index)
+                        questions: removeArrayControl(<FormArrayState<QuestionList.QuestionModel>>(state.formState.controls.questions), action.index)
                     }
                 }
             };
