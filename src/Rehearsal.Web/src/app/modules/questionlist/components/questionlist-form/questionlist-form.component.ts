@@ -1,8 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-
-import {Subscription} from "rxjs";
-import {debounceTime, filter, map} from "rxjs/operators";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {QuestionList} from "../../../../types";
 import {FormGroupState} from "ngrx-forms";
@@ -28,9 +24,5 @@ export class QuestionlistFormComponent {
 
     trackById(index, group): string {
         return group.id;
-    }
-
-    canSave() {
-        return !this.formState.isPristine && this.formState.isValid && !this.formState.isValidationPending;
     }
 }

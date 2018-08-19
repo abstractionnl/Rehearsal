@@ -11,7 +11,7 @@
 
         <a class="btn btn-default" (click)="new()">Nieuwe woordenlijst</a>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8" *ngIf="(selectedList$ | async)">
         <questionlist-buttons
             (onSave)="save()"
             [canSave]="canSave$ | async"
@@ -21,15 +21,23 @@
             [canCopy]="canCopy$ | async"
             (onSwap)="swap()"
             [canSwap]="canSwap$ | async"></questionlist-buttons>
-        <!--<questionlist-form
-            [questionList]="selectedList$ | async"
-            (onSave)="save()"
-            [canSave]="canSave$ | async"
-            (onChange)="changed($event)"
-            *ngIf="!!(selectedList$ | async)"></questionlist-form>-->
+
         <questionlist-form [formState]="formState$ | async"
             (onNewLine)="newLine()" (onRemoveLine)="removeLine($event)"></questionlist-form>
-        <no-questionlist-selected *ngIf="!(selectedList$ | async)"></no-questionlist-selected>
+
+        <questionlist-buttons
+            (onSave)="save()"
+            [canSave]="canSave$ | async"
+            (onDelete)="delete()"
+            [canDelete]="canDelete$ | async"
+            (onCopy)="copy()"
+            [canCopy]="canCopy$ | async"
+            (onSwap)="swap()"
+            [canSwap]="canSwap$ | async"></questionlist-buttons>
+    </div>
+
+    <div class="col-md-8" *ngIf="!(selectedList$ | async)">
+        <no-questionlist-selected></no-questionlist-selected>
     </div>
 </div>
 
