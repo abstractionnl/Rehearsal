@@ -1,6 +1,6 @@
 ﻿<h1>Piers woordjes</h1>
 <notifications></notifications>
-<ul class="nav nav-tabs" *ngIf="auth.loggedIn()">
+<ul class="nav nav-tabs" *ifLoggedIn>
   <li role="presentation" routerLinkActive="active"><a routerLink="/dashboard">Dashboard</a></li>
   <li role="presentation" routerLinkActive="active"><a routerLink="/questionlists">Woordenlijsten</a></li>
 </ul>
