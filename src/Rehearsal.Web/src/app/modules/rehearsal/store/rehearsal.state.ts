@@ -55,3 +55,8 @@ export const selectAnsweredQuestionCount = createSelector(
     selectCurrentSession,
     session => session.questions.filter(q => q.result).length
 );
+
+export const selectIncorrectAnsweredQuestions = createSelector(
+    selectCurrentSession,
+    session => session.questions.filter(q => q.result && !q.result.isCorrect)
+);

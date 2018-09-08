@@ -18,6 +18,7 @@ import {StoreModule} from "@ngrx/store";
 import {rehearsalReducer} from "./store/rehearsal.reducer";
 import {OpenRehearsalQuestionComponent} from "./components/open-rehearsal-question/open-rehearsal-question.component";
 import {MultipleChoiceQuestionComponent} from "./components/multiplechoice-question/multiplechoice-question.component";
+import {RehearsalStatisticsComponent} from "./components/rehearsal-statistics/rehearsal-statistics.component";
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import {MultipleChoiceQuestionComponent} from "./components/multiplechoice-quest
         OpenRehearsalQuestionComponent,
         MultipleChoiceQuestionComponent,
         RehearsalProgressComponent,
+        RehearsalStatisticsComponent,
         FocusDirective
     ],
     imports: [

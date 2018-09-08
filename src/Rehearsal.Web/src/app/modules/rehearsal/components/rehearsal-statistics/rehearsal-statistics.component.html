@@ -1,0 +1,20 @@
+<p class="text-info text-center" *ngIf="incorrectQuestions.length == 0; else errors">Alles goed, goed bezig!</p>
+
+<ng-template #errors>
+    <p class="text-warning text-center">
+        Een paar foutjes gemaakt, volgende keer beter
+    </p>
+    <table class="table">
+        <tr>
+            <th>Vraag</th>
+            <th>Jouw antwoord</th>
+            <th>Juiste antwoord</th>
+        </tr>
+        <tr *ngFor="let q of incorrectQuestions">
+            <td>{{q.question.question}}</td>
+            <td>{{q.result.givenAnswer}}</td>
+            <td>{{q.result.correctAnswers[0]}}</td>
+        </tr>
+    </table>
+</ng-template>
+

@@ -8,7 +8,9 @@
                 <multiplechoice-question *ngSwitchCase="'MultipleChoiceQuestion'" [question]="currentQuestion | async" [answerResult]="currentResult | async" (onSubmit)="submitAnswer($event)" (onNext)="gotoNext()"></multiplechoice-question>
             </ng-container>
 
-            <p class="text-info text-center" *ngIf="isFinished | async">Dat wassum.</p>
+            <div *ngIf="isFinished | async">
+                <rehearsal-statistics [incorrectQuestions]="incorrectQuestions | async"></rehearsal-statistics>
+            </div>
         </div>
     </div>
 </div>
