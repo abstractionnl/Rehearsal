@@ -72,15 +72,15 @@ export class MultipleChoiceQuestionComponent {
     }
 
     isCorrect(answer: number): boolean {
-        return this.answerResult && this.answerResult.correctAnswers.includes(String(answer));
+        return this.answerResult && this.answerResult.correctAnswers.includes(this._question.availableAnswers[answer]);
     }
 
     isInCorrect(answer: number): boolean {
-        return this.answerResult && !this.answerResult.correctAnswers.includes(String(answer));
+        return this.answerResult && !this.answerResult.correctAnswers.includes(this._question.availableAnswers[answer]);
     }
 
     isGivenAnswer(answer: number): boolean {
-        return this.answer && this.answer === String(answer);
+        return this.answer && this.answer === this._question.availableAnswers[answer];
     }
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -91,7 +91,7 @@ export class MultipleChoiceQuestionComponent {
         if (!Number.isNaN(keyAsNumber)) {
             keyAsNumber = keyAsNumber-1;        // Numbers should be one indexed
             if (keyAsNumber in this._question.availableAnswers) {
-                this.answer = String(keyAsNumber);
+                this.answer = this._question.availableAnswers[keyAsNumber];
                 this.focusCheckButton.emit();
             }
         }

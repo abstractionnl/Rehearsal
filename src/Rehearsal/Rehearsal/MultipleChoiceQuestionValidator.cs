@@ -15,15 +15,13 @@ namespace Rehearsal.Rehearsal
         
         public Task<AnswerResultModel> Validate(string answer)
         {
-            if (!int.TryParse(answer, out int answerAsInt))
-                throw new InvalidOperationException($"Answer '{answer}' could not be parsed as an integer");
-            
-            var isCorrect = Question.CorrectAnswer == answerAsInt;
+            var correctAnswer = Question.AvailableAnswers[Question.CorrectAnswer];
+            var isCorrect = correctAnswer == answer;
                 
             return Task.FromResult(new AnswerResultModel()
             {
                 QuestionId = Question.Id,
-                CorrectAnswers = new[] { Question.CorrectAnswer.ToString() },
+                CorrectAnswers = new[] { correctAnswer },
                 GivenAnswer = answer,
                 IsCorrect = isCorrect
             });
