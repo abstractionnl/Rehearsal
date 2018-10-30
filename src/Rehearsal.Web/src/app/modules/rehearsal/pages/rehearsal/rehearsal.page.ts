@@ -14,7 +14,7 @@ import {
     selectQuestionCount
 } from "../../store/rehearsal.state";
 import {Observable} from "rxjs/index";
-import {GiveAnswer, NextQuestion, PreviousQuestion} from "../../store/rehearsal.actions";
+import {GiveAnswer, NextQuestion, PreviousQuestion, Repeat} from "../../store/rehearsal.actions";
 
 @Component({
     templateUrl: './rehearsal.page.html'
@@ -49,6 +49,10 @@ export class RehearsalPage {
 
     gotoNext() {
         this.store.dispatch(new NextQuestion());
+    }
+
+    repeat() {
+        this.store.dispatch(new Repeat());
     }
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CQRSlite.Domain;
+using Rehearsal.Common;
 using Rehearsal.Messages;
 using Rehearsal.Messages.QuestionList;
 using Rehearsal.Messages.Rehearsal;
@@ -40,6 +41,12 @@ namespace Rehearsal.Rehearsal
         public void Apply(RehearsalStartedEvent @event)
         {
             Questions = @event.Questions;
+        }
+
+        public static Rehearsal CreateFrom(Guid newRehearsalId, Rehearsal rehearsal)
+        {
+            var randomizer = new Randomizer();
+            return new Rehearsal(newRehearsalId, randomizer.Randomize(rehearsal.Questions).ToList());
         }
     }
 }

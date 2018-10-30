@@ -72,5 +72,19 @@ namespace Rehearsal.WebApi.Rehearsal
                 })
                 .Match<IActionResult>(x => Ok(x), () => BadRequest());
         }
+
+        [HttpPost, Route("repeat")]
+        public async Task<IActionResult> Repeat([FromBody] RepeatRehearsalRequest request)
+        {
+            var rehearsalId = Guid.NewGuid();
+            
+            await CommandSender.Send(new RepeatRehearsalCommand()
+            {
+                Id = rehearsalId,
+                RehearsalId = request.RehearsalId
+            });
+            
+            return Ok(rehearsalId);
+        }
     }
 }

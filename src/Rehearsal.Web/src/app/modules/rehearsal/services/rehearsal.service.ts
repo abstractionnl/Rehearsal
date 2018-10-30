@@ -4,13 +4,15 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable } from 'rxjs';
 
 import {Rehearsal, System} from "../../../types";
-import StartRehearsalRequest = Rehearsal.StartRehearsalRequest;
 import Guid = System.Guid;
-import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
-import AnswerResultModel = Rehearsal.AnswerResultModel;
-import GiveAnswerRequest = Rehearsal.GiveAnswerRequest;
 
 import {map} from "rxjs/operators";
+
+import AnswerResultModel = Rehearsal.AnswerResultModel;
+import GiveAnswerRequest = Rehearsal.GiveAnswerRequest;
+import RehearsalSessionModel = Rehearsal.RehearsalSessionModel;
+import StartRehearsalRequest = Rehearsal.StartRehearsalRequest;
+import RepeatRehearsalRequest = Rehearsal.RepeatRehearsalRequest;
 
 @Injectable()
 export class RehearsalService {
@@ -50,6 +52,20 @@ export class RehearsalService {
             .put(url, JSON.stringify(model), { headers: this.headers })
             .pipe(
                 map(response => response as AnswerResultModel)
+            );
+    }
+
+    public repeatRehearsal(rehearsalId: Guid): Observable<Guid> {
+        const url = `${this.apiUrl}/repeat`;
+
+        const model: RepeatRehearsalRequest = {
+            rehearsalId: rehearsalId
+        };
+
+        return this.http
+            .post(url, JSON.stringify(model), { headers: this.headers })
+            .pipe(
+                map(response => response as Guid)
             );
     }
 }

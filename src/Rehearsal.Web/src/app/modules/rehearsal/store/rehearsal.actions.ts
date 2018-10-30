@@ -16,6 +16,9 @@ export const GIVE_ANSWER_SUCCESS = '[Rehearsal] Give answer success';
 export const GIVE_ANSWER_FAILED = '[Rehearsal] Give answer failed';
 export const NEXT_QUESTION = '[Rehearsal] Next question';
 export const PREVIOUS_QUESTION = '[Rehearsal] Previous question';
+export const REPEAT = '[Rehearsal] Repeat';
+export const REPEAT_SUCCESS = '[Rehearsal] Repeat success';
+export const REPEAT_FAILED = '[Rehearsal] Repeat failed';
 
 export class CreateRehearsal implements Action {
     readonly type = CREATE_REHEARSAL;
@@ -72,7 +75,22 @@ export class PreviousQuestion implements Action {
     constructor() {}
 }
 
+export class Repeat implements Action {
+    readonly type = REPEAT;
+}
+
+export class RepeatRehearsalSuccess implements Action {
+    readonly type = REPEAT_SUCCESS;
+    constructor(public payload: { rehearsalId: System.Guid }) { }
+}
+
+export class RepeatRehearsalFailed implements Action {
+    readonly type = REPEAT_FAILED;
+    constructor(public payload: any) { }
+}
+
 export type All =
     CreateRehearsal | CreateRehearsalSuccess | CreateRehearsalFailed |
     LoadRehearsal | LoadRehearsalSuccess | LoadRehearsalFailed |
-    GiveAnswer | GiveAnswerSuccess | GiveAnswerFailed | NextQuestion | PreviousQuestion;
+    GiveAnswer | GiveAnswerSuccess | GiveAnswerFailed | NextQuestion | PreviousQuestion |
+    Repeat | RepeatRehearsalSuccess | RepeatRehearsalFailed;

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
-import {Actions, Effect} from "@ngrx/effects";
+import {Actions, Effect, ofType} from "@ngrx/effects";
 import {Observable, of} from "rxjs/index";
 import {Action, Store} from "@ngrx/store";
 import {
@@ -8,7 +8,7 @@ import {
     CreateRehearsalFailed,
     CreateRehearsalSuccess, GiveAnswer, GiveAnswerFailed, GiveAnswerSuccess,
     LoadRehearsal,
-    LoadRehearsalSuccess
+    LoadRehearsalSuccess, RepeatRehearsalFailed, RepeatRehearsalSuccess
 } from "./rehearsal.actions";
 
 import * as RehearsalActions from "./rehearsal.actions";
@@ -72,8 +72,25 @@ export class RehearsalEffects {
             )
         );
 
+    @Effect() repeat$: Observable<Action> = this.actions$
+        .pipe(
+            ofType(RehearsalActions.REPEAT),
+            withLatestFrom(
+                this.state$.select(selectCurrentSession),
+                (action, session) => session.id
+            ),
+            switchMap(sessionId =>
+                this.rehearsalService
+                    .repeatRehearsal(sessionId)
+                    .pipe(
+                        map(id => new RepeatRehearsalSuccess({rehearsalId: id})),
+                        catchError(err => of(new RepeatRehearsalFailed(err)))
+                    )
+            )
+        );
+
     @Effect({ dispatch: false }) navigateToRehearsalAfterCreate$: Observable<Action> = this.actions$
-        .ofType<CreateRehearsalSuccess>(RehearsalActions.CREATE_REHEARSAL_SUCCESS)
+        .ofType<CreateRehearsalSuccess | RepeatRehearsalSuccess>(RehearsalActions.CREATE_REHEARSAL_SUCCESS, RehearsalActions.REPEAT_SUCCESS)
         .pipe(
             tap((action: CreateRehearsalSuccess) => this.router.navigate(['/rehearsal', action.payload.rehearsalId]))
         );

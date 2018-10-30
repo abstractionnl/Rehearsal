@@ -63,6 +63,9 @@ export namespace Rehearsal {
     id: System.Guid;
     questions: Rehearsal.RehearsalQuestionModel[];
   }
+  export interface RepeatRehearsalRequest {
+    rehearsalId: System.Guid;
+  }
   export interface StartRehearsalRequest {
     questionListId: System.Guid;
     questionType: Rehearsal.RehearsalQuestionType;
