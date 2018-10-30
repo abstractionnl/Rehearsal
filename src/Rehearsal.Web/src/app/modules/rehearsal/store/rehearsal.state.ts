@@ -9,13 +9,8 @@ export interface RehearsalState {
 
 export interface RehearsalSessionState {
     id: System.Guid;
-    questions: RehearsalSessionStateQuestion[];
+    questions: Rehearsal.RehearsalQuestionModel[];
     currentQuestion: number;
-}
-
-export interface RehearsalSessionStateQuestion {
-    question: Rehearsal.RehearsalQuestionModel;
-    result: AnswerResultModel;
 }
 
 export const initialState: RehearsalState = {
@@ -37,13 +32,7 @@ export const selectIsFinished = createSelector(
 export const selectCurrentQuestion = createSelector(
     selectCurrentSession,
     selectIsFinished,
-    (session, isFinished) => (session && !isFinished) ? session.questions[session.currentQuestion].question : undefined
-);
-
-export const selectCurrentResult = createSelector(
-    selectCurrentSession,
-    selectIsFinished,
-    (session, isFinished) => (session && !isFinished) ? session.questions[session.currentQuestion].result : undefined
+    (session, isFinished) => (session && !isFinished) ? session.questions[session.currentQuestion] : undefined
 );
 
 export const selectQuestionCount = createSelector(
@@ -53,10 +42,10 @@ export const selectQuestionCount = createSelector(
 
 export const selectAnsweredQuestionCount = createSelector(
     selectCurrentSession,
-    session => session.questions.filter(q => q.result).length
+    session => session.questions.filter(q => q.givenAnswer !== null).length
 );
 
 export const selectIncorrectAnsweredQuestions = createSelector(
     selectCurrentSession,
-    session => session.questions.filter(q => q.result && !q.result.isCorrect)
+    session => session.questions.filter(q => !q.answeredCorrectly)
 );

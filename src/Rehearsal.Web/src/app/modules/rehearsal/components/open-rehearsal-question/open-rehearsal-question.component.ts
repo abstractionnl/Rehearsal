@@ -12,7 +12,6 @@ import {Rehearsal} from "../../../../types";
 export class OpenRehearsalQuestionComponent {
     private _question: Rehearsal.OpenRehearsalQuestionModel;
     private _answerGiven: boolean;
-    private _answerResult: Rehearsal.AnswerResultModel;
 
     @Output() onSubmit: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNext: EventEmitter<void> = new EventEmitter<void>();
@@ -25,8 +24,8 @@ export class OpenRehearsalQuestionComponent {
     @Input('question')
     set question(value: Rehearsal.OpenRehearsalQuestionModel) {
         this._question = value;
-        this.answer = '';
-        this._answerGiven = false;
+        this.answer = value.givenAnswer;
+        this._answerGiven = value.givenAnswer !== null;
         this.focusAnswerField.emit();
     }
 
@@ -35,17 +34,7 @@ export class OpenRehearsalQuestionComponent {
     }
 
     get answerGiven() {
-        return this._answerGiven || this._answerResult;
-    }
-
-    @Input('answerResult')
-    set answerResult(value: Rehearsal.AnswerResultModel) {
-        this._answerResult = value;
-        this.focusNextButton.emit();
-    }
-
-    get answerResult() {
-        return this._answerResult;
+        return this._answerGiven;
     }
 
     submit(): void {
@@ -64,15 +53,15 @@ export class OpenRehearsalQuestionComponent {
     }
 
     canGotoNext(): boolean {
-        return !!this.answerResult;
+        return this._answerGiven && this._question.givenAnswer != null;
     }
 
     isCorrect(): boolean {
-        return this.answerResult && this.answerResult.isCorrect;
+        return this._question.givenAnswer != null && this._question.answeredCorrectly;
     }
 
     isInCorrect(): boolean {
-        return this.answerResult && !this.answerResult.isCorrect;
+        return this._question.givenAnswer != null && !this._question.answeredCorrectly;
     }
 
     static readonly validationSchema = Joi.string().trim().required();

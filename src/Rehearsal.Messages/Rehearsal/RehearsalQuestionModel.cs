@@ -11,5 +11,7 @@ namespace Rehearsal.Messages.Rehearsal
         public string QuestionTitle { get; set; }
         public string Question { get; set; }
         public string AnswerTitle { get; set; }
+        public string GivenAnswer { get; set; }
+        public bool AnsweredCorrectly { get; set; }
     }
 }

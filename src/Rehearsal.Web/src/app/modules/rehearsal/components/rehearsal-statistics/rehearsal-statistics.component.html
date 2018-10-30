@@ -11,9 +11,9 @@
             <th>Juiste antwoord</th>
         </tr>
         <tr *ngFor="let q of incorrectQuestions">
-            <td>{{q.question.question}}</td>
-            <td>{{q.result.givenAnswer}}</td>
-            <td>{{q.result.correctAnswers[0]}}</td>
+            <td>{{q.question}}</td>
+            <td>{{q.givenAnswer}}</td>
+            <td>{{q.correctAnswers[0]}}</td>
         </tr>
     </table>
 </ng-template>

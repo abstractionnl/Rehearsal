@@ -11,7 +11,6 @@ import {Rehearsal} from "../../../../types";
 export class MultipleChoiceQuestionComponent {
     private _question: Rehearsal.MultipleChoiceQuestionModel;
     private _answerGiven: boolean;
-    private _answerResult: Rehearsal.AnswerResultModel;
 
     @Output() onSubmit: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNext: EventEmitter<void> = new EventEmitter<void>();
@@ -24,9 +23,13 @@ export class MultipleChoiceQuestionComponent {
     @Input('question')
     set question(value: Rehearsal.MultipleChoiceQuestionModel) {
         this._question = value;
-        this.answer = null;
-        this._answerGiven = false;
-        this.focusCheckButton.emit();
+        this.answer = value.givenAnswer;
+        this._answerGiven = value.givenAnswer !== null;
+
+        if (!this._answerGiven)
+            this.focusCheckButton.emit();
+        else
+            this.focusNextButton.emit();
     }
 
     get question(): Rehearsal.MultipleChoiceQuestionModel {
@@ -35,22 +38,6 @@ export class MultipleChoiceQuestionComponent {
 
     answerGiven(): boolean {
         return this._answerGiven;
-    }
-
-    @Input('answerResult')
-    set answerResult(value: Rehearsal.AnswerResultModel) {
-        this._answerResult = value;
-
-        if (value != null) {
-            this.answer = value.givenAnswer;
-            this._answerGiven = true;
-
-            this.focusNextButton.emit();
-        }
-    }
-
-    get answerResult() {
-        return this._answerResult;
     }
 
     submit(): void {
@@ -68,19 +55,19 @@ export class MultipleChoiceQuestionComponent {
     }
 
     canGotoNext(): boolean {
-        return !!this.answerResult;
+        return this._answerGiven && this._question.givenAnswer !== null;
     }
 
     isCorrect(answer: number): boolean {
-        return this.answerResult && this.answerResult.correctAnswers.includes(this._question.availableAnswers[answer]);
+        return this._answerGiven && this._question.correctAnswer == answer;
     }
 
     isInCorrect(answer: number): boolean {
-        return this.answerResult && !this.answerResult.correctAnswers.includes(this._question.availableAnswers[answer]);
+        return this._answerGiven && this._question.correctAnswer != answer;
     }
 
     isGivenAnswer(answer: number): boolean {
-        return this.answer && this.answer === this._question.availableAnswers[answer];
+        return this.answer && this._question.givenAnswer === this._question.availableAnswers[answer];
     }
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {

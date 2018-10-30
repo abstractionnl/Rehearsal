@@ -1,21 +1,19 @@
 import * as RehearsalActions from "./rehearsal.actions";
-import {initialState, RehearsalSessionStateQuestion, RehearsalState} from "./rehearsal.state";
+import {initialState, RehearsalState} from "./rehearsal.state";
 import {GIVE_ANSWER_SUCCESS, LOAD_REHEARSAL_SUCCESS, NEXT_QUESTION, PREVIOUS_QUESTION} from "./rehearsal.actions";
 
 export function rehearsalReducer(state: RehearsalState = initialState, action: RehearsalActions.All): RehearsalState {
     switch (action.type) {
         case LOAD_REHEARSAL_SUCCESS:
+            let currentQuestion = action.payload.questions.findIndex(q => q.givenAnswer === null);
+            currentQuestion = currentQuestion != -1 ? currentQuestion : action.payload.questions.length;
+
             return {
                 ...state,
                 session: {
                     id: action.payload.id,
-                    questions: action.payload.questions.map<RehearsalSessionStateQuestion>(
-                        q => ({
-                            question: q,
-                            result: null
-                        })
-                    ),
-                    currentQuestion: 0
+                    questions: action.payload.questions,
+                    currentQuestion: currentQuestion
                 }
             };
 
@@ -24,7 +22,7 @@ export function rehearsalReducer(state: RehearsalState = initialState, action: R
                 ...state,
                 session: {
                     ...state.session,
-                    questions: state.session.questions.map(q => q.question.id == action.payload.questionId ? { ...q, result: action.payload } : q)
+                    questions: state.session.questions.map(q => q.id == action.payload.questionId ? { ...q, givenAnswer: action.payload.givenAnswer, answeredCorrectly: action.payload.isCorrect } : q)
                 }
             };
 

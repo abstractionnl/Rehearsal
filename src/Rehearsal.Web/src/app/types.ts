@@ -58,6 +58,8 @@ export namespace Rehearsal {
     question: string;
     questionTitle: string;
     type: string;
+    givenAnswer: string;
+    answeredCorrectly: boolean;
   }
   export interface RehearsalSessionModel {
     id: System.Guid;

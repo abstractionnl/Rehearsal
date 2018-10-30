@@ -8,9 +8,8 @@ import AnswerResultModel = Rehearsal.AnswerResultModel;
 import RehearsalQuestionModel = Rehearsal.RehearsalQuestionModel;
 
 import {
-    RehearsalSessionStateQuestion,
     RehearsalState, selectAnsweredQuestionCount,
-    selectCurrentQuestion, selectCurrentResult, selectIncorrectAnsweredQuestions as selectIncorrectAnswers, selectIsFinished,
+    selectCurrentQuestion, selectIncorrectAnsweredQuestions as selectIncorrectAnswers, selectIsFinished,
     selectQuestionCount
 } from "../../store/rehearsal.state";
 import {Observable} from "rxjs/index";
@@ -30,13 +29,12 @@ export class RehearsalPage {
     totalQuestions: Observable<number>;
     answeredQuestions: Observable<number>;
     isFinished: Observable<boolean>;
-    incorrectQuestions: Observable<RehearsalSessionStateQuestion[]>;
+    incorrectQuestions: Observable<RehearsalQuestionModel[]>;
 
     constructor(
         private rehearsalService : RehearsalService,
         private store: Store<RehearsalState>) {
         this.currentQuestion = store.select(selectCurrentQuestion);
-        this.currentResult = store.select(selectCurrentResult);
         this.totalQuestions = store.select(selectQuestionCount);
         this.answeredQuestions = store.select(selectAnsweredQuestionCount);
         this.isFinished = store.select(selectIsFinished);

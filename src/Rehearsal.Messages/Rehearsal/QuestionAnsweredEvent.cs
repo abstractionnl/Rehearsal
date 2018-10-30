@@ -7,6 +7,7 @@ namespace Rehearsal.Messages.Rehearsal
     public class QuestionAnsweredEvent : BaseEvent
     {
         public Guid QuestionId { get; set; }
-        public AnswerResultModel Result { get; set; }
+        public string GivenAnswer { get; set; }
+        public bool IsCorrect { get; set; }
     }
 }

@@ -15,21 +15,21 @@
         </div>
     </div>
     <div class="form-group" *ngIf="isInCorrect()">
-        <label class="col-sm-3 control-label" [ngPlural]="answerResult.correctAnswers.length">
+        <label class="col-sm-3 control-label" [ngPlural]="question.correctAnswers.length">
             <ng-template ngPluralCase="one">Juiste antwoord</ng-template>
             <ng-template ngPluralCase="other">Juiste antwoorden</ng-template>
         </label>
         <div class="col-sm-9">
-            <p class="form-control-static"><ng-container *ngFor="let correctAnswer of answerResult.correctAnswers"><span class="list-comma">{{correctAnswer}}</span></ng-container></p>
+            <p class="form-control-static"><ng-container *ngFor="let correctAnswer of question.correctAnswers"><span class="list-comma">{{correctAnswer}}</span></ng-container></p>
         </div>
     </div>
-    <div class="form-group" *ngIf="isCorrect() && answerResult.correctAnswers.length > 1">
-        <label class="col-sm-3 control-label" [ngPlural]="answerResult.correctAnswers.length - 1">
+    <div class="form-group" *ngIf="isCorrect() && question.correctAnswers.length > 1">
+        <label class="col-sm-3 control-label" [ngPlural]="question.correctAnswers.length - 1">
             <ng-template ngPluralCase="one">Ook correct is</ng-template>
             <ng-template ngPluralCase="other">Ook correct zijn</ng-template>
         </label>
         <div class="col-sm-9">
-            <p class="form-control-static"><ng-container *ngFor="let correctAnswer of answerResult.correctAnswers"><span  *ngIf="correctAnswer != answer" class="list-comma">{{correctAnswer}}</span></ng-container></p>
+            <p class="form-control-static"><ng-container *ngFor="let correctAnswer of question.correctAnswers"><span  *ngIf="correctAnswer != answer" class="list-comma">{{correctAnswer}}</span></ng-container></p>
         </div>
     </div>
     <div class="form-group">

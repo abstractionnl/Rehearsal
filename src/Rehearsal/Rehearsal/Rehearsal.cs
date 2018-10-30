@@ -34,7 +34,8 @@ namespace Rehearsal.Rehearsal
             ApplyChange(new QuestionAnsweredEvent()
             {
                 QuestionId = questionId,
-                Result = result
+                GivenAnswer = result.GivenAnswer,
+                IsCorrect = result.IsCorrect
             });
         }
 
